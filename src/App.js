@@ -114,7 +114,6 @@ export default function App() {
       mid: "Keep side pressure and avoid full team fights.",
       win: "Punish openings fast, break bed, and collapse.",
     },
-    ,
     {
       name: "Davey / Umbra / Fisher / Fisher",
       tag: "BB strat",
@@ -146,7 +145,7 @@ export default function App() {
       early: "Avoid random fights, keep both Fishers alive, and let Amy take only strong trades.",
       mid: "Play around gear timing, enchants, and Umbra utility while keeping pressure without overforcing.",
       win: "Outscale, take one strong grouped fight, then roll map control into bed pressure.",
-    }
+    },
   ];
 
   const roles = [
@@ -185,7 +184,8 @@ export default function App() {
     "One clean team fight can decide the game.",
     "Vs cheaters: do not ego fight. Play gear, stack blocks and TNT, let one player look for openings.",
   ];
-    const fisherFisherStrats = [
+
+  const fisherFisherStrats = [
     "Do not troll early. Double Fisher only works if both stay alive and keep value building.",
     "Your fighters should stall and trade smart instead of coinflipping every opening.",
     "Hit gear timings together. Do not let one side be stacked while the other is weak.",
@@ -209,12 +209,12 @@ export default function App() {
   const d = isDark;
 
   const styles = {
-        miniGrid: {
+    miniGrid: {
       display: "grid",
       gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       gap: 20,
       marginTop: 24,
-    }, 
+    },
     page: {
       minHeight: "100vh",
       background: d
@@ -771,11 +771,6 @@ export default function App() {
           </div>
         </div>
 
-        <div style={styles.footer}>
-          BedWars Squads Meta Reference · 4-stack ranked play
-        </div>
-      </div>
-    </div>
         <div style={styles.twoCol} className="bw-fadeup bw-fadeup-4">
           <div style={styles.section}>
             <div style={styles.sectionHead}>
@@ -825,5 +820,11 @@ export default function App() {
             ))}
           </div>
         </div>
+
+        <div style={styles.footer}>
+          BedWars Squads Meta Reference · 4-stack ranked play
+        </div>
+      </div>
+    </div>
   );
 }
