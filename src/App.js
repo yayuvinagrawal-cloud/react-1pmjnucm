@@ -649,7 +649,7 @@ export default function App() {
               fontWeight: 700,
               fontFamily: "'Space Mono', monospace",
               letterSpacing: "0.08em",
-              background: "linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899)",
+              background: "linear-gradient(90deg, #3b82f6, #60a5fa, #f87171)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
