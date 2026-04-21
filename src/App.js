@@ -76,12 +76,12 @@ export default function App() {
         ? "0 0 40px rgba(96,165,250,0.18)"
         : "0 8px 40px rgba(37,99,235,0.14)",
       icon: "⚔️",
-      why: "Reliable, well-rounded setup with pressure, sustain, and steady scaling.",
+      why: "Solid, balanced comp that keeps pressure on, holds up well, and scales steadily.",
       useWhen:
-        "Use when your team has good coordination and your Beekeeper can build value early. Get bees fast instead of overcommitting to base.",
-      early: "Split 2 mid / 2 base. Only take good fights.",
-      mid: "Play around Sheila and Star to control space and force one clean team fight.",
-      win: "Turn a won fight into instant bed pressure.",
+        "Pick this if your team coordinates well and your Beekeeper can get value early. Grab bees fast without overcommitting to base.",
+      early: "Split 2 mid / 2 base. Only jump into fights you can win.",
+      mid: "Use Sheila and Star to control the map and force one clean team fight.",
+      win: "After winning a fight, hit their bed right away.",
     },
     {
       name: "Farmer / Fisher / Star / Amy",
@@ -92,12 +92,12 @@ export default function App() {
         ? "0 0 40px rgba(52,211,153,0.18)"
         : "0 8px 40px rgba(5,150,105,0.14)",
       icon: "💰",
-      why: "Consistent scaling with good defensive stability.",
+      why: "Steady scaling with solid defense.",
       useWhen:
-        "Use when running a stable economy with two bed defenders and you want to scale safely into mid game.",
-      early: "Do not force bad fights. Protect your economy kits.",
-      mid: "Prioritize armor, enchants, and upgrades efficiently.",
-      win: "Use gear advantage and push together.",
+        "Go for this if you're running a stable economy with two bed defenders and want to scale safely into mid game.",
+      early: "Don't force bad fights. Keep your economy kits safe.",
+      mid: "Focus on armor, enchants, and upgrades.",
+      win: "Use your gear edge and push as a team.",
     },
     {
       name: "Lani / Lani / Warden / Fisher",
@@ -108,11 +108,11 @@ export default function App() {
         ? "0 0 40px rgba(244,114,182,0.18)"
         : "0 8px 40px rgba(219,39,119,0.14)",
       icon: "🏃",
-      why: "Built to avoid standard fights and create fast win conditions through bed pressure.",
-      useWhen: "Use against slower teams or when you want shorter games.",
-      early: "Split lanes. Lani players make angles while Fisher scales.",
+      why: "Designed to dodge standard fights and win fast through bed pressure.",
+      useWhen: "Use against slow teams or for shorter games.",
+      early: "Split lanes. Lani players create angles while Fisher builds.",
       mid: "Keep side pressure and avoid full team fights.",
-      win: "Punish openings fast, break bed, and collapse.",
+      win: "Punish openings quickly, break bed, and finish.",
     },
     {
       name: "Davey / Umbra / Fisher / Fisher",
@@ -123,12 +123,12 @@ export default function App() {
         ? "0 0 40px rgba(245,158,11,0.18)"
         : "0 8px 40px rgba(217,119,6,0.14)",
       icon: "💥",
-      why: "Aggressive bed break comp that creates fast pressure with Umbra space control and double Fisher scaling.",
+      why: "Aggressive bed break comp that builds fast pressure with Umbra controlling space and double Fisher scaling.",
       useWhen:
-        "Use when your BB is confident, your team can play fast, and you want to punish slower setups before they fully scale.",
-      early: "Let Davey look for early openings while both Fishers build value and Umbra helps control space.",
-      mid: "Force awkward fights, pressure side lanes, and make teams split attention between base and map control.",
-      win: "Get one clean opening, send Davey through, and convert instantly off pressure.",
+        "Use if your BB is confident, your team plays fast, and you want to hit slow setups before they scale.",
+      early: "Let Davey hunt for early openings while both Fishers build value and Umbra controls space.",
+      mid: "Force tough fights, pressure sides, and make teams split between base and map.",
+      win: "Get one clean opening, send Davey in, and turn pressure into wins.",
     },
     {
       name: "Amy / Umbra / Fisher / Fisher",
@@ -139,12 +139,12 @@ export default function App() {
         ? "0 0 40px rgba(167,139,250,0.18)"
         : "0 8px 40px rgba(124,58,237,0.14)",
       icon: "🌊",
-      why: "Safe scaling comp with strong late-game value and solid fight control through Amy and Umbra.",
+      why: "Safe scaling comp with strong late-game power and good fight control via Amy and Umbra.",
       useWhen:
-        "Use when your team wants stable scaling, trusts the Amy player in fights, and can protect both Fishers early.",
-      early: "Avoid random fights, keep both Fishers alive, and let Amy take only strong trades.",
-      mid: "Play around gear timing, enchants, and Umbra utility while keeping pressure without overforcing.",
-      win: "Outscale, take one strong grouped fight, then roll map control into bed pressure.",
+        "Pick this if your team wants steady scaling, trusts the Amy player in fights, and can protect both Fishers early.",
+      early: "Avoid random fights, keep both Fishers alive, and let Amy only take good trades.",
+      mid: "Focus on gear timing, enchants, and Umbra's utility while keeping pressure without pushing too hard.",
+      win: "Outscale, win one strong grouped fight, then use map control for bed pressure.",
     },
   ];
 
@@ -157,46 +157,46 @@ export default function App() {
     {
       key: "BD",
       emoji: "🛡️",
-      desc: "Bed defender. Keeps base stable and protects gen.",
+      desc: "Bed defender. Keeps base steady and protects the gen.",
     },
     {
       key: "MJ",
       emoji: "⚡",
-      desc: "Main jugg. Main PvP role. Amy and Freya are good examples.",
+      desc: "Main fighter. Handles most PvP. Amy and Freya are examples.",
     },
     {
       key: "SJ",
       emoji: "🤝",
-      desc: "Second jugg. Helps create advantages for the main jugg.",
+      desc: "Second fighter. Supports the main one.",
     },
     {
       key: "BBER",
       emoji: "💥",
-      desc: "Bed breaker. Looks for openings and ends games.",
+      desc: "Breaks beds. Finds chances and ends games.",
     },
   ];
 
   const quickGuide = [
-    "Do not force early fights unless you clearly win.",
-    "Fight mainly in groups of 2 to 3.",
-    "Protect cycle kits early.",
-    "Prioritize blocks and stone sword early.",
-    "One clean team fight can decide the game.",
-    "Vs cheaters: do not ego fight. Play gear, stack blocks and TNT, let one player look for openings.",
+    "Don't force early fights unless you're sure you'll win.",
+    "Fight mostly in groups of 2 or 3.",
+    "Protect scaling kits early.",
+    "Get blocks and stone sword first.",
+    "One good team fight can win the game.",
+    "Vs cheaters: don't ego fight. Build gear, stack blocks and TNT, let one player hunt for openings.",
   ];
 
   const fisherFisherStrats = [
-    "Do not troll early. Double Fisher only works if both stay alive and keep value building.",
-    "Your fighters should stall and trade smart instead of coinflipping every opening.",
-    "Hit gear timings together. Do not let one side be stacked while the other is weak.",
-    "Once both Fishers are online, force grouped fights and snowball map control.",
+    "Don't mess around early. Double Fisher works only if both survive and build value.",
+    "Fighters should hold back and trade wisely, not risk everything on every chance.",
+    "Time your gear upgrades together. Don't let one side get ahead while the other lags.",
+    "Once both Fishers are set, push for grouped fights and build map control.",
   ];
 
   const realStrats = [
-    "Core comps are strongest when every player sticks to role instead of freestyling.",
-    "Do not send your value kits into useless fights just because your team wants action.",
-    "If your comp scales, your job is to survive cleanly to mid game, not fake early dominance.",
-    "Most games are won by one clean grouped fight and a fast conversion, not random clips.",
+    "Core comps work best when everyone sticks to their role, not freelancing.",
+    "Don't throw your scaling kits into pointless fights just because the team wants excitement.",
+    "If your comp scales, survive to mid game cleanly, not pretend to dominate early.",
+    "Most games end with one good grouped fight and quick finish, not random kills.",
   ];
 
   const bbStrats = [
