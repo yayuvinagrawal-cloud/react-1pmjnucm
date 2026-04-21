@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import PlayerSearch from "./PlayerSearch";
+import { Analytics } from "@vercel/analytics/react";
 
 /* ─── FONT LOADER ─── */
 function useFonts() {
@@ -1315,6 +1316,7 @@ export default function App() {
       </div>
 
       <TabBar tab={tab} setTab={setTab} dark={dark} />
+      <Analytics />
     </div>
   );
 }
