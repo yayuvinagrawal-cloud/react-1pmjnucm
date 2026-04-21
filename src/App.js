@@ -577,7 +577,7 @@ export default function App() {
           background: dark ? "rgba(5,10,20,0.85)" : "rgba(240,244,255,0.9)",
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)"}`,
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+          display: "grid", gridTemplateColumns: "auto 1fr auto", alignItems: "center", gap: 12,
           flexWrap: "wrap",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -648,30 +648,7 @@ export default function App() {
     {dark ? <SunIcon /> : <MoonIcon />}
   </button>
 </div>
-            <div style={{
-              display: "flex", gap: 3,
-              background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
-              borderRadius: 10, padding: 3,
-              border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
-            }}>
-              {[["comps", "⚔️ Comps"], ["tips", "📋 Tips"], ["roles", "👥 Roles"]].map(([key, label]) => (
-                <button key={key} onClick={() => setTab(key)} style={{
-                  padding: "5px 11px", borderRadius: 7, border: "none", cursor: "pointer",
-                  fontSize: 11, fontWeight: 700, fontFamily: "'Space Mono', monospace",
-                  background: tab === key ? dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" : "transparent",
-                  color: tab === key ? dark ? "#fff" : "#0f172a" : dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)",
-                  transition: "all 0.2s",
-                }}>{label}</button>
-              ))}
-            </div>
-
-            <button onClick={() => setDark(d => !d)} style={{
-              width: 34, height: 34, borderRadius: 10, border: "none", cursor: "pointer",
-              background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
-              transition: "all 0.2s",
-            }}>{dark ? <SunIcon /> : <MoonIcon />}</button>
+       
           </div>
         </div>
       </div>
