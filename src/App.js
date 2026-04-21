@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const SUN = () => (
   <svg
@@ -825,6 +826,7 @@ export default function App() {
           BedWars Squads Meta Reference · 4-stack ranked play
         </div>
       </div>
+      <SpeedInsights />
     </div>
   );
 }
