@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 const SUN = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -19,7 +19,7 @@ const MOON = () => (
 export default function BedwarsMetaSite() {
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [activeComp, setActiveComp] = useState(null);
+  const [hoveredComp, setHoveredComp] = useState(null);
 
   useEffect(() => {
     setMounted(true);
@@ -37,7 +37,7 @@ export default function BedwarsMetaSite() {
       tag: "Core comp",
       accent: isDark ? "#60a5fa" : "#2563eb",
       accentBg: isDark ? "rgba(96,165,250,0.08)" : "rgba(37,99,235,0.06)",
-      glow: isDark ? "0 0 40px rgba(96,165,250,0.15)" : "0 8px 40px rgba(37,99,235,0.12)",
+      glow: isDark ? "0 0 40px rgba(96,165,250,0.18)" : "0 8px 40px rgba(37,99,235,0.14)",
       icon: "⚔️",
       why: "Reliable, well-rounded setup with pressure, sustain, and steady scaling.",
       useWhen: "Use when your team has good coordination and your Beekeeper can consistently build value early — prioritize getting bees quickly rather than overcommitting to base.",
@@ -50,7 +50,7 @@ export default function BedwarsMetaSite() {
       tag: "Stable econ",
       accent: isDark ? "#34d399" : "#059669",
       accentBg: isDark ? "rgba(52,211,153,0.08)" : "rgba(5,150,105,0.06)",
-      glow: isDark ? "0 0 40px rgba(52,211,153,0.15)" : "0 8px 40px rgba(5,150,105,0.12)",
+      glow: isDark ? "0 0 40px rgba(52,211,153,0.18)" : "0 8px 40px rgba(5,150,105,0.14)",
       icon: "💰",
       why: "Consistent resource scaling with strong defensive stability.",
       useWhen: "When running a stable economy with two bed defenders; prioritize a safe early game and scale into mid game.",
@@ -63,7 +63,7 @@ export default function BedwarsMetaSite() {
       tag: "Bypass",
       accent: isDark ? "#f472b6" : "#db2777",
       accentBg: isDark ? "rgba(244,114,182,0.08)" : "rgba(219,39,119,0.06)",
-      glow: isDark ? "0 0 40px rgba(244,114,182,0.15)" : "0 8px 40px rgba(219,39,119,0.12)",
+      glow: isDark ? "0 0 40px rgba(244,114,182,0.18)" : "0 8px 40px rgba(219,39,119,0.14)",
       icon: "🏃",
       why: "Designed to avoid standard engagements and create fast win conditions through bed pressure.",
       useWhen: "Against slower teams or when aiming for shorter games.",
@@ -105,10 +105,7 @@ export default function BedwarsMetaSite() {
       overflow: "hidden",
     },
     meshLayer: {
-      position: "fixed",
-      inset: 0,
-      pointerEvents: "none",
-      zIndex: 0,
+      position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
       background: d
         ? `radial-gradient(ellipse 80% 60% at 20% 10%, rgba(59,130,246,0.08) 0%, transparent 60%),
            radial-gradient(ellipse 60% 50% at 80% 80%, rgba(139,92,246,0.07) 0%, transparent 60%),
@@ -118,347 +115,133 @@ export default function BedwarsMetaSite() {
            radial-gradient(ellipse 50% 40% at 60% 30%, rgba(59,130,246,0.05) 0%, transparent 60%)`,
     },
     gridPattern: {
-      position: "fixed",
-      inset: 0,
-      pointerEvents: "none",
-      zIndex: 0,
+      position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
       opacity: d ? 0.03 : 0.025,
       backgroundImage: `linear-gradient(${d ? "#fff" : "#000"} 1px, transparent 1px), linear-gradient(90deg, ${d ? "#fff" : "#000"} 1px, transparent 1px)`,
       backgroundSize: "60px 60px",
     },
-    content: {
-      position: "relative",
-      zIndex: 1,
-      maxWidth: 1280,
-      margin: "0 auto",
-      padding: "40px 24px 60px",
-    },
-    // Hero card
+    content: { position: "relative", zIndex: 1, maxWidth: 1280, margin: "0 auto", padding: "40px 24px 60px" },
     heroCard: {
       borderRadius: 28,
       border: `1px solid ${d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-      background: d
-        ? "rgba(255,255,255,0.03)"
-        : "rgba(255,255,255,0.85)",
-      backdropFilter: "blur(20px)",
-      WebkitBackdropFilter: "blur(20px)",
+      background: d ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.85)",
+      backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
       boxShadow: d
         ? "0 0 0 1px rgba(255,255,255,0.04), 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07)"
         : "0 20px 60px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03)",
-      marginBottom: 28,
-      overflow: "hidden",
-      transition: "all 0.5s ease",
+      marginBottom: 28, overflow: "hidden", transition: "all 0.5s ease",
     },
     heroBar: {
       padding: "14px 28px",
       borderBottom: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: 12,
+      display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
     },
     heroBarLeft: { display: "flex", alignItems: "center", gap: 12 },
-    dot: (color) => ({
-      width: 12,
-      height: 12,
-      borderRadius: "50%",
-      background: color,
-      opacity: 0.8,
-    }),
+    dot: (color) => ({ width: 12, height: 12, borderRadius: "50%", background: color, opacity: 0.8 }),
     pill: {
       borderRadius: 999,
       background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
       border: `1px solid ${d ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)"}`,
-      padding: "5px 14px",
-      fontSize: 12,
-      fontWeight: 500,
-      color: d ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
-      letterSpacing: "0.01em",
+      padding: "5px 14px", fontSize: 12, fontWeight: 500,
+      color: d ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)", letterSpacing: "0.01em",
     },
     darkToggle: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      cursor: "pointer",
-      borderRadius: 999,
+      display: "flex", alignItems: "center", gap: 8, cursor: "pointer", borderRadius: 999,
       border: `1px solid ${d ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
       background: d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
-      padding: "6px 14px 6px 10px",
-      fontSize: 13,
-      fontWeight: 600,
-      color: d ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
-      transition: "all 0.3s ease",
-      userSelect: "none",
+      padding: "6px 14px 6px 10px", fontSize: 13, fontWeight: 600,
+      color: d ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)", transition: "all 0.3s ease", userSelect: "none",
     },
-    heroBody: {
-      display: "grid",
-      gap: 32,
-      padding: "40px 28px",
-      gridTemplateColumns: "1fr auto",
-      alignItems: "end",
-    },
+    heroBody: { display: "grid", gap: 32, padding: "40px 28px", gridTemplateColumns: "1fr auto", alignItems: "end" },
     badge: {
-      display: "inline-flex",
-      borderRadius: 999,
+      display: "inline-flex", borderRadius: 999,
       border: `1px solid ${d ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)"}`,
       background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-      padding: "5px 14px",
-      fontSize: 13,
-      fontWeight: 500,
-      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.45)",
-      marginBottom: 16,
+      padding: "5px 14px", fontSize: 13, fontWeight: 500,
+      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.45)", marginBottom: 16,
     },
-    h1: {
-  fontSize: "clamp(2.2rem, 5vw, 3.6rem)",
-  fontWeight: 700,
-  letterSpacing: "-0.03em",
-  lineHeight: 1.1,
-  margin: 0,
-  color: d ? "#ffffff" : "#0f172a",
-},
-    heroSub: {
-      marginTop: 14,
-      fontSize: 16,
-      lineHeight: 1.65,
-      color: d ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)",
-      maxWidth: 500,
-    },
-    statsGrid: {
-      display: "grid",
-      gap: 10,
-      minWidth: 220,
-    },
+    h1: { fontSize: "clamp(2.2rem, 5vw, 3.6rem)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1, margin: 0, color: d ? "#ffffff" : "#0f172a" },
+    heroSub: { marginTop: 14, fontSize: 16, lineHeight: 1.65, color: d ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)", maxWidth: 500 },
+    statsGrid: { display: "grid", gap: 10, minWidth: 220 },
     statCard: {
       borderRadius: 18,
       border: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
-      background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
-      padding: "16px 20px",
+      background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)", padding: "16px 20px",
     },
-    statLabel: {
-      fontSize: 11,
-      fontWeight: 500,
-      letterSpacing: "0.05em",
-      textTransform: "uppercase",
-      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)",
-    },
-    statVal: {
-      fontSize: 16,
-      fontWeight: 650,
-      marginTop: 6,
-      color: d ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.8)",
-    },
-
-    // Two-col
-    twoCol: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1.15fr",
-      gap: 24,
-      marginBottom: 24,
-    },
-
-    // Section card
+    statLabel: { fontSize: 11, fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)" },
+    statVal: { fontSize: 16, fontWeight: 650, marginTop: 6, color: d ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.8)" },
+    twoCol: { display: "grid", gridTemplateColumns: "1fr 1.15fr", gap: 24, marginBottom: 24 },
     section: (extra = {}) => ({
       borderRadius: 28,
       border: `1px solid ${d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
       background: d ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.85)",
-      backdropFilter: "blur(20px)",
-      WebkitBackdropFilter: "blur(20px)",
-      boxShadow: d
-        ? "0 0 0 1px rgba(255,255,255,0.03), 0 20px 50px rgba(0,0,0,0.35)"
-        : "0 20px 50px rgba(0,0,0,0.05)",
-      padding: "28px 28px",
-      transition: "all 0.5s ease",
-      ...extra,
+      backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+      boxShadow: d ? "0 0 0 1px rgba(255,255,255,0.03), 0 20px 50px rgba(0,0,0,0.35)" : "0 20px 50px rgba(0,0,0,0.05)",
+      padding: "28px 28px", transition: "all 0.5s ease", ...extra,
     }),
-
-    sectionHead: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      marginBottom: 20,
-    },
-    h2: {
-      fontSize: "1.45rem",
-      fontWeight: 700,
-      letterSpacing: "-0.025em",
-      margin: 0,
-    },
+    sectionHead: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 },
+    h2: { fontSize: "1.45rem", fontWeight: 700, letterSpacing: "-0.025em", margin: 0 },
     smallPill: {
-      borderRadius: 999,
-      background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
-      padding: "4px 12px",
-      fontSize: 11,
-      fontWeight: 600,
-      letterSpacing: "0.04em",
-      textTransform: "uppercase",
-      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+      borderRadius: 999, background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+      padding: "4px 12px", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
+      textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
     },
-
-    // Checklist item
     checkItem: (i) => ({
-      display: "flex",
-      alignItems: "flex-start",
-      gap: 14,
-      borderRadius: 16,
-      padding: "14px 16px",
+      display: "flex", alignItems: "flex-start", gap: 14, borderRadius: 16, padding: "14px 16px",
       background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
       border: `1px solid ${d ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)"}`,
       transition: "transform 0.2s ease, background 0.2s ease",
     }),
     numBadge: (i) => {
       const accent = ["#60a5fa","#34d399","#f472b6","#a78bfa","#fb923c","#facc15"][i % 6];
-      return {
-        flexShrink: 0,
-        width: 30,
-        height: 30,
-        borderRadius: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 12,
-        fontWeight: 700,
-        background: d ? `${accent}18` : `${accent}20`,
-        color: accent,
-        border: `1px solid ${accent}35`,
-      };
+      return { flexShrink: 0, width: 30, height: 30, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, background: d ? `${accent}18` : `${accent}20`, color: accent, border: `1px solid ${accent}35` };
     },
-    checkText: {
-      paddingTop: 5,
-      fontSize: 13,
-      lineHeight: 1.6,
-      color: d ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.55)",
-    },
-
-    // Role card
-    rolesGrid: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 12,
-    },
+    checkText: { paddingTop: 5, fontSize: 13, lineHeight: 1.6, color: d ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.55)" },
+    rolesGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
     roleCard: {
-      borderRadius: 18,
-      padding: "18px 18px",
+      borderRadius: 18, padding: "18px 18px",
       border: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
       background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
-      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-      cursor: "default",
+      transition: "transform 0.2s ease, box-shadow 0.2s ease", cursor: "default",
     },
-    roleKey: {
-      fontSize: 10,
-      fontWeight: 700,
-      letterSpacing: "0.2em",
-      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
-    },
-    roleDesc: {
-      marginTop: 8,
-      fontSize: 12.5,
-      lineHeight: 1.6,
-      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
-    },
-
-    // Comps section
+    roleKey: { fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" },
+    roleDesc: { marginTop: 8, fontSize: 12.5, lineHeight: 1.6, color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" },
     compsSection: {
       borderRadius: 28,
       border: `1px solid ${d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
       background: d ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.85)",
-      backdropFilter: "blur(20px)",
-      WebkitBackdropFilter: "blur(20px)",
-      boxShadow: d
-        ? "0 0 0 1px rgba(255,255,255,0.03), 0 30px 70px rgba(0,0,0,0.4)"
-        : "0 30px 70px rgba(0,0,0,0.06)",
-      padding: "32px 28px",
-      transition: "all 0.5s ease",
+      backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+      boxShadow: d ? "0 0 0 1px rgba(255,255,255,0.03), 0 30px 70px rgba(0,0,0,0.4)" : "0 30px 70px rgba(0,0,0,0.06)",
+      padding: "32px 28px", transition: "all 0.5s ease",
     },
-
-    compsGrid: {
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: 20,
-      marginTop: 24,
-    },
-
-    compCard: (comp, isActive) => ({
+    compsGrid: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, marginTop: 24 },
+    compCard: (comp, isHovered) => ({
       borderRadius: 22,
-      border: `1px solid ${isActive
-        ? `${comp.accent}40`
-        : d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
-      background: isActive
-        ? comp.accentBg
-        : d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
-      padding: "22px",
-      cursor: "pointer",
-      transition: "all 0.25s cubic-bezier(0.34,1.56,0.64,1)",
-      transform: isActive ? "translateY(-4px) scale(1.01)" : "translateY(0) scale(1)",
-      boxShadow: isActive ? comp.glow : "none",
-      position: "relative",
-      overflow: "hidden",
+      border: `1px solid ${isHovered ? `${comp.accent}45` : d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
+      background: isHovered ? comp.accentBg : d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
+      padding: "22px", cursor: "default",
+      transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
+      transform: isHovered ? "translateY(-5px) scale(1.01)" : "translateY(0) scale(1)",
+      boxShadow: isHovered ? comp.glow : "none",
+      position: "relative", overflow: "hidden",
     }),
-
     compGlowBar: (accent) => ({
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 2,
-      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
-      opacity: 0.8,
+      position: "absolute", top: 0, left: 0, right: 0, height: 2,
+      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`, opacity: 0.9,
     }),
-
-    compTag: {
-      fontSize: 10,
-      fontWeight: 700,
-      letterSpacing: "0.18em",
-      textTransform: "uppercase",
-      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
-    },
-
-    compName: {
-      fontSize: "1rem",
-      fontWeight: 700,
-      letterSpacing: "-0.02em",
-      marginTop: 6,
-      marginBottom: 12,
-      color: d ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)",
-    },
-
-    compWhy: {
-      fontSize: 12.5,
-      lineHeight: 1.65,
-      color: d ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)",
-      marginBottom: 14,
-    },
-
-    infoBox: (accent) => ({
-      borderRadius: 14,
-      padding: "12px 14px",
+    compTag: { fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" },
+    compName: { fontSize: "1rem", fontWeight: 700, letterSpacing: "-0.02em", marginTop: 6, marginBottom: 12, color: d ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)" },
+    compWhy: { fontSize: 12.5, lineHeight: 1.65, color: d ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)", marginBottom: 14 },
+    infoBox: {
+      borderRadius: 14, padding: "12px 14px",
       background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
       border: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
       marginBottom: 8,
-    }),
-
-    infoLabel: (accent) => ({
-      fontSize: 10,
-      fontWeight: 700,
-      letterSpacing: "0.15em",
-      textTransform: "uppercase",
-      color: accent,
-      marginBottom: 5,
-    }),
-
-    infoText: {
-      fontSize: 12,
-      lineHeight: 1.6,
-      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
     },
-
-    divider: {
-      height: 1,
-      background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
-      margin: "14px 0",
-    },
+    infoLabel: (accent) => ({ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: accent, marginBottom: 5 }),
+    infoText: { fontSize: 12, lineHeight: 1.6, color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" },
   };
 
-  // Google Fonts injection
   useEffect(() => {
     if (!document.getElementById("bw-fonts")) {
       const link = document.createElement("link");
@@ -473,19 +256,14 @@ export default function BedwarsMetaSite() {
 
   return (
     <div style={styles.page}>
-      {/* Background layers */}
       <div style={styles.meshLayer} />
       <div style={styles.gridPattern} />
 
       <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .bw-fadeup { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
         .bw-fadeup-1 { animation-delay: 0.05s; }
         .bw-fadeup-2 { animation-delay: 0.12s; }
-        .bw-fadeup-3 { animation-delay: 0.18s; }
         .bw-fadeup-4 { animation-delay: 0.24s; }
         .check-row:hover { background: ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)"} !important; transform: translateX(3px); }
         .role-card:hover { transform: translateY(-3px); box-shadow: ${d ? "0 8px 30px rgba(0,0,0,0.3)" : "0 8px 24px rgba(0,0,0,0.07)"}; }
@@ -497,8 +275,6 @@ export default function BedwarsMetaSite() {
       `}</style>
 
       <div style={styles.content}>
-
-        {/* Hero card */}
         <div style={styles.heroCard} className="bw-fadeup">
           <div style={styles.heroBar}>
             <div style={styles.heroBarLeft}>
@@ -507,47 +283,26 @@ export default function BedwarsMetaSite() {
               <div style={styles.dot("#4ade80")} />
               <div style={styles.pill}>squads reference</div>
             </div>
-            <button
-              onClick={() => setIsDark(!isDark)}
-              style={styles.darkToggle}
-              className="dark-toggle"
-            >
+            <button onClick={() => setIsDark(!isDark)} style={styles.darkToggle} className="dark-toggle">
               {isDark ? <SUN /> : <MOON />}
               <span>{isDark ? "Light mode" : "Dark mode"}</span>
             </button>
           </div>
-
           <div style={styles.heroBody}>
             <div>
               <div style={styles.badge}>Roblox BedWars · Ranked Squads</div>
-              <h1 style={styles.h1}>
-                Squads comps,<br />roles &amp; win conditions
-              </h1>
-              <p style={styles.heroSub}>
-                A concise reference for effective ranked play focused on structure, roles, and execution.
-              </p>
+              <h1 style={styles.h1}>Squads comps,<br />roles &amp; win conditions</h1>
+              <p style={styles.heroSub}>A concise reference for effective ranked play focused on structure, roles, and execution.</p>
             </div>
             <div style={styles.statsGrid}>
-              <div style={styles.statCard}>
-                <div style={styles.statLabel}>Best for</div>
-                <div style={styles.statVal}>4-stack ranked teams</div>
-              </div>
-              <div style={styles.statCard}>
-                <div style={styles.statLabel}>Focus</div>
-                <div style={styles.statVal}>Roles and coordination</div>
-              </div>
-              <div style={styles.statCard}>
-                <div style={styles.statLabel}>Approach</div>
-                <div style={styles.statVal}>Convert advantages quickly</div>
-              </div>
+              <div style={styles.statCard}><div style={styles.statLabel}>Best for</div><div style={styles.statVal}>4-stack ranked teams</div></div>
+              <div style={styles.statCard}><div style={styles.statLabel}>Focus</div><div style={styles.statVal}>Roles and coordination</div></div>
+              <div style={styles.statCard}><div style={styles.statLabel}>Approach</div><div style={styles.statVal}>Convert advantages quickly</div></div>
             </div>
           </div>
         </div>
 
-        {/* Two col */}
         <div style={styles.twoCol} className="bw-fadeup bw-fadeup-1">
-
-          {/* Win checklist */}
           <div style={styles.section()}>
             <div style={styles.sectionHead}>
               <h2 style={styles.h2}>Win checklist</h2>
@@ -555,11 +310,7 @@ export default function BedwarsMetaSite() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {quickGuide.map((item, i) => (
-                <div
-                  key={i}
-                  style={styles.checkItem(i)}
-                  className="check-row"
-                >
+                <div key={i} style={styles.checkItem(i)} className="check-row">
                   <div style={styles.numBadge(i)}>{i + 1}</div>
                   <p style={styles.checkText}>{item}</p>
                 </div>
@@ -567,7 +318,6 @@ export default function BedwarsMetaSite() {
             </div>
           </div>
 
-          {/* Roles */}
           <div style={styles.section()}>
             <div style={styles.sectionHead}>
               <h2 style={styles.h2}>Roles</h2>
@@ -585,92 +335,52 @@ export default function BedwarsMetaSite() {
           </div>
         </div>
 
-        {/* Comps */}
         <div style={styles.compsSection} className="bw-fadeup bw-fadeup-2">
           <div style={styles.sectionHead}>
             <div>
               <h2 style={{ ...styles.h2, fontSize: "1.65rem" }}>Recommended comps</h2>
               <p style={{ margin: "4px 0 0", fontSize: 13, color: d ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)" }}>
-                Click a comp to expand details — when to use it and how it converts games.
+                Hover a comp to highlight it.
               </p>
             </div>
             <span style={styles.smallPill}>ranked squads</span>
           </div>
 
-          {/* Comp cards top row */}
           <div style={styles.compsGrid}>
             {comps.map((comp, ci) => {
-              const isActive = activeComp === ci;
+              const isHovered = hoveredComp === ci;
               return (
                 <div
                   key={comp.name}
-                  style={styles.compCard(comp, isActive)}
-                  onClick={() => setActiveComp(isActive ? null : ci)}
+                  style={styles.compCard(comp, isHovered)}
+                  onMouseEnter={() => setHoveredComp(ci)}
+                  onMouseLeave={() => setHoveredComp(null)}
                 >
-                  {isActive && <div style={styles.compGlowBar(comp.accent)} />}
+                  {isHovered && <div style={styles.compGlowBar(comp.accent)} />}
                   <div style={styles.compTag}>{comp.tag}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
                     <span style={{ fontSize: 22 }}>{comp.icon}</span>
                     <div style={styles.compName}>{comp.name}</div>
                   </div>
                   <p style={styles.compWhy}>{comp.why}</p>
-
-                  <div style={styles.infoBox(comp.accent)}>
-                    <div style={styles.infoLabel(comp.accent)}>Use when</div>
-                    <p style={styles.infoText}>{comp.useWhen}</p>
-                  </div>
-
-                  {/* Expanded phase details */}
-                  {isActive && (
-                    <div style={{ marginTop: 8 }}>
-                      <div style={styles.divider} />
-                      {[
-                        { label: "Early", text: comp.early },
-                        { label: "Mid", text: comp.mid },
-                        { label: "Win condition", text: comp.win },
-                      ].map((phase) => (
-                        <div key={phase.label} style={{ ...styles.infoBox(comp.accent), marginBottom: 8 }}>
-                          <div style={styles.infoLabel(comp.accent)}>{phase.label}</div>
-                          <p style={styles.infoText}>{phase.text}</p>
-                        </div>
-                      ))}
+                  {[
+                    { label: "Use when", text: comp.useWhen },
+                    { label: "Early", text: comp.early },
+                    { label: "Mid", text: comp.mid },
+                    { label: "Win condition", text: comp.win },
+                  ].map((phase) => (
+                    <div key={phase.label} style={styles.infoBox}>
+                      <div style={styles.infoLabel(comp.accent)}>{phase.label}</div>
+                      <p style={styles.infoText}>{phase.text}</p>
                     </div>
-                  )}
-
-                  {/* Expand hint */}
-                  <div style={{
-                    marginTop: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 5,
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: comp.accent,
-                    opacity: 0.7,
-                    letterSpacing: "0.04em",
-                  }}>
-                    <span style={{
-                      transform: isActive ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.3s ease",
-                      display: "inline-block",
-                    }}>▾</span>
-                    {isActive ? "Collapse" : "Expand phases"}
-                  </div>
+                  ))}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="bw-fadeup bw-fadeup-4" style={{
-          marginTop: 24,
-          textAlign: "center",
-          fontSize: 12,
-          color: d ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.25)",
-          fontWeight: 500,
-          letterSpacing: "0.04em",
-        }}>
+        <div className="bw-fadeup bw-fadeup-4" style={{ marginTop: 24, textAlign: "center", fontSize: 12, color: d ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.25)", fontWeight: 500, letterSpacing: "0.04em" }}>
           BedWars Squads Meta Reference · 4-stack ranked play
         </div>
       </div>
