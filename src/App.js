@@ -332,12 +332,76 @@ function Ambient({ dark }) {
   );
 }
 
+/* ─── FEATURE STRIP ─── */
+function FeaturedStrip({ dark }) {
+  const items = [
+    { label: "Structured meta", value: "Clean comps" },
+    { label: "Role clarity", value: "Less chaos" },
+    { label: "Win plans", value: "Better converts" },
+  ];
+
+  return (
+    <div
+      style={{
+        marginTop: 28,
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+        gap: 10,
+        width: "100%",
+        maxWidth: 760,
+        marginInline: "auto",
+      }}
+    >
+      {items.map((item) => (
+        <div
+          key={item.label}
+          style={{
+            borderRadius: 18,
+            padding: "15px 16px",
+            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.86)",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            boxShadow: dark ? "0 10px 24px rgba(0,0,0,0.2)" : "0 10px 22px rgba(0,0,0,0.05)",
+            textAlign: "left",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 10,
+              fontWeight: 800,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              fontFamily: "'JetBrains Mono', monospace",
+              color: dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)",
+              marginBottom: 6,
+            }}
+          >
+            {item.label}
+          </div>
+          <div
+            style={{
+              fontSize: 16,
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
+              color: dark ? "#ffffff" : "#111111",
+            }}
+          >
+            {item.value}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ─── COMP CARD ─── */
 function CompCard({ comp, dark }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div
+      className="compCard"
       onClick={() => setOpen((o) => !o)}
       style={{
         borderRadius: 24,
@@ -373,13 +437,13 @@ function CompCard({ comp, dark }) {
           transition: "opacity 0.3s ease",
         }}
       />
-      <div style={{ padding: "18px 18px 16px" }}>
+      <div style={{ padding: "22px 20px 20px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div
             style={{
-              width: 48,
-              height: 48,
-              borderRadius: 15,
+              width: 50,
+              height: 50,
+              borderRadius: 16,
               flexShrink: 0,
               background: `linear-gradient(135deg, rgba(${comp.rgb},0.2), rgba(${comp.rgb},0.08))`,
               border: `1px solid rgba(${comp.rgb},0.22)`,
@@ -409,7 +473,7 @@ function CompCard({ comp, dark }) {
             </div>
             <div
               style={{
-                fontSize: 14.5,
+                fontSize: 15,
                 fontWeight: 800,
                 lineHeight: 1.25,
                 color: dark ? "#f8f8fb" : "#0f0f10",
@@ -424,8 +488,8 @@ function CompCard({ comp, dark }) {
 
           <div
             style={{
-              width: 30,
-              height: 30,
+              width: 32,
+              height: 32,
               flexShrink: 0,
               borderRadius: "50%",
               display: "flex",
@@ -441,9 +505,9 @@ function CompCard({ comp, dark }) {
 
         <p
           style={{
-            margin: "12px 0 0",
-            fontSize: 13.2,
-            lineHeight: 1.68,
+            margin: "14px 0 0",
+            fontSize: 13.4,
+            lineHeight: 1.7,
             color: dark ? "rgba(255,255,255,0.52)" : "rgba(0,0,0,0.56)",
           }}
         >
@@ -675,6 +739,7 @@ function RolesSection({ dark }) {
     >
       {ROLES.map((r) => (
         <div
+          className="roleCard"
           key={r.key}
           style={{
             borderRadius: 22,
@@ -684,6 +749,7 @@ function RolesSection({ dark }) {
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
             boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+            transition: "transform 0.25s ease, box-shadow 0.25s ease",
           }}
         >
           <div
@@ -873,6 +939,18 @@ export default function App() {
         .liveDot {
           animation: pulse-dot 2.4s ease-in-out infinite;
         }
+
+        @media (hover: hover) and (pointer: fine) {
+          .compCard:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 46px rgba(0,0,0,0.20);
+          }
+
+          .roleCard:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.16);
+          }
+        }
       `}</style>
 
       <Ambient dark={dark} />
@@ -981,7 +1059,7 @@ export default function App() {
         style={{
           maxWidth: 960,
           margin: "0 auto",
-          padding: "42px 18px 18px",
+          padding: "72px 18px 20px",
           textAlign: "center",
           position: "relative",
           zIndex: 5,
@@ -1028,10 +1106,10 @@ export default function App() {
         <h1
           style={{
             margin: "0 0 10px",
-            fontSize: "clamp(3rem, 12vw, 5.6rem)",
+            fontSize: "clamp(3.2rem, 12vw, 6.2rem)",
             fontWeight: 900,
-            letterSpacing: "-0.06em",
-            lineHeight: 0.95,
+            letterSpacing: "-0.07em",
+            lineHeight: 0.92,
             color: dark ? "#ffffff" : "#111111",
           }}
         >
@@ -1041,7 +1119,7 @@ export default function App() {
         <p
           style={{
             margin: "0 0 10px",
-            fontSize: "clamp(1rem, 4vw, 1.55rem)",
+            fontSize: "clamp(1rem, 4vw, 1.6rem)",
             fontWeight: 800,
             letterSpacing: "-0.03em",
             color: dark ? "rgba(255,255,255,0.82)" : "rgba(0,0,0,0.82)",
@@ -1053,9 +1131,9 @@ export default function App() {
         <p
           style={{
             margin: "14px auto 0",
-            maxWidth: 520,
-            fontSize: 14.2,
-            lineHeight: 1.75,
+            maxWidth: 560,
+            fontSize: 14.4,
+            lineHeight: 1.8,
             color: dark ? "rgba(255,255,255,0.46)" : "rgba(0,0,0,0.52)",
           }}
         >
@@ -1080,8 +1158,8 @@ export default function App() {
             <div
               key={s.label}
               style={{
-                minWidth: 92,
-                padding: "12px 18px",
+                minWidth: 96,
+                padding: "13px 19px",
                 borderRadius: 18,
                 background: dark ? "rgba(16,16,20,0.8)" : "rgba(255,255,255,0.88)",
                 border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
@@ -1098,7 +1176,7 @@ export default function App() {
             >
               <span
                 style={{
-                  fontSize: "1.55rem",
+                  fontSize: "1.6rem",
                   fontWeight: 900,
                   fontFamily: "'JetBrains Mono', monospace",
                   color: dark ? "#ffffff" : "#111111",
@@ -1121,6 +1199,8 @@ export default function App() {
             </div>
           ))}
         </div>
+
+        <FeaturedStrip dark={dark} />
       </div>
 
       {/* CONTENT */}
@@ -1129,13 +1209,13 @@ export default function App() {
         style={{
           maxWidth: 960,
           margin: "0 auto",
-          padding: "8px 18px",
+          padding: "12px 18px",
           position: "relative",
           zIndex: 5,
         }}
       >
         {tab === "comps" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {COMPS.map((c, i) => (
               <CompCard key={i} comp={c} dark={dark} />
             ))}
@@ -1146,12 +1226,12 @@ export default function App() {
         {tab === "roles" && <RolesSection dark={dark} />}
       </div>
 
-      {/* FOOTER / CTA */}
+      {/* FOOTER */}
       <div
         className="fade fade3"
         style={{
           maxWidth: 960,
-          margin: "22px auto 0",
+          margin: "24px auto 0",
           padding: "0 18px",
           position: "relative",
           zIndex: 5,
@@ -1160,7 +1240,7 @@ export default function App() {
         <div
           style={{
             borderRadius: 28,
-            padding: "26px 22px",
+            padding: "28px 22px",
             background: dark
               ? "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025))"
               : "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(247,247,244,0.96))",
