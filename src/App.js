@@ -9,6 +9,7 @@ const SunIcon = () => (
     <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
   </svg>
 );
+
 const MoonIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -135,15 +136,19 @@ const TIPS = {
 /* ─── PARTICLE BACKGROUND ─── */
 function Particles({ dark }) {
   const canvasRef = useRef(null);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const ctx = canvas.getContext("2d");
     let animId;
+
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
     };
+
     resize();
     window.addEventListener("resize", resize);
 
@@ -158,10 +163,14 @@ function Particles({ dark }) {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      pts.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
+
+      pts.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = dark
@@ -169,10 +178,13 @@ function Particles({ dark }) {
           : `rgba(59,130,246,${p.opacity * 0.6})`;
         ctx.fill();
       });
+
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
+
           if (dist < 100) {
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
@@ -185,21 +197,45 @@ function Particles({ dark }) {
           }
         }
       }
+
       animId = requestAnimationFrame(draw);
     };
+
     draw();
-    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); };
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
   }, [dark]);
 
-  return <canvas ref={canvasRef} style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+    />
+  );
 }
 
 /* ─── SCANLINE OVERLAY ─── */
 const Scanlines = () => (
-  <div style={{
-    position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1,
-    backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
-  }} />
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      pointerEvents: "none",
+      zIndex: 1,
+      backgroundImage:
+        "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+    }}
+  />
 );
 
 /* ─── GLITCH TEXT ─── */
@@ -220,118 +256,217 @@ function CompCard({ comp, dark }) {
 
   return (
     <div
-      onClick={() => setOpen(o => !o)}
+      onClick={() => setOpen((o) => !o)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         borderRadius: 22,
-        border: `1px solid ${open || hovered ? comp.color + "60" : dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)"}`,
+        border: `1px solid ${
+          open || hovered
+            ? comp.color + "60"
+            : dark
+            ? "rgba(255,255,255,0.07)"
+            : "rgba(0,0,0,0.08)"
+        }`,
         background: open
-          ? dark ? `rgba(${comp.glow},0.12)` : `rgba(${comp.glow},0.06)`
-          : dark ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.7)",
+          ? dark
+            ? `rgba(${comp.glow},0.12)`
+            : `rgba(${comp.glow},0.06)`
+          : dark
+          ? "rgba(255,255,255,0.03)"
+          : "rgba(255,255,255,0.7)",
         cursor: "pointer",
         transition: "all 0.3s cubic-bezier(.22,1,.36,1)",
         transform: hovered ? "translateY(-4px) scale(1.015)" : "none",
-        boxShadow: open || hovered ? `0 0 30px rgba(${comp.glow},0.2), 0 8px 32px rgba(0,0,0,0.15)` : dark ? "0 2px 12px rgba(0,0,0,0.25)" : "0 2px 12px rgba(0,0,0,0.05)",
+        boxShadow:
+          open || hovered
+            ? `0 0 30px rgba(${comp.glow},0.2), 0 8px 32px rgba(0,0,0,0.15)`
+            : dark
+            ? "0 2px 12px rgba(0,0,0,0.25)"
+            : "0 2px 12px rgba(0,0,0,0.05)",
         overflow: "hidden",
         position: "relative",
         backdropFilter: "blur(18px)",
         WebkitBackdropFilter: "blur(18px)",
       }}
     >
-      <div style={{
-        height: 3,
-        background: `linear-gradient(90deg, transparent 0%, ${comp.color} 40%, ${comp.color} 60%, transparent 100%)`,
-        opacity: open || hovered ? 1 : 0.3,
-        transition: "opacity 0.3s",
-      }} />
+      <div
+        style={{
+          height: 3,
+          background: `linear-gradient(90deg, transparent 0%, ${comp.color} 40%, ${comp.color} 60%, transparent 100%)`,
+          opacity: open || hovered ? 1 : 0.3,
+          transition: "opacity 0.3s",
+        }}
+      />
 
-      <div style={{
-        position: "absolute", top: 12, right: 12,
-        width: 32, height: 32, opacity: 0.08,
-        border: `2px solid ${comp.color}`,
-        borderRadius: 6,
-        transform: "rotate(15deg)",
-        pointerEvents: "none",
-      }} />
+      <div
+        style={{
+          position: "absolute",
+          top: 12,
+          right: 12,
+          width: 32,
+          height: 32,
+          opacity: 0.08,
+          border: `2px solid ${comp.color}`,
+          borderRadius: 6,
+          transform: "rotate(15deg)",
+          pointerEvents: "none",
+        }}
+      />
 
       <div style={{ padding: "16px 18px", position: "relative", overflow: "hidden" }}>
-        <div style={{
-          position: "absolute",
-          top: -30,
-          right: -20,
-          width: 90,
-          height: 90,
-          borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(${comp.glow},0.22) 0%, rgba(${comp.glow},0.08) 35%, transparent 72%)`,
-          pointerEvents: "none",
-        }} />
+        <div
+          style={{
+            position: "absolute",
+            top: -30,
+            right: -20,
+            width: 90,
+            height: 90,
+            borderRadius: "50%",
+            background: `radial-gradient(circle, rgba(${comp.glow},0.22) 0%, rgba(${comp.glow},0.08) 35%, transparent 72%)`,
+            pointerEvents: "none",
+          }}
+        />
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, position: "relative", zIndex: 1 }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: `rgba(${comp.glow},0.15)`,
-            border: `1px solid rgba(${comp.glow},0.3)`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 18, flexShrink: 0,
-            boxShadow: `0 0 12px rgba(${comp.glow},0.2)`,
-          }}>{comp.icon}</div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
-              color: comp.color, marginBottom: 2, fontFamily: "'Space Mono', monospace",
-            }}>{comp.short}</div>
-            <div style={{
-              fontSize: 13, fontWeight: 700, letterSpacing: "-0.01em",
-              color: dark ? "rgba(255,255,255,0.9)" : "#0f172a",
-              lineHeight: 1.3,
-            }}>{comp.name}</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 8,
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <div
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              background: `rgba(${comp.glow},0.15)`,
+              border: `1px solid rgba(${comp.glow},0.3)`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 18,
+              flexShrink: 0,
+              boxShadow: `0 0 12px rgba(${comp.glow},0.2)`,
+            }}
+          >
+            {comp.icon}
           </div>
-          <div style={{
-            width: 22, height: 22, borderRadius: "50%",
-            border: `1.5px solid ${dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"}`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 10, color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
-            transition: "transform 0.3s",
-            transform: open ? "rotate(180deg)" : "none",
-            flexShrink: 0,
-          }}>▼</div>
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: 9,
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: comp.color,
+                marginBottom: 2,
+                fontFamily: "'Space Mono', monospace",
+              }}
+            >
+              {comp.short}
+            </div>
+
+            <div
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                letterSpacing: "-0.01em",
+                color: dark ? "rgba(255,255,255,0.9)" : "#0f172a",
+                lineHeight: 1.3,
+              }}
+            >
+              {comp.name}
+            </div>
+          </div>
+
+          <div
+            style={{
+              width: 22,
+              height: 22,
+              borderRadius: "50%",
+              border: `1.5px solid ${dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 10,
+              color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
+              transition: "transform 0.3s",
+              transform: open ? "rotate(180deg)" : "none",
+              flexShrink: 0,
+            }}
+          >
+            ▼
+          </div>
         </div>
 
-        <p style={{
-          fontSize: 12, lineHeight: 1.65, margin: "0 0 0",
-          color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)",
-          position: "relative",
-          zIndex: 1,
-        }}>{comp.why}</p>
+        <p
+          style={{
+            fontSize: 12,
+            lineHeight: 1.65,
+            margin: 0,
+            color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {comp.why}
+        </p>
 
-        <div style={{
-          overflow: "hidden",
-          maxHeight: open ? 600 : 0,
-          transition: "max-height 0.5s cubic-bezier(.22,1,.36,1)",
-          position: "relative",
-          zIndex: 1,
-        }}>
+        <div
+          style={{
+            overflow: "hidden",
+            maxHeight: open ? 600 : 0,
+            transition: "max-height 0.5s cubic-bezier(.22,1,.36,1)",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           <div style={{ paddingTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
             {[
               { label: "Use when", text: comp.useWhen, icon: "🎯" },
               { label: "Early game", text: comp.early, icon: "⚡" },
               { label: "Mid game", text: comp.mid, icon: "🔄" },
               { label: "Win condition", text: comp.win, icon: "🏆" },
-            ].map(phase => (
-              <div key={phase.label} style={{
-                borderRadius: 10, padding: "10px 12px",
-                background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-              }}>
+            ].map((phase) => (
+              <div
+                key={phase.label}
+                style={{
+                  borderRadius: 10,
+                  padding: "10px 12px",
+                  background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)",
+                  border: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+                }}
+              >
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
                   <span style={{ fontSize: 11 }}>{phase.icon}</span>
-                  <span style={{
-                    fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase",
-                    color: comp.color, fontFamily: "'Space Mono', monospace",
-                  }}>{phase.label}</span>
+                  <span
+                    style={{
+                      fontSize: 9,
+                      fontWeight: 700,
+                      letterSpacing: "0.14em",
+                      textTransform: "uppercase",
+                      color: comp.color,
+                      fontFamily: "'Space Mono', monospace",
+                    }}
+                  >
+                    {phase.label}
+                  </span>
                 </div>
-                <p style={{ margin: 0, fontSize: 12, lineHeight: 1.65, color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }}>{phase.text}</p>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 12,
+                    lineHeight: 1.65,
+                    color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+                  }}
+                >
+                  {phase.text}
+                </p>
               </div>
             ))}
           </div>
@@ -347,57 +482,101 @@ function TipsPanel({ dark }) {
   const data = TIPS[active];
 
   return (
-    <div style={{
-      borderRadius: 20,
-      border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
-      background: dark ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.75)",
-      backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
-      overflow: "hidden",
-      boxShadow: dark ? "0 20px 50px rgba(0,0,0,0.4)" : "0 8px 30px rgba(0,0,0,0.06)",
-    }}>
-      <div style={{
-        display: "flex", overflowX: "auto",
-        borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-        scrollbarWidth: "none",
-        background: dark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.02)",
-      }}>
-        {Object.keys(TIPS).map(tab => {
-          const t = TIPS[tab];
-          const isActive = tab === active;
+    <div
+      style={{
+        borderRadius: 20,
+        border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+        background: dark ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        overflow: "hidden",
+        boxShadow: dark ? "0 20px 50px rgba(0,0,0,0.4)" : "0 8px 30px rgba(0,0,0,0.06)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto",
+          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+          scrollbarWidth: "none",
+          background: dark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.02)",
+        }}
+      >
+        {Object.keys(TIPS).map((tabName) => {
+          const t = TIPS[tabName];
+          const isActive = tabName === active;
+
           return (
-            <button key={tab} onClick={() => setActive(tab)} style={{
-              flex: "1 0 auto",
-              padding: "11px 14px",
-              background: "none", border: "none", cursor: "pointer",
-              fontSize: 11, fontWeight: 700, fontFamily: "'Space Mono', monospace",
-              letterSpacing: "0.04em",
-              color: isActive ? t.color : dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)",
-              borderBottom: isActive ? `2px solid ${t.color}` : "2px solid transparent",
-              transition: "all 0.2s",
-              whiteSpace: "nowrap",
-            }}>{t.icon} {tab}</button>
+            <button
+              key={tabName}
+              onClick={() => setActive(tabName)}
+              style={{
+                flex: "1 0 auto",
+                padding: "11px 14px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: 11,
+                fontWeight: 700,
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: "0.04em",
+                color: isActive ? t.color : dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)",
+                borderBottom: isActive ? `2px solid ${t.color}` : "2px solid transparent",
+                transition: "all 0.2s",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {t.icon} {tabName}
+            </button>
           );
         })}
       </div>
 
       <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", gap: 8 }}>
         {data.items.map((item, i) => (
-          <div key={i} style={{
-            display: "flex", gap: 12, alignItems: "flex-start",
-            borderRadius: 12, padding: "11px 13px",
-            background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)"}`,
-            transition: "transform 0.2s",
-          }}>
-            <div style={{
-              flexShrink: 0, width: 24, height: 24, borderRadius: 6,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 10, fontWeight: 800, fontFamily: "'Space Mono', monospace",
-              background: `${data.color}20`,
-              color: data.color,
-              border: `1px solid ${data.color}40`,
-            }}>{i + 1}</div>
-            <p style={{ margin: 0, paddingTop: 2, fontSize: 12.5, lineHeight: 1.65, color: dark ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.55)" }}>{item}</p>
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              gap: 12,
+              alignItems: "flex-start",
+              borderRadius: 12,
+              padding: "11px 13px",
+              background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
+              border: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)"}`,
+              transition: "transform 0.2s",
+            }}
+          >
+            <div
+              style={{
+                flexShrink: 0,
+                width: 24,
+                height: 24,
+                borderRadius: 6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 10,
+                fontWeight: 800,
+                fontFamily: "'Space Mono', monospace",
+                background: `${data.color}20`,
+                color: data.color,
+                border: `1px solid ${data.color}40`,
+              }}
+            >
+              {i + 1}
+            </div>
+            <p
+              style={{
+                margin: 0,
+                paddingTop: 2,
+                fontSize: 12.5,
+                lineHeight: 1.65,
+                color: dark ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.55)",
+              }}
+            >
+              {item}
+            </p>
           </div>
         ))}
       </div>
@@ -408,44 +587,97 @@ function TipsPanel({ dark }) {
 /* ─── ROLES GRID ─── */
 function RolesSection({ dark }) {
   const [hovered, setHovered] = useState(null);
+
   return (
-    <div style={{
-      borderRadius: 20,
-      border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
-      background: dark ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.75)",
-      backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
-      padding: "20px",
-      boxShadow: dark ? "0 20px 50px rgba(0,0,0,0.4)" : "0 8px 30px rgba(0,0,0,0.06)",
-    }}>
+    <div
+      style={{
+        borderRadius: 20,
+        border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+        background: dark ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        padding: "20px",
+        boxShadow: dark ? "0 20px 50px rgba(0,0,0,0.4)" : "0 8px 30px rgba(0,0,0,0.06)",
+      }}
+    >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 800, fontFamily: "'Space Mono', monospace", letterSpacing: "-0.02em", color: dark ? "#fff" : "#0f172a" }}>Roles</h2>
-        <span style={{
-          fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
-          color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
-          fontFamily: "'Space Mono', monospace",
-        }}>DEFINITIONS</span>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: 16,
+            fontWeight: 800,
+            fontFamily: "'Space Mono', monospace",
+            letterSpacing: "-0.02em",
+            color: dark ? "#fff" : "#0f172a",
+          }}
+        >
+          Roles
+        </h2>
+
+        <span
+          style={{
+            fontSize: 9,
+            fontWeight: 700,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+            fontFamily: "'Space Mono', monospace",
+          }}
+        >
+          DEFINITIONS
+        </span>
       </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 8 }}>
-        {ROLES.map(r => (
+        {ROLES.map((r) => (
           <div
             key={r.key}
             onMouseEnter={() => setHovered(r.key)}
             onMouseLeave={() => setHovered(null)}
             style={{
-              borderRadius: 14, padding: "14px 13px",
-              background: hovered === r.key ? `rgba(${r.color.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16)).join(',')},0.1)` : dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
-              border: `1px solid ${hovered === r.key ? r.color + "50" : dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
+              borderRadius: 14,
+              padding: "14px 13px",
+              background:
+                hovered === r.key
+                  ? `rgba(${r.color.replace("#", "").match(/.{2}/g).map((x) => parseInt(x, 16)).join(",")},0.1)`
+                  : dark
+                  ? "rgba(255,255,255,0.03)"
+                  : "rgba(0,0,0,0.02)",
+              border: `1px solid ${
+                hovered === r.key
+                  ? r.color + "50"
+                  : dark
+                  ? "rgba(255,255,255,0.05)"
+                  : "rgba(0,0,0,0.05)"
+              }`,
               transition: "all 0.2s",
               transform: hovered === r.key ? "translateY(-2px)" : "none",
               cursor: "default",
             }}
           >
             <div style={{ fontSize: 22, marginBottom: 7 }}>{r.emoji}</div>
-            <div style={{
-              fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", fontFamily: "'Space Mono', monospace",
-              color: r.color, marginBottom: 5,
-            }}>{r.key}</div>
-            <p style={{ margin: 0, fontSize: 11, lineHeight: 1.6, color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)" }}>{r.desc}</p>
+            <div
+              style={{
+                fontSize: 10,
+                fontWeight: 800,
+                letterSpacing: "0.18em",
+                fontFamily: "'Space Mono', monospace",
+                color: r.color,
+                marginBottom: 5,
+              }}
+            >
+              {r.key}
+            </div>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 11,
+                lineHeight: 1.6,
+                color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)",
+              }}
+            >
+              {r.desc}
+            </p>
           </div>
         ))}
       </div>
@@ -461,7 +693,9 @@ export default function App() {
   const [headerVisible, setHeaderVisible] = useState(true);
   const lastScroll = useRef(0);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handle = () => {
@@ -469,6 +703,7 @@ export default function App() {
       setHeaderVisible(y < lastScroll.current || y < 60);
       lastScroll.current = y;
     };
+
     window.addEventListener("scroll", handle, { passive: true });
     return () => window.removeEventListener("scroll", handle);
   }, []);
@@ -477,8 +712,10 @@ export default function App() {
     const id = "bw-ext-fonts";
     if (!document.getElementById(id)) {
       const l = document.createElement("link");
-      l.id = id; l.rel = "stylesheet";
-      l.href = "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;500;600;700;800;900&display=swap";
+      l.id = id;
+      l.rel = "stylesheet";
+      l.href =
+        "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;500;600;700;800;900&display=swap";
       document.head.appendChild(l);
     }
   }, []);
@@ -486,18 +723,20 @@ export default function App() {
   if (!mounted) return null;
 
   const bg = dark
-    ? "linear-gradient(160deg, #050a14 0%, #080d1a 50%, #06091200 100%)"
+    ? "linear-gradient(160deg, #050a14 0%, #080d1a 50%, #060912 100%)"
     : "linear-gradient(160deg, #e8eeff 0%, #f4f6ff 50%, #eff0ff 100%)";
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: bg,
-      color: dark ? "#e8edf5" : "#0f172a",
-      fontFamily: "'Outfit', sans-serif",
-      position: "relative",
-      overflowX: "hidden",
-    }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: bg,
+        color: dark ? "#e8edf5" : "#0f172a",
+        fontFamily: "'Outfit', sans-serif",
+        position: "relative",
+        overflowX: "hidden",
+      }}
+    >
       <style>{`
         @keyframes glitch-a {
           0%,100% { clip-path: inset(0 0 98% 0); transform: translateX(-2px); }
@@ -546,7 +785,10 @@ export default function App() {
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)"}; border-radius: 99px; }
+        ::-webkit-scrollbar-thumb {
+          background: ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)"};
+          border-radius: 99px;
+        }
         body { margin: 0; }
         button { font-family: inherit; }
       `}</style>
@@ -555,148 +797,251 @@ export default function App() {
       <Scanlines />
 
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
-        <div style={{
-          position: "absolute", width: 600, height: 600, borderRadius: "50%",
-          background: dark ? "radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)" : "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
-          top: -200, left: -100,
-        }} />
-        <div style={{
-          position: "absolute", width: 500, height: 500, borderRadius: "50%",
-          background: dark ? "radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%)" : "radial-gradient(circle, rgba(220,38,38,0.05) 0%, transparent 70%)",
-          bottom: 0, right: -100,
-        }} />
+        <div
+          style={{
+            position: "absolute",
+            width: 600,
+            height: 600,
+            borderRadius: "50%",
+            background: dark
+              ? "radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)"
+              : "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
+            top: -200,
+            left: -100,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background: dark
+              ? "radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%)"
+              : "radial-gradient(circle, rgba(220,38,38,0.05) 0%, transparent 70%)",
+            bottom: 0,
+            right: -100,
+          }}
+        />
       </div>
 
-      <div style={{
-        position: "sticky", top: 0, zIndex: 100,
-        transform: headerVisible ? "translateY(0)" : "translateY(-100%)",
-        transition: "transform 0.3s cubic-bezier(.22,1,.36,1)",
-      }}>
-        <div style={{
-          padding: "10px 16px",
-          background: dark ? "rgba(5,10,20,0.85)" : "rgba(240,244,255,0.9)",
-          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)"}`,
-          display: "grid", gridTemplateColumns: "auto 1fr auto", alignItems: "center", gap: 12,
-          flexWrap: "wrap",
-        }}>
+      {/* NAVBAR */}
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          transform: headerVisible ? "translateY(0)" : "translateY(-100%)",
+          transition: "transform 0.3s cubic-bezier(.22,1,.36,1)",
+        }}
+      >
+        <div
+          style={{
+            padding: "10px 16px",
+            background: dark ? "rgba(5,10,20,0.85)" : "rgba(240,244,255,0.9)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)"}`,
+            display: "grid",
+            gridTemplateColumns: "auto 1fr auto",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{
-              width: 28, height: 28, borderRadius: 8,
-              background: "linear-gradient(135deg, #2563eb, #60a5fa, #dc2626)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 14, boxShadow: "0 0 18px rgba(37,99,235,0.35), 0 0 28px rgba(220,38,38,0.12)",
-            }}>🛏</div>
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 8,
+                background: "linear-gradient(135deg, #2563eb, #60a5fa, #dc2626)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 14,
+                boxShadow: "0 0 18px rgba(37,99,235,0.35), 0 0 28px rgba(220,38,38,0.12)",
+              }}
+            >
+              🛏
+            </div>
+
             <div>
-              <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1, fontFamily: "'Space Mono', monospace", color: dark ? "#fff" : "#0f172a" }}>BEDWARS</div>
-              <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)", fontFamily: "'Space Mono', monospace" }}>SQUADS META</div>
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.1,
+                  fontFamily: "'Space Mono', monospace",
+                  color: dark ? "#fff" : "#0f172a",
+                }}
+              >
+                BEDWARS
+              </div>
+              <div
+                style={{
+                  fontSize: 9,
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+                  fontFamily: "'Space Mono', monospace",
+                }}
+              >
+                SQUADS META
+              </div>
             </div>
           </div>
-            <div style={{
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flex: 1,
-}}>
-  {/* CENTER TABS */}
-  <div style={{
-    display: "flex",
-    gap: 3,
-    background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
-    borderRadius: 12,
-    padding: 4,
-    border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
-  }}>
-    {[["comps", "⚔️ Comps"], ["tips", "📋 Tips"], ["roles", "👥 Roles"]].map(([key, label]) => (
-      <button key={key} onClick={() => setTab(key)} style={{
-        padding: "6px 14px",
-        borderRadius: 8,
-        border: "none",
-        cursor: "pointer",
-        fontSize: 11,
-        fontWeight: 700,
-        fontFamily: "'Space Mono', monospace",
-        background: tab === key
-          ? dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"
-          : "transparent",
-        color: tab === key
-          ? dark ? "#fff" : "#0f172a"
-          : dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
-        transition: "all 0.2s",
-      }}>
-        {label}
-      </button>
-    ))}
-  </div>
-</div>
 
-{/* RIGHT SIDE DARK TOGGLE */}
-<div>
-  <button onClick={() => setDark(d => !d)} style={{
-    width: 34,
-    height: 34,
-    borderRadius: 10,
-    border: "none",
-    cursor: "pointer",
-    background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
-    transition: "all 0.2s",
-  }}>
-    {dark ? <SunIcon /> : <MoonIcon />}
-  </button>
-</div>
-       
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: 3,
+                background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+                borderRadius: 12,
+                padding: 4,
+                border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+              }}
+            >
+              {[["comps", "⚔️ Comps"], ["tips", "📋 Tips"], ["roles", "👥 Roles"]].map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setTab(key)}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: 8,
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    fontFamily: "'Space Mono', monospace",
+                    background:
+                      tab === key
+                        ? dark
+                          ? "rgba(255,255,255,0.12)"
+                          : "rgba(0,0,0,0.08)"
+                        : "transparent",
+                    color:
+                      tab === key
+                        ? dark
+                          ? "#fff"
+                          : "#0f172a"
+                        : dark
+                        ? "rgba(255,255,255,0.4)"
+                        : "rgba(0,0,0,0.4)",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <button
+              onClick={() => setDark((d) => !d)}
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 10,
+                border: "none",
+                cursor: "pointer",
+                background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
+                transition: "all 0.2s",
+              }}
+            >
+              {dark ? <SunIcon /> : <MoonIcon />}
+            </button>
           </div>
         </div>
       </div>
 
+      {/* HERO + CONTENT */}
       <div style={{ position: "relative", zIndex: 2, padding: "40px 16px 20px", maxWidth: 900, margin: "0 auto" }}>
         <div className="fade-in" style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            borderRadius: 999, padding: "5px 14px",
-            background: dark ? "rgba(59,130,246,0.12)" : "rgba(59,130,246,0.08)",
-            border: "1px solid rgba(59,130,246,0.3)",
-            marginBottom: 18,
-          }}>
-            <div className="pulse" style={{
-              width: 7, height: 7, borderRadius: "50%",
-              background: "#3b82f6",
-              boxShadow: "0 0 8px #3b82f6",
-            }} />
-            <span style={{ fontSize: 11, fontWeight: 700, fontFamily: "'Space Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: "#3b82f6" }}>Roblox BedWars · Ranked Squads</span>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              borderRadius: 999,
+              padding: "5px 14px",
+              background: dark ? "rgba(59,130,246,0.12)" : "rgba(59,130,246,0.08)",
+              border: "1px solid rgba(59,130,246,0.3)",
+              marginBottom: 18,
+            }}
+          >
+            <div
+              className="pulse"
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: "50%",
+                background: "#3b82f6",
+                boxShadow: "0 0 8px #3b82f6",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "#3b82f6",
+              }}
+            >
+              Roblox BedWars · Ranked Squads
+            </span>
           </div>
 
           <h1 style={{ margin: "0 0 12px", lineHeight: 1.05 }}>
-            <GlitchText style={{
-              fontSize: "clamp(2.4rem, 9vw, 5rem)",
-              fontWeight: 900,
-              fontFamily: "'Space Mono', monospace",
-              letterSpacing: "-0.05em",
-              color: dark ? "#ffffff" : "#0f172a",
-              display: "block",
-              textShadow: dark ? "0 0 30px rgba(37,99,235,0.18)" : "none",
-            }}>SQUADS</GlitchText>
-            <span style={{
-              fontSize: "clamp(1.1rem, 4vw, 1.8rem)",
-              fontWeight: 700,
-              fontFamily: "'Space Mono', monospace",
-              letterSpacing: "0.08em",
-              background: "linear-gradient(90deg, #60a5fa 0%, #2563eb 45%, #dc2626 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              display: "block",
-            }}>COMPS · ROLES · WIN CONDITIONS</span>
+            <GlitchText
+              style={{
+                fontSize: "clamp(2.4rem, 9vw, 5rem)",
+                fontWeight: 900,
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: "-0.05em",
+                color: dark ? "#ffffff" : "#0f172a",
+                display: "block",
+                textShadow: dark ? "0 0 30px rgba(37,99,235,0.18)" : "none",
+              }}
+            >
+              SQUADS
+            </GlitchText>
+
+            <span
+              style={{
+                fontSize: "clamp(1.1rem, 4vw, 1.8rem)",
+                fontWeight: 700,
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: "0.08em",
+                background: "linear-gradient(90deg, #60a5fa 0%, #2563eb 45%, #dc2626 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                display: "block",
+              }}
+            >
+              COMPS · ROLES · WIN CONDITIONS
+            </span>
           </h1>
 
-          <p style={{
-            fontSize: 14, lineHeight: 1.7, maxWidth: 480, margin: "0 auto",
-            color: dark ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.45)",
-          }}>
+          <p
+            style={{
+              fontSize: 14,
+              lineHeight: 1.7,
+              maxWidth: 480,
+              margin: "0 auto",
+              color: dark ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.45)",
+            }}
+          >
             Ranked squads structure, roles, and execution — clean reference for 4-stack teams.
           </p>
 
@@ -720,78 +1065,132 @@ export default function App() {
             }}
           >
             <div style={{ textAlign: "left" }}>
-              <div style={{
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                fontFamily: "'Space Mono', monospace",
-                color: "#3b82f6",
-                marginBottom: 3,
-              }}>
+              <div
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  fontFamily: "'Space Mono', monospace",
+                  color: "#3b82f6",
+                  marginBottom: 3,
+                }}
+              >
                 Current style
               </div>
-              <div style={{
-                fontSize: 13,
-                fontWeight: 600,
-                color: dark ? "rgba(255,255,255,0.8)" : "#0f172a",
-              }}>
+
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: dark ? "rgba(255,255,255,0.8)" : "#0f172a",
+                }}
+              >
                 Clean macro comps with fast grouped pressure
               </div>
             </div>
 
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "7px 12px",
-              borderRadius: 999,
-              background: "rgba(37,99,235,0.12)",
-              border: "1px solid rgba(37,99,235,0.25)",
-            }}>
-              <div style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#2563eb",
-                boxShadow: "0 0 12px rgba(37,99,235,0.8)",
-              }} />
-              <span style={{
-                fontSize: 11,
-                fontWeight: 700,
-                fontFamily: "'Space Mono', monospace",
-                color: "#60a5fa",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-              }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "7px 12px",
+                borderRadius: 999,
+                background: "rgba(37,99,235,0.12)",
+                border: "1px solid rgba(37,99,235,0.25)",
+              }}
+            >
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#2563eb",
+                  boxShadow: "0 0 12px rgba(37,99,235,0.8)",
+                }}
+              />
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  fontFamily: "'Space Mono', monospace",
+                  color: "#60a5fa",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                }}
+              >
                 Live Meta
               </span>
             </div>
           </div>
 
-          <div className="fade-in fade-in-1" style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 24, flexWrap: "wrap" }}>
+          <div
+            className="fade-in fade-in-1"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 10,
+              marginTop: 24,
+              flexWrap: "wrap",
+            }}
+          >
             {[
               { val: "5", label: "Comps", color: "#3b82f6" },
               { val: "5", label: "Roles", color: "#10b981" },
               { val: "4", label: "Strat Guides", color: "#8b5cf6" },
-            ].map(s => (
-              <div key={s.label} style={{
-                borderRadius: 14, padding: "12px 22px",
-                background: dark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.7)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)"}`,
-                backdropFilter: "blur(12px)",
-                textAlign: "center",
-              }}>
-                <div style={{ fontSize: "1.6rem", fontWeight: 900, fontFamily: "'Space Mono', monospace", color: s.color }}>{s.val}</div>
-                <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)", marginTop: 2, fontFamily: "'Space Mono', monospace" }}>{s.label}</div>
+            ].map((s) => (
+              <div
+                key={s.label}
+                style={{
+                  borderRadius: 14,
+                  padding: "12px 22px",
+                  background: dark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.7)",
+                  border: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)"}`,
+                  backdropFilter: "blur(12px)",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "1.6rem",
+                    fontWeight: 900,
+                    fontFamily: "'Space Mono', monospace",
+                    color: s.color,
+                  }}
+                >
+                  {s.val}
+                </div>
+                <div
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)",
+                    marginTop: 2,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                >
+                  {s.label}
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         {tab === "comps" && (
-          <div className="fade-in fade-in-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
-            {COMPS.map((comp, i) => <CompCard key={i} comp={comp} dark={dark} />)}
+          <div
+            className="fade-in fade-in-2"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: 14,
+            }}
+          >
+            {COMPS.map((comp, i) => (
+              <CompCard key={i} comp={comp} dark={dark} />
+            ))}
           </div>
         )}
 
@@ -823,40 +1222,56 @@ export default function App() {
             textAlign: "center",
           }}
         >
-          <div style={{
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            fontFamily: "'Space Mono', monospace",
-            color: "#60a5fa",
-            marginBottom: 8,
-          }}>
+          <div
+            style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              fontFamily: "'Space Mono', monospace",
+              color: "#60a5fa",
+              marginBottom: 8,
+            }}
+          >
             Ranked squads focus
           </div>
 
-          <h3 style={{
-            margin: "0 0 8px",
-            fontSize: "clamp(1.25rem, 4vw, 1.8rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            color: dark ? "#fff" : "#0f172a",
-          }}>
+          <h3
+            style={{
+              margin: "0 0 8px",
+              fontSize: "clamp(1.25rem, 4vw, 1.8rem)",
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
+              color: dark ? "#fff" : "#0f172a",
+            }}
+          >
             Play cleaner. Scale faster. End games properly.
           </h3>
 
-          <p style={{
-            margin: "0 auto",
-            maxWidth: 520,
-            fontSize: 13,
-            lineHeight: 1.7,
-            color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
-          }}>
+          <p
+            style={{
+              margin: "0 auto",
+              maxWidth: 520,
+              fontSize: 13,
+              lineHeight: 1.7,
+              color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+            }}
+          >
             Use this page as a clean squads reference for comps roles and win conditions instead of random callouts and bad queue habits.
           </p>
         </div>
 
-        <div style={{ marginTop: 32, textAlign: "center", fontSize: 10, fontFamily: "'Space Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.2)" }}>
+        <div
+          style={{
+            marginTop: 32,
+            textAlign: "center",
+            fontSize: 10,
+            fontFamily: "'Space Mono', monospace",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.2)",
+          }}
+        >
           BEDWARS SQUADS META REFERENCE · 4-STACK RANKED PLAY
         </div>
       </div>
