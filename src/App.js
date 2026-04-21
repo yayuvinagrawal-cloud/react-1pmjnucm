@@ -186,6 +186,7 @@ export default function BedwarsMetaSite() {
           </div>
         </section>
       </div>
+      </div>
     </div>
   );
 }
