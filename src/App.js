@@ -1,11 +1,46 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+const SUN = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+);
+
+const MOON = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+);
+
 export default function BedwarsMetaSite() {
+  const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [activeComp, setActiveComp] = useState(null);
+
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem("bw-dark");
+    if (saved) setIsDark(JSON.parse(saved));
+  }, []);
+
+  useEffect(() => {
+    if (mounted) localStorage.setItem("bw-dark", JSON.stringify(isDark));
+  }, [isDark, mounted]);
+
   const comps = [
     {
       name: "Sheila / Star / Noelle / Beekeeper",
       tag: "Core comp",
+      accent: isDark ? "#60a5fa" : "#2563eb",
+      accentBg: isDark ? "rgba(96,165,250,0.08)" : "rgba(37,99,235,0.06)",
+      glow: isDark ? "0 0 40px rgba(96,165,250,0.15)" : "0 8px 40px rgba(37,99,235,0.12)",
+      icon: "⚔️",
       why: "Reliable, well-rounded setup with pressure, sustain, and steady scaling.",
-      useWhen: "Use when your team has good coordination and your Beekeeper can consistently build value early (prioritize getting bees quickly rather than overcommitting to base).",
+      useWhen: "Use when your team has good coordination and your Beekeeper can consistently build value early — prioritize getting bees quickly rather than overcommitting to base.",
       early: "Split 2 mid / 2 base. Take only favorable fights.",
       mid: "Play around Sheila and Star to control space and take one clean team fight.",
       win: "Convert a won fight into immediate bed pressure.",
@@ -13,6 +48,10 @@ export default function BedwarsMetaSite() {
     {
       name: "Farmer / Fisher / Star / Amy",
       tag: "Stable econ",
+      accent: isDark ? "#34d399" : "#059669",
+      accentBg: isDark ? "rgba(52,211,153,0.08)" : "rgba(5,150,105,0.06)",
+      glow: isDark ? "0 0 40px rgba(52,211,153,0.15)" : "0 8px 40px rgba(5,150,105,0.12)",
+      icon: "💰",
       why: "Consistent resource scaling with strong defensive stability.",
       useWhen: "When running a stable economy with two bed defenders; prioritize a safe early game and scale into mid game.",
       early: "Avoid unnecessary fights and protect your economy players.",
@@ -20,8 +59,12 @@ export default function BedwarsMetaSite() {
       win: "Leverage gear advantage and push as a group.",
     },
     {
-      name: "Lani / Lani / Warden (or Nyx) / Fisher",
+      name: "Lani / Lani / Warden / Fisher",
       tag: "Bypass",
+      accent: isDark ? "#f472b6" : "#db2777",
+      accentBg: isDark ? "rgba(244,114,182,0.08)" : "rgba(219,39,119,0.06)",
+      glow: isDark ? "0 0 40px rgba(244,114,182,0.15)" : "0 8px 40px rgba(219,39,119,0.12)",
+      icon: "🏃",
       why: "Designed to avoid standard engagements and create fast win conditions through bed pressure.",
       useWhen: "Against slower teams or when aiming for shorter games.",
       early: "Split lanes. Lani players create angles while Fisher focuses on economy.",
@@ -31,11 +74,11 @@ export default function BedwarsMetaSite() {
   ];
 
   const roles = [
-    { key: "CYCLE", desc: "Scaling kits such as Metal, Beekeeper, Farmer, and Fisher." },
-    { key: "BD", desc: "Bed defender. Maintains generator control and base stability." },
-    { key: "MJ", desc: "Main jugg. Primary PvP role. Amy and Freya are strong examples that are less kill-dependent." },
-    { key: "SJ", desc: "Second jugg. Supports the main jugg and creates advantages (e.g., Zeno, Lassy, Star)." },
-    { key: "BBER", desc: "Bed breaker. Focuses on identifying openings and ending games." },
+    { key: "CYCLE", emoji: "♻️", desc: "Scaling kits such as Metal, Beekeeper, Farmer, and Fisher." },
+    { key: "BD", emoji: "🛡️", desc: "Bed defender. Maintains generator control and base stability." },
+    { key: "MJ", emoji: "⚡", desc: "Main jugg. Primary PvP role. Amy and Freya are strong examples that are less kill-dependent." },
+    { key: "SJ", emoji: "🤝", desc: "Second jugg. Supports the main jugg and creates advantages (e.g., Zeno, Lassy, Star)." },
+    { key: "BBER", emoji: "💥", desc: "Bed breaker. Focuses on identifying openings and ending games." },
   ];
 
   const quickGuide = [
@@ -44,139 +87,597 @@ export default function BedwarsMetaSite() {
     "Protect cycle kits during the early phase.",
     "Prioritize early blocks and a stone sword over unnecessary fights.",
     "One clean team fight often determines the outcome of the match.",
-    "Vs cheaters: don’t ego fight. play gear, stack blocks/TNT, have 1 BBER look for openings while others pressure and tnt rain.",
+    "Vs cheaters: don't ego fight. Play gear, stack blocks/TNT, have 1 BBER look for openings while others pressure and TNT rain.",
   ];
 
+  const d = isDark;
+
+  const styles = {
+    page: {
+      minHeight: "100vh",
+      background: d
+        ? "linear-gradient(135deg, #080c14 0%, #0c1220 40%, #0a0f1c 100%)"
+        : "linear-gradient(135deg, #f0f4ff 0%, #fafbff 50%, #f5f0ff 100%)",
+      color: d ? "#e8edf5" : "#0f172a",
+      fontFamily: "'Sora', 'DM Sans', sans-serif",
+      transition: "background 0.5s ease, color 0.4s ease",
+      position: "relative",
+      overflow: "hidden",
+    },
+    meshLayer: {
+      position: "fixed",
+      inset: 0,
+      pointerEvents: "none",
+      zIndex: 0,
+      background: d
+        ? `radial-gradient(ellipse 80% 60% at 20% 10%, rgba(59,130,246,0.08) 0%, transparent 60%),
+           radial-gradient(ellipse 60% 50% at 80% 80%, rgba(139,92,246,0.07) 0%, transparent 60%),
+           radial-gradient(ellipse 50% 40% at 60% 30%, rgba(16,185,129,0.04) 0%, transparent 60%)`
+        : `radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,0.08) 0%, transparent 60%),
+           radial-gradient(ellipse 60% 50% at 80% 80%, rgba(168,85,247,0.06) 0%, transparent 60%),
+           radial-gradient(ellipse 50% 40% at 60% 30%, rgba(59,130,246,0.05) 0%, transparent 60%)`,
+    },
+    gridPattern: {
+      position: "fixed",
+      inset: 0,
+      pointerEvents: "none",
+      zIndex: 0,
+      opacity: d ? 0.03 : 0.025,
+      backgroundImage: `linear-gradient(${d ? "#fff" : "#000"} 1px, transparent 1px), linear-gradient(90deg, ${d ? "#fff" : "#000"} 1px, transparent 1px)`,
+      backgroundSize: "60px 60px",
+    },
+    content: {
+      position: "relative",
+      zIndex: 1,
+      maxWidth: 1280,
+      margin: "0 auto",
+      padding: "40px 24px 60px",
+    },
+    // Hero card
+    heroCard: {
+      borderRadius: 28,
+      border: `1px solid ${d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+      background: d
+        ? "rgba(255,255,255,0.03)"
+        : "rgba(255,255,255,0.85)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+      boxShadow: d
+        ? "0 0 0 1px rgba(255,255,255,0.04), 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07)"
+        : "0 20px 60px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03)",
+      marginBottom: 28,
+      overflow: "hidden",
+      transition: "all 0.5s ease",
+    },
+    heroBar: {
+      padding: "14px 28px",
+      borderBottom: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 12,
+    },
+    heroBarLeft: { display: "flex", alignItems: "center", gap: 12 },
+    dot: (color) => ({
+      width: 12,
+      height: 12,
+      borderRadius: "50%",
+      background: color,
+      opacity: 0.8,
+    }),
+    pill: {
+      borderRadius: 999,
+      background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+      border: `1px solid ${d ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)"}`,
+      padding: "5px 14px",
+      fontSize: 12,
+      fontWeight: 500,
+      color: d ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
+      letterSpacing: "0.01em",
+    },
+    darkToggle: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      cursor: "pointer",
+      borderRadius: 999,
+      border: `1px solid ${d ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+      background: d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
+      padding: "6px 14px 6px 10px",
+      fontSize: 13,
+      fontWeight: 600,
+      color: d ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
+      transition: "all 0.3s ease",
+      userSelect: "none",
+    },
+    heroBody: {
+      display: "grid",
+      gap: 32,
+      padding: "40px 28px",
+      gridTemplateColumns: "1fr auto",
+      alignItems: "end",
+    },
+    badge: {
+      display: "inline-flex",
+      borderRadius: 999,
+      border: `1px solid ${d ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)"}`,
+      background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
+      padding: "5px 14px",
+      fontSize: 13,
+      fontWeight: 500,
+      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.45)",
+      marginBottom: 16,
+    },
+    h1: {
+      fontSize: "clamp(2.2rem, 5vw, 3.6rem)",
+      fontWeight: 700,
+      letterSpacing: "-0.03em",
+      lineHeight: 1.1,
+      margin: 0,
+      background: d
+        ? "linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%)"
+        : "linear-gradient(135deg, #0f172a 0%, #334155 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      backgroundClip: "text",
+    },
+    heroSub: {
+      marginTop: 14,
+      fontSize: 16,
+      lineHeight: 1.65,
+      color: d ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)",
+      maxWidth: 500,
+    },
+    statsGrid: {
+      display: "grid",
+      gap: 10,
+      minWidth: 220,
+    },
+    statCard: {
+      borderRadius: 18,
+      border: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
+      background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
+      padding: "16px 20px",
+    },
+    statLabel: {
+      fontSize: 11,
+      fontWeight: 500,
+      letterSpacing: "0.05em",
+      textTransform: "uppercase",
+      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)",
+    },
+    statVal: {
+      fontSize: 16,
+      fontWeight: 650,
+      marginTop: 6,
+      color: d ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.8)",
+    },
+
+    // Two-col
+    twoCol: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1.15fr",
+      gap: 24,
+      marginBottom: 24,
+    },
+
+    // Section card
+    section: (extra = {}) => ({
+      borderRadius: 28,
+      border: `1px solid ${d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+      background: d ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.85)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+      boxShadow: d
+        ? "0 0 0 1px rgba(255,255,255,0.03), 0 20px 50px rgba(0,0,0,0.35)"
+        : "0 20px 50px rgba(0,0,0,0.05)",
+      padding: "28px 28px",
+      transition: "all 0.5s ease",
+      ...extra,
+    }),
+
+    sectionHead: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 20,
+    },
+    h2: {
+      fontSize: "1.45rem",
+      fontWeight: 700,
+      letterSpacing: "-0.025em",
+      margin: 0,
+    },
+    smallPill: {
+      borderRadius: 999,
+      background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+      padding: "4px 12px",
+      fontSize: 11,
+      fontWeight: 600,
+      letterSpacing: "0.04em",
+      textTransform: "uppercase",
+      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+    },
+
+    // Checklist item
+    checkItem: (i) => ({
+      display: "flex",
+      alignItems: "flex-start",
+      gap: 14,
+      borderRadius: 16,
+      padding: "14px 16px",
+      background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
+      border: `1px solid ${d ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)"}`,
+      transition: "transform 0.2s ease, background 0.2s ease",
+    }),
+    numBadge: (i) => {
+      const accent = ["#60a5fa","#34d399","#f472b6","#a78bfa","#fb923c","#facc15"][i % 6];
+      return {
+        flexShrink: 0,
+        width: 30,
+        height: 30,
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 12,
+        fontWeight: 700,
+        background: d ? `${accent}18` : `${accent}20`,
+        color: accent,
+        border: `1px solid ${accent}35`,
+      };
+    },
+    checkText: {
+      paddingTop: 5,
+      fontSize: 13,
+      lineHeight: 1.6,
+      color: d ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.55)",
+    },
+
+    // Role card
+    rolesGrid: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 12,
+    },
+    roleCard: {
+      borderRadius: 18,
+      padding: "18px 18px",
+      border: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
+      background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
+      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+      cursor: "default",
+    },
+    roleKey: {
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: "0.2em",
+      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+    },
+    roleDesc: {
+      marginTop: 8,
+      fontSize: 12.5,
+      lineHeight: 1.6,
+      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+    },
+
+    // Comps section
+    compsSection: {
+      borderRadius: 28,
+      border: `1px solid ${d ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+      background: d ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.85)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+      boxShadow: d
+        ? "0 0 0 1px rgba(255,255,255,0.03), 0 30px 70px rgba(0,0,0,0.4)"
+        : "0 30px 70px rgba(0,0,0,0.06)",
+      padding: "32px 28px",
+      transition: "all 0.5s ease",
+    },
+
+    compsGrid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: 20,
+      marginTop: 24,
+    },
+
+    compCard: (comp, isActive) => ({
+      borderRadius: 22,
+      border: `1px solid ${isActive
+        ? `${comp.accent}40`
+        : d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
+      background: isActive
+        ? comp.accentBg
+        : d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
+      padding: "22px",
+      cursor: "pointer",
+      transition: "all 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+      transform: isActive ? "translateY(-4px) scale(1.01)" : "translateY(0) scale(1)",
+      boxShadow: isActive ? comp.glow : "none",
+      position: "relative",
+      overflow: "hidden",
+    }),
+
+    compGlowBar: (accent) => ({
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 2,
+      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+      opacity: 0.8,
+    }),
+
+    compTag: {
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: "0.18em",
+      textTransform: "uppercase",
+      color: d ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)",
+    },
+
+    compName: {
+      fontSize: "1rem",
+      fontWeight: 700,
+      letterSpacing: "-0.02em",
+      marginTop: 6,
+      marginBottom: 12,
+      color: d ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)",
+    },
+
+    compWhy: {
+      fontSize: 12.5,
+      lineHeight: 1.65,
+      color: d ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)",
+      marginBottom: 14,
+    },
+
+    infoBox: (accent) => ({
+      borderRadius: 14,
+      padding: "12px 14px",
+      background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
+      border: `1px solid ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
+      marginBottom: 8,
+    }),
+
+    infoLabel: (accent) => ({
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: "0.15em",
+      textTransform: "uppercase",
+      color: accent,
+      marginBottom: 5,
+    }),
+
+    infoText: {
+      fontSize: 12,
+      lineHeight: 1.6,
+      color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+    },
+
+    divider: {
+      height: 1,
+      background: d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+      margin: "14px 0",
+    },
+  };
+
+  // Google Fonts injection
+  useEffect(() => {
+    if (!document.getElementById("bw-fonts")) {
+      const link = document.createElement("link");
+      link.id = "bw-fonts";
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap";
+      document.head.appendChild(link);
+    }
+  }, []);
+
+  if (!mounted) return null;
+
   return (
-    <div className="min-h-screen bg-[#f5f5f7] text-neutral-900">
-      <div className="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10">
-        <div className="mb-8 overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
-          <div className="border-b border-black/5 px-6 py-4 sm:px-8">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="h-3 w-3 rounded-full bg-red-400/80" />
-                <div className="h-3 w-3 rounded-full bg-amber-400/80" />
-                <div className="h-3 w-3 rounded-full bg-green-400/80" />
-              </div>
-              <div className="rounded-full bg-black/[0.03] px-4 py-1.5 text-xs font-medium text-neutral-500">
-                squads reference
-              </div>
+    <div style={styles.page}>
+      {/* Background layers */}
+      <div style={styles.meshLayer} />
+      <div style={styles.gridPattern} />
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .bw-fadeup { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+        .bw-fadeup-1 { animation-delay: 0.05s; }
+        .bw-fadeup-2 { animation-delay: 0.12s; }
+        .bw-fadeup-3 { animation-delay: 0.18s; }
+        .bw-fadeup-4 { animation-delay: 0.24s; }
+        .check-row:hover { background: ${d ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)"} !important; transform: translateX(3px); }
+        .role-card:hover { transform: translateY(-3px); box-shadow: ${d ? "0 8px 30px rgba(0,0,0,0.3)" : "0 8px 24px rgba(0,0,0,0.07)"}; }
+        .dark-toggle:hover { background: ${d ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.07)"} !important; }
+        * { box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: ${d ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.12)"}; border-radius: 999px; }
+      `}</style>
+
+      <div style={styles.content}>
+
+        {/* Hero card */}
+        <div style={styles.heroCard} className="bw-fadeup">
+          <div style={styles.heroBar}>
+            <div style={styles.heroBarLeft}>
+              <div style={styles.dot("#f87171")} />
+              <div style={styles.dot("#fbbf24")} />
+              <div style={styles.dot("#4ade80")} />
+              <div style={styles.pill}>squads reference</div>
             </div>
+            <button
+              onClick={() => setIsDark(!isDark)}
+              style={styles.darkToggle}
+              className="dark-toggle"
+            >
+              {isDark ? <SUN /> : <MOON />}
+              <span>{isDark ? "Light mode" : "Dark mode"}</span>
+            </button>
           </div>
 
-          <div className="grid gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
+          <div style={styles.heroBody}>
             <div>
-              <div className="mb-4 inline-flex rounded-full border border-black/10 bg-black/[0.03] px-4 py-1.5 text-sm font-medium text-neutral-600">
-                Roblox BedWars
-              </div>
-              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-                Squads comps, roles, and win conditions
+              <div style={styles.badge}>Roblox BedWars · Ranked Squads</div>
+              <h1 style={styles.h1}>
+                Squads comps,<br />roles &amp; win conditions
               </h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-500 sm:text-lg">
+              <p style={styles.heroSub}>
                 A concise reference for effective ranked play focused on structure, roles, and execution.
               </p>
             </div>
-
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-              <div className="rounded-3xl border border-black/5 bg-[#fafafa] p-5">
-                <div className="text-sm text-neutral-500">Best for</div>
-                <div className="mt-2 text-lg font-semibold">4-stack ranked teams</div>
+            <div style={styles.statsGrid}>
+              <div style={styles.statCard}>
+                <div style={styles.statLabel}>Best for</div>
+                <div style={styles.statVal}>4-stack ranked teams</div>
               </div>
-              <div className="rounded-3xl border border-black/5 bg-[#fafafa] p-5">
-                <div className="text-sm text-neutral-500">Focus</div>
-                <div className="mt-2 text-lg font-semibold">Roles and coordination</div>
+              <div style={styles.statCard}>
+                <div style={styles.statLabel}>Focus</div>
+                <div style={styles.statVal}>Roles and coordination</div>
               </div>
-              <div className="rounded-3xl border border-black/5 bg-[#fafafa] p-5">
-                <div className="text-sm text-neutral-500">Approach</div>
-                <div className="mt-2 text-lg font-semibold">Convert advantages quickly</div>
+              <div style={styles.statCard}>
+                <div style={styles.statLabel}>Approach</div>
+                <div style={styles.statVal}>Convert advantages quickly</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mb-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] sm:p-7">
-            <div className="mb-5 flex items-center justify-between gap-3">
-              <h2 className="text-2xl font-semibold tracking-tight">Win checklist</h2>
-              <span className="rounded-full bg-black/[0.04] px-3 py-1 text-xs font-medium text-neutral-500">core</span>
+        {/* Two col */}
+        <div style={styles.twoCol} className="bw-fadeup bw-fadeup-1">
+
+          {/* Win checklist */}
+          <div style={styles.section()}>
+            <div style={styles.sectionHead}>
+              <h2 style={styles.h2}>Win checklist</h2>
+              <span style={styles.smallPill}>core</span>
             </div>
-            <div className="space-y-3">
-              {quickGuide.map((item, index) => (
-                <div key={item} className="flex items-start gap-4 rounded-2xl bg-[#f8f8f8] p-4">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-semibold shadow-sm ring-1 ring-black/5">
-                    {index + 1}
-                  </div>
-                  <p className="pt-1 text-sm leading-6 text-neutral-600">{item}</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {quickGuide.map((item, i) => (
+                <div
+                  key={i}
+                  style={styles.checkItem(i)}
+                  className="check-row"
+                >
+                  <div style={styles.numBadge(i)}>{i + 1}</div>
+                  <p style={styles.checkText}>{item}</p>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
 
-          <section className="rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] sm:p-7">
-            <div className="mb-5 flex items-center justify-between gap-3">
-              <h2 className="text-2xl font-semibold tracking-tight">Roles</h2>
-              <span className="rounded-full bg-black/[0.04] px-3 py-1 text-xs font-medium text-neutral-500">definitions</span>
+          {/* Roles */}
+          <div style={styles.section()}>
+            <div style={styles.sectionHead}>
+              <h2 style={styles.h2}>Roles</h2>
+              <span style={styles.smallPill}>definitions</span>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div style={styles.rolesGrid}>
               {roles.map((r) => (
-                <div key={r.key} className="rounded-3xl border border-black/5 bg-[#fafafa] p-5 transition-transform duration-200 hover:-translate-y-0.5">
-                  <div className="text-sm font-semibold tracking-[0.18em] text-neutral-400">{r.key}</div>
-                  <p className="mt-3 text-sm leading-6 text-neutral-600">{r.desc}</p>
+                <div key={r.key} style={styles.roleCard} className="role-card">
+                  <div style={{ fontSize: 22, marginBottom: 8 }}>{r.emoji}</div>
+                  <div style={styles.roleKey}>{r.key}</div>
+                  <p style={styles.roleDesc}>{r.desc}</p>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
         </div>
 
-        <section className="rounded-[32px] border border-black/5 bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] sm:p-7">
-          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        {/* Comps */}
+        <div style={styles.compsSection} className="bw-fadeup bw-fadeup-2">
+          <div style={styles.sectionHead}>
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Recommended comps</h2>
-              <p className="mt-1 text-sm text-neutral-500">When to use them and how they typically convert games.</p>
+              <h2 style={{ ...styles.h2, fontSize: "1.65rem" }}>Recommended comps</h2>
+              <p style={{ margin: "4px 0 0", fontSize: 13, color: d ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)" }}>
+                Click a comp to expand details — when to use it and how it converts games.
+              </p>
             </div>
-            <div className="rounded-full bg-black/[0.04] px-4 py-1.5 text-xs font-medium text-neutral-500">
-              ranked squads
-            </div>
+            <span style={styles.smallPill}>ranked squads</span>
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-3">
-            {comps.map((comp) => (
-              <article key={comp.name} className="group rounded-[28px] border border-black/5 bg-[#fafafa] p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-white hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] sm:p-6">
-                <div className="mb-5 flex items-start justify-between gap-4">
-                  <div>
-                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-400">{comp.tag}</div>
-                    <h3 className="mt-2 text-xl font-semibold tracking-tight text-neutral-900">{comp.name}</h3>
+          {/* Comp cards top row */}
+          <div style={styles.compsGrid}>
+            {comps.map((comp, ci) => {
+              const isActive = activeComp === ci;
+              return (
+                <div
+                  key={comp.name}
+                  style={styles.compCard(comp, isActive)}
+                  onClick={() => setActiveComp(isActive ? null : ci)}
+                >
+                  {isActive && <div style={styles.compGlowBar(comp.accent)} />}
+                  <div style={styles.compTag}>{comp.tag}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                    <span style={{ fontSize: 22 }}>{comp.icon}</span>
+                    <div style={styles.compName}>{comp.name}</div>
                   </div>
-                  <div className="rounded-full border border-black/5 bg-white px-3 py-1 text-xs font-medium text-neutral-500">
-                    comp
+                  <p style={styles.compWhy}>{comp.why}</p>
+
+                  <div style={styles.infoBox(comp.accent)}>
+                    <div style={styles.infoLabel(comp.accent)}>Use when</div>
+                    <p style={styles.infoText}>{comp.useWhen}</p>
+                  </div>
+
+                  {/* Expanded phase details */}
+                  {isActive && (
+                    <div style={{ marginTop: 8 }}>
+                      <div style={styles.divider} />
+                      {[
+                        { label: "Early", text: comp.early },
+                        { label: "Mid", text: comp.mid },
+                        { label: "Win condition", text: comp.win },
+                      ].map((phase) => (
+                        <div key={phase.label} style={{ ...styles.infoBox(comp.accent), marginBottom: 8 }}>
+                          <div style={styles.infoLabel(comp.accent)}>{phase.label}</div>
+                          <p style={styles.infoText}>{phase.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Expand hint */}
+                  <div style={{
+                    marginTop: 12,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: comp.accent,
+                    opacity: 0.7,
+                    letterSpacing: "0.04em",
+                  }}>
+                    <span style={{
+                      transform: isActive ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s ease",
+                      display: "inline-block",
+                    }}>▾</span>
+                    {isActive ? "Collapse" : "Expand phases"}
                   </div>
                 </div>
-
-                <p className="mb-4 text-sm leading-6 text-neutral-600">{comp.why}</p>
-
-                <div className="mb-5 rounded-2xl bg-white p-4 ring-1 ring-black/5">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">Use when</div>
-                  <div className="mt-2 text-sm font-medium text-neutral-700">{comp.useWhen}</div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="rounded-2xl bg-white p-4 ring-1 ring-black/5">
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">Early</div>
-                    <p className="mt-2 text-sm leading-6 text-neutral-600">{comp.early}</p>
-                  </div>
-                  <div className="rounded-2xl bg-white p-4 ring-1 ring-black/5">
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">Mid</div>
-                    <p className="mt-2 text-sm leading-6 text-neutral-600">{comp.mid}</p>
-                  </div>
-                  <div className="rounded-2xl bg-white p-4 ring-1 ring-black/5">
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">Win condition</div>
-                    <p className="mt-2 text-sm leading-6 text-neutral-600">{comp.win}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
+              );
+            })}
           </div>
-        </section>
+        </div>
+
+        {/* Footer */}
+        <div className="bw-fadeup bw-fadeup-4" style={{
+          marginTop: 24,
+          textAlign: "center",
+          fontSize: 12,
+          color: d ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.25)",
+          fontWeight: 500,
+          letterSpacing: "0.04em",
+        }}>
+          BedWars Squads Meta Reference · 4-stack ranked play
+        </div>
       </div>
     </div>
   );
