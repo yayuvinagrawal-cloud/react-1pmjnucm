@@ -592,8 +592,62 @@ export default function App() {
               <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)", fontFamily: "'Space Mono', monospace" }}>SQUADS META</div>
             </div>
           </div>
+            <div style={{
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flex: 1,
+}}>
+  {/* CENTER TABS */}
+  <div style={{
+    display: "flex",
+    gap: 3,
+    background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+    borderRadius: 12,
+    padding: 4,
+    border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+  }}>
+    {[["comps", "⚔️ Comps"], ["tips", "📋 Tips"], ["roles", "👥 Roles"]].map(([key, label]) => (
+      <button key={key} onClick={() => setTab(key)} style={{
+        padding: "6px 14px",
+        borderRadius: 8,
+        border: "none",
+        cursor: "pointer",
+        fontSize: 11,
+        fontWeight: 700,
+        fontFamily: "'Space Mono', monospace",
+        background: tab === key
+          ? dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"
+          : "transparent",
+        color: tab === key
+          ? dark ? "#fff" : "#0f172a"
+          : dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
+        transition: "all 0.2s",
+      }}>
+        {label}
+      </button>
+    ))}
+  </div>
+</div>
 
-          <div style={{   display: "flex",   alignItems: "center",   justifyContent: "center",   flex: 1, }}>   {/* CENTER TABS */}   <div style={{     display: "flex",     gap: 3,     background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",     borderRadius: 12,     padding: 4,     border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,   }}>     {[["comps", "⚔️ Comps"], ["tips", "📋 Tips"], ["roles", "👥 Roles"]].map(([key, label]) => (       <button key={key} onClick={() => setTab(key)} style={{         padding: "6px 14px",         borderRadius: 8,         border: "none",         cursor: "pointer",         fontSize: 11,         fontWeight: 700,         fontFamily: "'Space Mono', monospace",         background: tab === key           ? dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"           : "transparent",         color: tab === key           ? dark ? "#fff" : "#0f172a"           : dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",         transition: "all 0.2s",       }}>         {label}       </button>     ))}   </div> </div>  {/* RIGHT SIDE DARK TOGGLE */} <div>   <button onClick={() => setDark(d => !d)} style={{     width: 34,     height: 34,     borderRadius: 10,     border: "none",     cursor: "pointer",     background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",     display: "flex",     alignItems: "center",     justifyContent: "center",     color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",     transition: "all 0.2s",   }}>     {dark ? <SunIcon /> : <MoonIcon />}   </button> </div>
+{/* RIGHT SIDE DARK TOGGLE */}
+<div>
+  <button onClick={() => setDark(d => !d)} style={{
+    width: 34,
+    height: 34,
+    borderRadius: 10,
+    border: "none",
+    cursor: "pointer",
+    background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
+    transition: "all 0.2s",
+  }}>
+    {dark ? <SunIcon /> : <MoonIcon />}
+  </button>
+</div>
             <div style={{
               display: "flex", gap: 3,
               background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
