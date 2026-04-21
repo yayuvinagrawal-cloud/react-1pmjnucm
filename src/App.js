@@ -145,6 +145,7 @@ const ROLES = [
     desc: "Scaling kits like Metal Beekeeper and Farmer. Their job is value first.",
     color: "#10b981",
     rgb: "16,185,129",
+    kits: ["Bee Keeper", "Metal", "Farmer", "Star", "Thalya", "Sigrid", "Davey", "Double Fisher"],
   },
   {
     key: "BD",
@@ -152,6 +153,7 @@ const ROLES = [
     desc: "Bed defender. Keeps bed safe, watches gen and pchests, and has counter TNT ready.",
     color: "#2f6bff",
     rgb: "47,107,255",
+    kits: ["Noelle", "Wren", "Fisher", "Baker", "Zola"],
   },
   {
     key: "MJ",
@@ -159,6 +161,7 @@ const ROLES = [
     desc: "Main fighter. Handles most PvP and sets the pace in bigger fights.",
     color: "#ef4444",
     rgb: "239,68,68",
+    kits: ["Sheila Aery", "Silas", "Amy", "Freya", "Cait", "Mech", "Lucia"],
   },
   {
     key: "SJ",
@@ -166,6 +169,7 @@ const ROLES = [
     desc: "Second fighter. Supports the main and adds utility, peel, and pressure.",
     color: "#f59e0b",
     rgb: "245,158,11",
+    kits: ["Star", "Amy", "Mech", "Zeno", "Lassy", "Wren", "Noelle", "Umeko", "Umbra", "Nahla", "Melody"],
   },
   {
     key: "BBER",
@@ -173,6 +177,7 @@ const ROLES = [
     desc: "Bed breaker. Tracks openings, finds angles, and ends games.",
     color: "#8b5cf6",
     rgb: "139,92,246",
+    kits: ["Ragnar", "DinoTamer", "Sigrid", "Umbra", "Triton", "Davey", "Amy", "Smoke", "Milo", "Regent", "Mech"],
   },
 ];
 
@@ -788,10 +793,52 @@ function RolesSection({ dark }) {
               fontSize: 12.4,
               lineHeight: 1.62,
               color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.56)",
+              marginBottom: 12,
             }}
           >
             {r.desc}
           </p>
+
+          <div
+            style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              fontFamily: "'JetBrains Mono', monospace",
+              color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
+              marginBottom: 8,
+              textTransform: "uppercase",
+            }}
+          >
+            Kits
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 4,
+            }}
+          >
+            {r.kits.map((kit) => (
+              <span
+                key={kit}
+                style={{
+                  fontSize: 9.5,
+                  fontWeight: 600,
+                  padding: "3px 6px",
+                  borderRadius: 6,
+                  background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
+                  color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.7)",
+                  border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"}`,
+                  fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {kit}
+              </span>
+            ))}
+          </div>
         </div>
       ))}
     </div>
