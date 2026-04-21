@@ -81,7 +81,7 @@ export default function App() {
         "Pick this if your team coordinates well and your Beekeeper can get value early. Grab bees fast without overcommitting to base.",
       early: "Split at 2:20 after t1 2 mid / 2 base. Only jump into fights you can win.",
       mid: "Use Sheila and Star to control the map, try to get t3 before 6 mins and bb other teams when ur up on iron with tnt!",
-      win: "After winning a fight, hit their bed right away.",
+      win: "After getting first t3 go for beds with tnt right away!.",
     },
     {
       name: "Farmer / Fisher / Star / Amy",
@@ -152,27 +152,27 @@ export default function App() {
     {
       key: "CYCLE",
       emoji: "♻️",
-      desc: "Scaling kits like Beekeeper, Farmer, and Fisher.",
+      desc: "Scaling kits like Metal Beekeeper, Farmer",
     },
     {
       key: "BD",
       emoji: "🛡️",
-      desc: "Bed defender. Keeps base steady and protects the gen.",
+      desc: "Bed defender. Keeps the bed safe, HAS COUNTER TNT, protects the gen and pchests all dims.",
     },
     {
       key: "MJ",
       emoji: "⚡",
-      desc: "Main fighter. Handles most PvP. Amy and Freya are examples.",
+      desc: "Main fighter. Handles most PvP like Sheila Cait and Silas. Amy and Freya are examples that dont need kills to be better.",
     },
     {
       key: "SJ",
       emoji: "🤝",
-      desc: "Second fighter. Supports the main one.",
+      desc: "Second fighter. Supports the main one and has impact/advantage for team like Star, Zeno, and Umbra.",
     },
     {
       key: "BBER",
       emoji: "💥",
-      desc: "Breaks beds. Finds chances and ends games.",
+      desc: "Breaks beds. Finds chances and ends games. Like Ragnar, Davey, and Dino",
     },
   ];
 
@@ -188,8 +188,8 @@ export default function App() {
   const fisherFisherStrats = [
     "Don't mess around early. Double Fisher works only if both survive and build value.",
     "Fighters should hold back and trade wisely, not risk everything on every chance.",
-    "Time your gear upgrades together. Don't let one side get ahead while the other lags.",
-    "Once both Fishers are set, push for grouped fights and build map control.",
+    "After t1 make sure to JJUMP on any fish thats not dim gold or ems!.",
+    " Your need to get fishing rod early and try to ",
   ];
 
   const realStrats = [
