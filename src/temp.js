@@ -1,183 +1,106 @@
-import { useState, useEffect, useMemo } from "react";
-
-/* ─── FONT LOADER ─── */
-function useFonts() {
-  useEffect(() => {
-    const id = "bw-apple-fonts";
-    if (!document.getElementById(id)) {
-      const l = document.createElement("link");
-      l.id = id;
-      l.rel = "stylesheet";
-      l.href =
-        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap";
-      document.head.appendChild(l);
-    }
-  }, []);
-}
-
-/* ─── ICONS ─── */
-const SunIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <circle cx="12" cy="12" r="4" />
-    <line x1="12" y1="2" x2="12" y2="6" />
-    <line x1="12" y1="18" x2="12" y2="22" />
-    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-    <line x1="2" y1="12" x2="6" y2="12" />
-    <line x1="18" y1="12" x2="22" y2="12" />
-    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const ChevronIcon = ({ open }) => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    style={{
-      transition: "transform 0.3s ease",
-      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-    }}
-  >
-    <polyline points="6 9 12 15 18 9" />
-  </svg>
-);
-
-/* ─── DATA ─── */
 const COMPS = [
   {
-    name: "Sheila / Star / Noelle / Beekeeper",
-    short: "Core Comp",
-    icon: "⚔️",
-    color: "#2f6bff",
-    rgb: "47,107,255",
-    why: "Solid balanced comp that keeps pressure on, survives well, and scales cleanly if your team stays organized.",
-    useWhen:
-      "Run this when your team has chemistry and your Beekeeper knows how to get early value without griefing their own tempo.",
-    early:
-      "Split 2 mid and 2 base after t1. Take good fights only and don't waste tempo on ego pushes.",
-    mid:
-      "Use Sheila and Star to keep map pressure, secure upgrades fast, and try to hit first t3 before around 6 minutes.",
-    win:
-      "Once you get first t3, convert that lead into bed pressure fast with TNT and grouped pushes.",
+    name: "Builder / Builder / Miner / Miner",
+    short: "Rush Comp",
+    icon: "🏗️",
+    color: "#ef4444",
+    rgb: "239,68,68",
+    why: "Aggressive early game composition focused on breaking beds quickly with enhanced building and mining speed.",
+    useWhen: "Use this when you want to end games fast and your team has good aim for early fights.",
+    early: "Rush beds immediately after spawn. Use enhanced building to create bridges and ladders.",
+    mid: "Focus on breaking multiple beds while your Builders create safe paths for your team.",
+    win: "Once you have bed advantage, use your Miners to create TNT traps and finish the game."
   },
   {
-    name: "Farmer / Fisher / Star / Amy",
-    short: "Stable Econ",
+    name: "Angel / Angel / Bigman / Bigman",
+    short: "Defense Comp",
+    icon: "🛡️",
+    color: "#2f6bff",
+    rgb: "47,107,255",
+    why: "Tanky composition with high health pools and strong defensive capabilities.",
+    useWhen: "Pick this when facing aggressive rush teams or when you need to survive longer.",
+    early: "Stay defensive and let your Angels heal the team while Bigmans soak damage.",
+    mid: "Use your size advantage to control space and protect your beds effectively.",
+    win: "Outlast the enemy and use your superior health to win team fights."
+  },
+  {
+    name: "Trinity / Trinity / Spirit / Spirit",
+    short: "Support Comp",
+    icon: "✨",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    why: "Healing and support focused composition that keeps the team alive longer.",
+    useWhen: "Use this when your team needs better sustain or when facing high damage comps.",
+    early: "Focus on keeping everyone healed and use Spirit's mobility to dodge fights.",
+    mid: "Position your healers safely while they provide constant support to fighters.",
+    win: "Your superior sustain allows you to outlast enemies in prolonged fights."
+  },
+  {
+    name: "Metal Detector / Builder / Miner / Fisherman",
+    short: "Econ Comp",
     icon: "💰",
     color: "#10b981",
     rgb: "16,185,129",
-    why: "Reliable loot flow with solid defense and safer scaling into the mid game.",
-    useWhen:
-      "Use this if you want a stable economy with two players protecting the game state while the comp scales up.",
-    early:
-      "Do not force bad fights. Keep your economy kits alive and let your fighters take cleaner trades.",
-    mid:
-      "Play for armor timing, enchants, generator control, and safe pressure instead of random scraps.",
-    win:
-      "Use your gear lead to win one clean grouped fight and roll that into bed pressure.",
+    why: "Economy focused composition that generates resources efficiently.",
+    useWhen: "Pick this when you want stable scaling and better late game power.",
+    early: "Let your Metal Detector find emeralds while Fisherman provides steady income.",
+    mid: "Use your economic advantage to get better gear and upgrades faster.",
+    win: "Your gear lead and better upgrades will carry you to victory."
   },
   {
-    name: "Lani / Lani / Warden / Fisher",
-    short: "Bypass",
-    icon: "🏃",
-    color: "#ef4444",
-    rgb: "239,68,68",
-    why: "Made to dodge standard fights and win faster through movement, side pressure, and bed threat.",
-    useWhen:
-      "Pick this into slower teams or when you want to speed the game up and force chaos.",
-    early:
-      "Split lanes early. Lani players create angles while Fisher builds value and Warden stabilizes fights.",
-    mid:
-      "Keep pressure on side lanes and avoid flipping full team fights unless you have a clear edge.",
-    win:
-      "Punish openings instantly, get bed damage, and finish before slower comps fully scale.",
-  },
-  {
-    name: "Davey / Umbra / Fisher / Fisher",
-    short: "BB Strat",
-    icon: "💥",
+    name: "Cowgirl / Builder / Miner / Spirit",
+    short: "Hybrid Comp",
+    icon: "🤠",
     color: "#f59e0b",
     rgb: "245,158,11",
-    why: "Aggressive bed break comp with strong pressure windows and good scaling from double Fisher.",
-    useWhen:
-      "Use this if your BB is confident, your team plays fast, and you want to break slow teams before they stabilize.",
-    early:
-      "Let Davey look for clean openings while both Fishers build value and Umbra controls pressure space.",
-    mid:
-      "Force hard choices, threaten multiple lanes, and make teams split between map control and base defense.",
-    win:
-      "Get one real opening, send Davey through, and turn the pressure into a fast finish.",
-  },
-  {
-    name: "Amy / Umbra / Fisher / Fisher",
-    short: "Fisher Fisher",
-    icon: "🌊",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    why: "Safe scaling comp with strong late-game power and clean fight control if your team stays patient.",
-    useWhen:
-      "Pick this if your team wants steady scaling, trusts the Amy player in fights, and can keep both Fishers safe early.",
-    early:
-      "Avoid random fights, keep both Fishers alive, and only let Amy take strong trades.",
-    mid:
-      "Play around gear spikes, enchants, and Umbra utility while keeping pressure without overcommitting.",
-    win:
-      "Outscale, win one big grouped fight, then use map control to take bed and close.",
-  },
+    why: "Balanced composition with good damage, building, and mobility.",
+    useWhen: "Use this for general situations where you need versatility.",
+    early: "Use Cowgirl's lasso to control space while Builders create paths.",
+    mid: "Balance between breaking beds and defending your own base.",
+    win: "Your versatility allows you to adapt to different situations."
+  }
 ];
 
 const ROLES = [
   {
-    key: "CYCLE",
-    emoji: "♻️",
-    desc: "Scaling kits like Metal Beekeeper and Farmer. Their job is value first.",
-    color: "#10b981",
-    rgb: "16,185,129",
-    kits: ["Bee Keeper", "Metal", "Farmer", "Star", "Thalya", "Sigrid", "Davey", "Double Fisher"],
-  },
-  {
-    key: "BD",
-    emoji: "🛡️",
-    desc: "Bed defender. Keeps bed safe, watches gen and pchests, and has counter TNT ready.",
-    color: "#2f6bff",
-    rgb: "47,107,255",
-    kits: ["Noelle", "Wren", "Fisher", "Baker", "Zola"],
-  },
-  {
-    key: "MJ",
-    emoji: "⚔️",
-    desc: "Main fighter. Handles most PvP and sets the pace in bigger fights.",
+    key: "RUSHER",
+    emoji: "🏃",
+    desc: "Breaks beds early and creates pressure. Focuses on speed and aggression.",
     color: "#ef4444",
     rgb: "239,68,68",
-    kits: ["Sheila Aery", "Silas", "Amy", "Freya", "Cait", "Mech", "Lucia"],
+    kits: ["Builder", "Miner", "Cowgirl", "Elf", "Dasher", "GhostCatcher", "Vampire"],
   },
   {
-    key: "SJ",
-    emoji: "🤝",
-    desc: "Second fighter. Supports the main and adds utility, peel, and pressure.",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    kits: ["Star", "Amy", "Mech", "Zeno", "Lassy", "Wren", "Noelle", "Umeko", "Umbra", "Nahla", "Melody"],
+    key: "DEFENDER",
+    emoji: "🛡️",
+    desc: "Protects beds and base. Uses tanky kits to absorb damage and control space.",
+    color: "#2f6bff",
+    rgb: "47,107,255",
+    kits: ["Angel", "Bigman", "Paladin", "Witch", "Warlock", "Guardian", "IceQueen"],
   },
   {
-    key: "BBER",
-    emoji: "💥",
-    desc: "Bed breaker. Tracks openings, finds angles, and ends games.",
+    key: "SUPPORTER",
+    emoji: "✨",
+    desc: "Provides healing and utility. Keeps team alive and offers mobility.",
     color: "#8b5cf6",
     rgb: "139,92,246",
-    kits: ["Ragnar", "DinoTamer", "Sigrid", "Umbra", "Triton", "Davey", "Amy", "Smoke", "Milo", "Regent", "Mech"],
+    kits: ["Trinity", "Spirit", "Fairy", "Priest", "Healer", "Medic", "Enchanter"],
+  },
+  {
+    key: "ECONOMIST",
+    emoji: "💰",
+    desc: "Generates resources and enables scaling. Focuses on emerald generation.",
+    color: "#10b981",
+    rgb: "16,185,129",
+    kits: ["Metal Detector", "Fisherman", "Farmer", "Smelter", "Merchant", "Alchemist", "Treasure Hunter"],
+  },
+  {
+    key: "FIGHTER",
+    emoji: "⚔️",
+    desc: "Main damage dealer. Handles PvP and controls fights.",
+    color: "#f59e0b",
+    rgb: "245,158,11",
+    kits: ["Barbarian", "Archer", "Mage", "Assassin", "Berserker", "Ninja", "Samurai"],
   },
 ];
 
@@ -187,88 +110,145 @@ const GUIDES = {
     color: "#2f6bff",
     rgb: "47,107,255",
     items: [
-      "Don't force early fights unless you know the fight is good.",
-      "Take fights mostly in pairs or grouped swings.",
-      "Protect scaling kits early instead of sending them into random scraps.",
-      "Get blocks and stone sword first so early game has structure.",
-      "Most games are won off one clean grouped fight and a fast conversion.",
-      "Vs cheaters, don't ego fight. Stack gear, keep blocks, and TNT rain when needed.",
+      "Break beds early and maintain bed advantage",
+      "Control the center generator for resources",
+      "Upgrade your team's gear together",
+      "Use team chat for coordination",
+      "Protect your base while expanding",
+      "Finish games when you have clear advantages"
     ],
   },
-  "Fisher Fisher": {
-    icon: "🎣",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
+  "Rush Strategies": {
+    icon: "🏃",
+    color: "#ef4444",
+    rgb: "239,68,68",
     items: [
-      "Double Fisher only works if both stay alive and keep building value.",
-      "Your fighters should hold tempo, not flip every chance they see.",
-      "After t1, jump on fish timing whenever it doesn't cost dim gold or ems.",
-      "Get rod early and build value as fast as possible without inting.",
+      "Spawn rush with Builder/Miner combinations",
+      "Break beds before wave 3 for maximum advantage",
+      "Use enhanced building to create quick paths",
+      "Focus on one base at a time",
+      "Convert bed breaks into team fights immediately"
     ],
   },
-  "Real Strats": {
-    icon: "🧠",
-    color: "#111111",
-    rgb: "17,17,17",
+  "Defense Tips": {
+    icon: "🛡️",
+    color: "#10b981",
+    rgb: "16,185,129",
     items: [
-      "Core comps work best when everyone sticks to their role and timing.",
-      "Do not throw scaling kits into pointless fights just for excitement.",
-      "If your comp scales, survive early and arrive to mid game clean.",
-      "Good squads win with structure, pressure windows, and fast conversion.",
+      "Build walls and towers around your bed",
+      "Use Angel/Bigman for tanky defense",
+      "Place traps with TNT and lava",
+      "Control sightlines to prevent easy breaks",
+      "Have backup beds ready",
+      "Use Spirit for quick rotations"
     ],
   },
-  "BB Strats": {
-    icon: "💥",
+  "Economy Guide": {
+    icon: "💰",
     color: "#f59e0b",
     rgb: "245,158,11",
     items: [
-      "Your BB should not ego fight. Their job is spacing, angles, and punish windows.",
-      "Pressure first, break second. Good bed breaks come after defenders get moved.",
-      "If the map is locked, threaten side lanes and make the enemy split.",
-      "When an opening appears, the whole team commits fast with no hesitation.",
+      "Metal Detector finds hidden emeralds",
+      "Fisherman provides steady income",
+      "Upgrade generators for better resources",
+      "Save emeralds for important upgrades",
+      "Balance spending with team needs",
+      "Late game emerald armor is crucial"
     ],
   },
 };
 
+/* ─── MAPS ─── */
+const MAPS = [
+  {
+    name: "Classic",
+    icon: "🏠",
+    difficulty: "Easy",
+    color: "#10b981",
+    rgb: "16,185,129",
+    layout: "Standard square layout with central generators and symmetrical base placement",
+    strategies: [
+      "Control the middle generator early",
+      "Use side paths for flanking",
+      "Standard bed defense with walls and towers",
+      "Middle lane provides best pressure"
+    ],
+    weakSpots: ["Open middle area", "Predictable base layouts", "Limited cover"],
+    strongSpots: ["Central control", "Symmetrical advantages", "Standard timings"]
+  },
+  {
+    name: "Garden",
+    icon: "🌸",
+    difficulty: "Medium",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    layout: "Flower-themed with hedges, elevated areas, and decorative elements",
+    strategies: [
+      "Use hedges for cover and ambushes",
+      "Control elevated positions",
+      "Watch for cross-map shortcuts",
+      "Flower beds provide building materials"
+    ],
+    weakSpots: ["Open hedge areas", "Elevated position exposure", "Limited sightlines"],
+    strongSpots: ["Cover opportunities", "Building materials", "Verticality"]
+  },
+  {
+    name: "Toy",
+    icon: "🧸",
+    difficulty: "Hard",
+    color: "#f59e0b",
+    rgb: "245,158,11",
+    layout: "Playground theme with slides, swings, and complex structures",
+    strategies: [
+      "Use slides for quick rotations",
+      "Control the playground equipment",
+      "Watch for ambushes behind structures",
+      "Complex layout favors aggressive play"
+    ],
+    weakSpots: ["Tight spaces", "Complex structures", "Limited sightlines"],
+    strongSpots: ["Mobility options", "Cover variety", "Creative tactics"]
+  }
+];
+
 /* ─── ITEM TIMINGS ─── */
 const TIMINGS = {
-  "Early Game (0-3 min)": {
+  "Early Game (Waves 1-3)": {
     icon: "🌅",
     color: "#f59e0b",
     rgb: "245,158,11",
     items: [
-      "Starter weapon (immediate)",
-      "Basic armor",
-      "Blocks (constant)",
-      "Generator prioritization",
-      "Early health potions",
-      "Resource farming"
+      "Wood Sword (immediate)",
+      "Leather Armor (first emeralds)",
+      "Stone Tools (wave 2)",
+      "Bow (wave 3)",
+      "Blocks for building",
+      "Shears for wool"
     ]
   },
-  "Mid Game (3-6 min)": {
+  "Mid Game (Waves 4-6)": {
     icon: "🌇",
     color: "#8b5cf6",
     rgb: "139,92,246",
     items: [
-      "Upgraded armor",
-      "Better sword",
-      "Bow setup",
-      "Generator upgrades",
-      "Speed potions",
-      "Heal potions"
+      "Iron Armor (wave 4)",
+      "Iron Sword (wave 4)",
+      "Diamond Tools (wave 5)",
+      "TNT (wave 5)",
+      "Fireball (wave 6)",
+      "Generator upgrades"
     ]
   },
-  "Late Game (6+ min)": {
+  "Late Game (Waves 7+)": {
     icon: "🌙",
     color: "#ef4444",
     rgb: "239,68,68",
     items: [
-      "Full armor upgrade",
-      "Sword upgrades",
-      "Bow with arrows",
-      "Speed II potions",
-      "Healing items",
-      "Utility equipment"
+      "Diamond Armor (wave 7)",
+      "Diamond Sword (wave 7)",
+      "Emerald Armor (wave 8+)",
+      "Multiple TNT",
+      "Fireball upgrades",
+      "Max generator upgrades"
     ]
   }
 };
@@ -276,46 +256,49 @@ const TIMINGS = {
 /* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
   {
-    target: "Double Fisher",
-    icon: "🎣",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    strategies: [
-      "Force early fights before they scale",
-      "Target fishers with fireball + TNT",
-      "Use knockback to separate them",
-      "Control emerald gen to starve them"
-    ],
-    recommended: ["Sheila", "Star", "Umbra", "Amy"],
-    avoid: ["Single target damage", "Letting them group"]
-  },
-  {
-    target: "BB Comp",
-    icon: "💥",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    strategies: [
-      "Stack beds with obsidian",
-      "Use anti-knockback enchant",
-      "Keep distance from base",
-      "Counter with your own BB pressure"
-    ],
-    recommended: ["Noelle", "Wren", "Baker", "Zola"],
-    avoid: ["Exposing bed location", "Solo fights near base"]
-  },
-  {
-    target: "Cheater Comp",
-    icon: "😈",
+    target: "Rush Comp",
+    icon: "🏃",
     color: "#ef4444",
     rgb: "239,68,68",
     strategies: [
-      "Report immediately",
-      "Play defensively, don't ego",
-      "Use map control to your advantage",
-      "Stack gear and wait for staff"
+      "Use Angel/Bigman for tanky defense",
+      "Build walls and towers quickly",
+      "Counter-rush with your own Builders",
+      "Use Spirit for quick rotations",
+      "Place traps around your base"
     ],
-    recommended: ["Any defensive comp", "Generator control", "Map pressure"],
-    avoid: ["Fair fights", "Getting tilted"]
+    recommended: ["Angel", "Bigman", "Builder", "Spirit", "Paladin"],
+    avoid: ["Early aggressive fights", "Leaving base undefended"]
+  },
+  {
+    target: "Defense Comp",
+    icon: "🛡️",
+    color: "#2f6bff",
+    rgb: "47,107,255",
+    strategies: [
+      "Break beds before they get too tanky",
+      "Use fireball to clear walls",
+      "Target healers first (Trinity/Spirit)",
+      "Multiple TNT for base destruction",
+      "Outnumber them in team fights"
+    ],
+    recommended: ["Builder", "Miner", "Barbarian", "Archer", "Mage"],
+    avoid: ["Solo fights", "Letting them heal up"]
+  },
+  {
+    target: "Econ Comp",
+    icon: "💰",
+    color: "#10b981",
+    rgb: "16,185,129",
+    strategies: [
+      "Steal their generators",
+      "Force fights before they get gear",
+      "Use Metal Detector to compete",
+      "Control map resources",
+      "Pressure them constantly"
+    ],
+    recommended: ["Metal Detector", "Fisherman", "Builder", "Miner"],
+    avoid: ["Letting them farm", "Expensive purchases"]
   }
 ];
 
@@ -329,9 +312,10 @@ const PRACTICE = [
     rgb: "16,185,129",
     description: "Practice defending your bed against different attack angles",
     drills: [
-      "Place 10 beds in different positions",
-      "Defend against fireball + sword combos",
-      "Practice pillar jumping defense",
+      "Build walls and towers around your bed",
+      "Place traps with TNT and lava",
+      "Use Angel/Bigman for tanky defense",
+      "Practice quick rotations with Spirit",
       "Test different block placements"
     ],
     tips: ["Always have blocks ready", "Stay calm under pressure", "Use elevation to your advantage"]
@@ -344,9 +328,10 @@ const PRACTICE = [
     rgb: "59,130,246",
     description: "Learn to control and upgrade generators effectively",
     drills: [
-      "Time generator upgrades perfectly",
-      "Practice stealing enemy gens",
+      "Time emerald wave upgrades perfectly",
+      "Practice stealing enemy generators",
       "Defend your gen while upgrading",
+      "Use Metal Detector for hidden emeralds",
       "Coordinate gen control with team"
     ],
     tips: ["Know upgrade costs", "Time upgrades with fights", "Protect your gen at all costs"]
@@ -362,9 +347,10 @@ const PRACTICE = [
       "Practice calling out enemy positions",
       "Coordinate group fights",
       "Learn to rotate as a team",
-      "Master bed break timing"
+      "Master bed break timing",
+      "Use Builder for quick paths"
     ],
-    tips: ["Use voice chat effectively", "Know your roles", "Trust your team"]
+    tips: ["Use team chat effectively", "Know your roles", "Trust your team"]
   }
 ];
 
@@ -742,6 +728,141 @@ function CompCard({ comp, dark, isFavorite, onToggleFavorite }) {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ─── MAPS SECTION ─── */
+function MapsSection({ dark }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {MAPS.map((map, i) => (
+        <div
+          key={i}
+          style={{
+            borderRadius: 22,
+            padding: "20px",
+            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+            <span style={{ fontSize: 28 }}>{map.icon}</span>
+            <div>
+              <h3 style={{
+                margin: 0,
+                fontSize: 18,
+                fontWeight: 700,
+                color: dark ? "#ffffff" : "#111111",
+                marginBottom: 4
+              }}>
+                {map.name}
+              </h3>
+              <span style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: map.color,
+                background: `rgba(${map.rgb},0.1)`,
+                padding: "2px 8px",
+                borderRadius: 12,
+                border: `1px solid rgba(${map.rgb},0.2)`
+              }}>
+                {map.difficulty}
+              </span>
+            </div>
+          </div>
+
+          <p style={{
+            margin: "0 0 16px 0",
+            fontSize: 14,
+            lineHeight: 1.5,
+            color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)"
+          }}>
+            <strong>Layout:</strong> {map.layout}
+          </p>
+
+          <div style={{ marginBottom: 16 }}>
+            <h4 style={{
+              margin: "0 0 8px 0",
+              fontSize: 14,
+              fontWeight: 700,
+              color: dark ? "#ffffff" : "#111111"
+            }}>
+              Key Strategies
+            </h4>
+            <ul style={{
+              margin: 0,
+              paddingLeft: 20,
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)"
+            }}>
+              {map.strategies.map((strat, j) => (
+                <li key={j}>{strat}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <h4 style={{
+                margin: "0 0 8px 0",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#ef4444",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Weak Spots
+              </h4>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {map.weakSpots.map((spot, j) => (
+                  <span key={j} style={{
+                    fontSize: 11,
+                    padding: "4px 8px",
+                    background: "rgba(239,68,68,0.1)",
+                    border: "1px solid rgba(239,68,68,0.2)",
+                    borderRadius: 8,
+                    color: "#ef4444"
+                  }}>
+                    {spot}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <h4 style={{
+                margin: "0 0 8px 0",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#10b981",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Strong Spots
+              </h4>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {map.strongSpots.map((spot, j) => (
+                  <span key={j} style={{
+                    fontSize: 11,
+                    padding: "4px 8px",
+                    background: "rgba(16,185,129,0.1)",
+                    border: "1px solid rgba(16,185,129,0.2)",
+                    borderRadius: 8,
+                    color: "#10b981"
+                  }}>
+                    {spot}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -1523,6 +1644,7 @@ function RolesSection({ dark }) {
 function TabBar({ tab, setTab, dark }) {
   const tabs = [
     { key: "comps",  label: "Comps",  icon: "⚔️" },
+    { key: "maps",   label: "Maps",   icon: "🗺️" },
     { key: "timings", label: "Timings", icon: "⏰" },
     { key: "counters", label: "Counters", icon: "🛡️" },
     { key: "practice", label: "Practice", icon: "🎯" },
@@ -2089,6 +2211,7 @@ export default function App() {
           </div>
         )}
 
+        {tab === "maps" && <MapsSection dark={dark} />}
         {tab === "timings" && <TimingsSection dark={dark} />}
         {tab === "counters" && <CountersSection dark={dark} />}
         {tab === "practice" && <PracticeSection dark={dark} />}
