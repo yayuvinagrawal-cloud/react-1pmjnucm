@@ -169,7 +169,6 @@ function Particles({ dark }) {
           : `rgba(59,130,246,${p.opacity * 0.6})`;
         ctx.fill();
       });
-      // connections
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
@@ -225,22 +224,21 @@ function CompCard({ comp, dark }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 16,
+        borderRadius: 22,
         border: `1px solid ${open || hovered ? comp.color + "60" : dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)"}`,
         background: open
           ? dark ? `rgba(${comp.glow},0.12)` : `rgba(${comp.glow},0.06)`
           : dark ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.7)",
         cursor: "pointer",
         transition: "all 0.3s cubic-bezier(.22,1,.36,1)",
-        transform: hovered ? "translateY(-3px) scale(1.01)" : "none",
+        transform: hovered ? "translateY(-4px) scale(1.015)" : "none",
         boxShadow: open || hovered ? `0 0 30px rgba(${comp.glow},0.2), 0 8px 32px rgba(0,0,0,0.15)` : dark ? "0 2px 12px rgba(0,0,0,0.25)" : "0 2px 12px rgba(0,0,0,0.05)",
         overflow: "hidden",
         position: "relative",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
       }}
     >
-      {/* top accent bar */}
       <div style={{
         height: 3,
         background: `linear-gradient(90deg, transparent 0%, ${comp.color} 40%, ${comp.color} 60%, transparent 100%)`,
@@ -248,7 +246,6 @@ function CompCard({ comp, dark }) {
         transition: "opacity 0.3s",
       }} />
 
-      {/* corner decoration */}
       <div style={{
         position: "absolute", top: 12, right: 12,
         width: 32, height: 32, opacity: 0.08,
@@ -258,8 +255,19 @@ function CompCard({ comp, dark }) {
         pointerEvents: "none",
       }} />
 
-      <div style={{ padding: "16px 18px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+      <div style={{ padding: "16px 18px", position: "relative", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute",
+          top: -30,
+          right: -20,
+          width: 90,
+          height: 90,
+          borderRadius: "50%",
+          background: `radial-gradient(circle, rgba(${comp.glow},0.22) 0%, rgba(${comp.glow},0.08) 35%, transparent 72%)`,
+          pointerEvents: "none",
+        }} />
+
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, position: "relative", zIndex: 1 }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10,
             background: `rgba(${comp.glow},0.15)`,
@@ -293,13 +301,16 @@ function CompCard({ comp, dark }) {
         <p style={{
           fontSize: 12, lineHeight: 1.65, margin: "0 0 0",
           color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.45)",
+          position: "relative",
+          zIndex: 1,
         }}>{comp.why}</p>
 
-        {/* Expanded */}
         <div style={{
           overflow: "hidden",
           maxHeight: open ? 600 : 0,
           transition: "max-height 0.5s cubic-bezier(.22,1,.36,1)",
+          position: "relative",
+          zIndex: 1,
         }}>
           <div style={{ paddingTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
             {[
@@ -344,7 +355,6 @@ function TipsPanel({ dark }) {
       overflow: "hidden",
       boxShadow: dark ? "0 20px 50px rgba(0,0,0,0.4)" : "0 8px 30px rgba(0,0,0,0.06)",
     }}>
-      {/* Tab bar */}
       <div style={{
         display: "flex", overflowX: "auto",
         borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
@@ -370,7 +380,6 @@ function TipsPanel({ dark }) {
         })}
       </div>
 
-      {/* Content */}
       <div style={{ padding: "18px 20px", display: "flex", flexDirection: "column", gap: 8 }}>
         {data.items.map((item, i) => (
           <div key={i} style={{
@@ -510,9 +519,9 @@ export default function App() {
         }
         .glitch-b {
           position: absolute; inset: 0;
-          color: #ec4899;
+          color: #dc2626;
           animation: glitch-b 4s infinite 0.1s;
-          opacity: 0.4;
+          opacity: 0.35;
         }
         @keyframes fadeup {
           from { opacity: 0; transform: translateY(20px); }
@@ -545,7 +554,6 @@ export default function App() {
       <Particles dark={dark} />
       <Scanlines />
 
-      {/* Ambient glows */}
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
         <div style={{
           position: "absolute", width: 600, height: 600, borderRadius: "50%",
@@ -554,12 +562,11 @@ export default function App() {
         }} />
         <div style={{
           position: "absolute", width: 500, height: 500, borderRadius: "50%",
-          background: dark ? "radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%)" : "radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)",
+          background: dark ? "radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%)" : "radial-gradient(circle, rgba(220,38,38,0.05) 0%, transparent 70%)",
           bottom: 0, right: -100,
         }} />
       </div>
 
-      {/* ── STICKY NAV ── */}
       <div style={{
         position: "sticky", top: 0, zIndex: 100,
         transform: headerVisible ? "translateY(0)" : "translateY(-100%)",
@@ -576,9 +583,9 @@ export default function App() {
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
               width: 28, height: 28, borderRadius: 8,
-              background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+              background: "linear-gradient(135deg, #2563eb, #60a5fa, #dc2626)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 14, boxShadow: "0 0 12px rgba(59,130,246,0.4)",
+              fontSize: 14, boxShadow: "0 0 18px rgba(37,99,235,0.35), 0 0 28px rgba(220,38,38,0.12)",
             }}>🛏</div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1, fontFamily: "'Space Mono', monospace", color: dark ? "#fff" : "#0f172a" }}>BEDWARS</div>
@@ -587,7 +594,6 @@ export default function App() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            {/* Tab switcher */}
             <div style={{
               display: "flex", gap: 3,
               background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
@@ -605,7 +611,6 @@ export default function App() {
               ))}
             </div>
 
-            {/* Dark toggle */}
             <button onClick={() => setDark(d => !d)} style={{
               width: 34, height: 34, borderRadius: 10, border: "none", cursor: "pointer",
               background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
@@ -617,7 +622,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── HERO ── */}
       <div style={{ position: "relative", zIndex: 2, padding: "40px 16px 20px", maxWidth: 900, margin: "0 auto" }}>
         <div className="fade-in" style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{
@@ -637,14 +641,14 @@ export default function App() {
 
           <h1 style={{ margin: "0 0 12px", lineHeight: 1.05 }}>
             <GlitchText style={{
-            fontSize: "clamp(2.4rem, 9vw, 5rem)",
-            fontWeight: 900,
-            fontFamily: "'Space Mono', monospace",
-            letterSpacing: "-0.05em",
-            color: dark ? "#ffffff" : "#0f172a",
-            display: "block",
-            textShadow: dark ? "0 0 30px rgba(37,99,235,0.18)" : "none",
-          }}>SQUADS</GlitchText>
+              fontSize: "clamp(2.4rem, 9vw, 5rem)",
+              fontWeight: 900,
+              fontFamily: "'Space Mono', monospace",
+              letterSpacing: "-0.05em",
+              color: dark ? "#ffffff" : "#0f172a",
+              display: "block",
+              textShadow: dark ? "0 0 30px rgba(37,99,235,0.18)" : "none",
+            }}>SQUADS</GlitchText>
             <span style={{
               fontSize: "clamp(1.1rem, 4vw, 1.8rem)",
               fontWeight: 700,
@@ -665,7 +669,75 @@ export default function App() {
             Ranked squads structure, roles, and execution — clean reference for 4-stack teams.
           </p>
 
-          {/* Stats row */}
+          <div
+            className="fade-in fade-in-1"
+            style={{
+              margin: "18px auto 0",
+              maxWidth: 560,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 12,
+              flexWrap: "wrap",
+              padding: "12px 16px",
+              borderRadius: 18,
+              background: dark ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.78)",
+              border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              boxShadow: dark ? "0 10px 40px rgba(0,0,0,0.35)" : "0 8px 24px rgba(0,0,0,0.06)",
+            }}
+          >
+            <div style={{ textAlign: "left" }}>
+              <div style={{
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontFamily: "'Space Mono', monospace",
+                color: "#3b82f6",
+                marginBottom: 3,
+              }}>
+                Current style
+              </div>
+              <div style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: dark ? "rgba(255,255,255,0.8)" : "#0f172a",
+              }}>
+                Clean macro comps with fast grouped pressure
+              </div>
+            </div>
+
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "7px 12px",
+              borderRadius: 999,
+              background: "rgba(37,99,235,0.12)",
+              border: "1px solid rgba(37,99,235,0.25)",
+            }}>
+              <div style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#2563eb",
+                boxShadow: "0 0 12px rgba(37,99,235,0.8)",
+              }} />
+              <span style={{
+                fontSize: 11,
+                fontWeight: 700,
+                fontFamily: "'Space Mono', monospace",
+                color: "#60a5fa",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+              }}>
+                Live Meta
+              </span>
+            </div>
+          </div>
+
           <div className="fade-in fade-in-1" style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 24, flexWrap: "wrap" }}>
             {[
               { val: "5", label: "Comps", color: "#3b82f6" },
@@ -686,7 +758,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── MAIN CONTENT ── */}
         {tab === "comps" && (
           <div className="fade-in fade-in-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
             {COMPS.map((comp, i) => <CompCard key={i} comp={comp} dark={dark} />)}
@@ -704,6 +775,55 @@ export default function App() {
             <RolesSection dark={dark} />
           </div>
         )}
+
+        <div
+          className="fade-in fade-in-3"
+          style={{
+            marginTop: 28,
+            borderRadius: 24,
+            padding: "22px 20px",
+            background: dark
+              ? "linear-gradient(135deg, rgba(15,23,42,0.78), rgba(30,58,138,0.18), rgba(127,29,29,0.18))"
+              : "linear-gradient(135deg, rgba(255,255,255,0.88), rgba(219,234,254,0.9), rgba(254,226,226,0.85))",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)"}`,
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            boxShadow: dark ? "0 20px 60px rgba(0,0,0,0.4)" : "0 12px 30px rgba(0,0,0,0.06)",
+            textAlign: "center",
+          }}
+        >
+          <div style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            fontFamily: "'Space Mono', monospace",
+            color: "#60a5fa",
+            marginBottom: 8,
+          }}>
+            Ranked squads focus
+          </div>
+
+          <h3 style={{
+            margin: "0 0 8px",
+            fontSize: "clamp(1.25rem, 4vw, 1.8rem)",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            color: dark ? "#fff" : "#0f172a",
+          }}>
+            Play cleaner. Scale faster. End games properly.
+          </h3>
+
+          <p style={{
+            margin: "0 auto",
+            maxWidth: 520,
+            fontSize: 13,
+            lineHeight: 1.7,
+            color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+          }}>
+            Use this page as a clean squads reference for comps roles and win conditions instead of random callouts and bad queue habits.
+          </p>
+        </div>
 
         <div style={{ marginTop: 32, textAlign: "center", fontSize: 10, fontFamily: "'Space Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.2)" }}>
           BEDWARS SQUADS META REFERENCE · 4-STACK RANKED PLAY
