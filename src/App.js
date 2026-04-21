@@ -230,6 +230,196 @@ const GUIDES = {
   },
 };
 
+/* ─── MAPS ─── */
+const MAPS = [
+  {
+    name: "Alpine",
+    icon: "🏔️",
+    difficulty: "Medium",
+    color: "#6b7280",
+    rgb: "107,114,128",
+    layout: "Central diamond generators, elevated base positions, multiple bridge connections",
+    strategies: [
+      "Control the central diamond gen early",
+      "Use elevation for bed defense",
+      "Watch for bridge rushes from side bases",
+      "Middle lane is strongest for pressure"
+    ],
+    weakSpots: ["Side base bridges", "Lower elevation beds", "Central gen exposure"],
+    strongSpots: ["High ground defense", "Central pressure", "Bridge control"]
+  },
+  {
+    name: "Arctic",
+    icon: "🧊",
+    difficulty: "Hard",
+    color: "#3b82f6",
+    rgb: "59,130,246",
+    layout: "Ice bridges, central emerald gen, compact base design",
+    strategies: [
+      "Secure emerald gen immediately",
+      "Use ice bridges for quick rotations",
+      "Compact base allows better defense",
+      "Focus on bridge control for map dominance"
+    ],
+    weakSpots: ["Bridge exposure", "Tight base spacing", "Emerald gen vulnerability"],
+    strongSpots: ["Bridge mobility", "Central pressure", "Quick rotations"]
+  },
+  {
+    name: "Canyon",
+    icon: "🏜️",
+    difficulty: "Easy",
+    color: "#d97706",
+    rgb: "217,119,6",
+    layout: "Open layout, side canyons, central lava pit",
+    strategies: [
+      "Use canyons for side pressure",
+      "Avoid central lava pit fights",
+      "Long sightlines favor ranged kits",
+      "Control canyon entrances"
+    ],
+    weakSpots: ["Open sightlines", "Canyon bottlenecks", "Central lava pit"],
+    strongSpots: ["Side pressure", "Ranged advantages", "Multiple lanes"]
+  }
+];
+
+/* ─── ITEM TIMINGS ─── */
+const TIMINGS = {
+  "Early Game (T1-T2)": {
+    icon: "🌅",
+    color: "#f59e0b",
+    rgb: "245,158,11",
+    items: [
+      "Stone Sword (immediate)",
+      "Wood Tools (first 30 seconds)",
+      "Armor (first iron)",
+      "Shears (first iron)",
+      "Bow (first gold)",
+      "Blocks (constant priority)"
+    ]
+  },
+  "Mid Game (T3-T4)": {
+    icon: "🌇",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    items: [
+      "Sharpness I (t3 start)",
+      "Protection I (t3 start)",
+      "Bow upgrades (t3)",
+      "Generator upgrades (t3)",
+      "Efficiency tools (t3)",
+      "Fireball (t4)"
+    ]
+  },
+  "Late Game (T5+)": {
+    icon: "🌙",
+    color: "#ef4444",
+    rgb: "239,68,68",
+    items: [
+      "Sharpness II (t5)",
+      "Protection II (t5)",
+      "Power II bow (t5)",
+      "TNT (constant)",
+      "Ender pearls (t5+)",
+      "Fireball upgrades (t5+)"
+    ]
+  }
+};
+
+/* ─── COUNTER STRATEGIES ─── */
+const COUNTERS = [
+  {
+    target: "Double Fisher",
+    icon: "🎣",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    strategies: [
+      "Force early fights before they scale",
+      "Target fishers with fireball + TNT",
+      "Use knockback to separate them",
+      "Control emerald gen to starve them"
+    ],
+    recommended: ["Sheila", "Star", "Umbra", "Amy"],
+    avoid: ["Single target damage", "Letting them group"]
+  },
+  {
+    target: "BB Comp",
+    icon: "💥",
+    color: "#f59e0b",
+    rgb: "245,158,11",
+    strategies: [
+      "Stack beds with obsidian",
+      "Use anti-knockback enchant",
+      "Keep distance from base",
+      "Counter with your own BB pressure"
+    ],
+    recommended: ["Noelle", "Wren", "Baker", "Zola"],
+    avoid: ["Exposing bed location", "Solo fights near base"]
+  },
+  {
+    target: "Cheater Comp",
+    icon: "😈",
+    color: "#ef4444",
+    rgb: "239,68,68",
+    strategies: [
+      "Report immediately",
+      "Play defensively, don't ego",
+      "Use map control to your advantage",
+      "Stack gear and wait for staff"
+    ],
+    recommended: ["Any defensive comp", "Generator control", "Map pressure"],
+    avoid: ["Fair fights", "Getting tilted"]
+  }
+];
+
+/* ─── PRACTICE DRILLS ─── */
+const PRACTICE = [
+  {
+    name: "Bed Defense",
+    icon: "🛡️",
+    difficulty: "Beginner",
+    color: "#10b981",
+    rgb: "16,185,129",
+    description: "Practice defending your bed against different attack angles",
+    drills: [
+      "Place 10 beds in different positions",
+      "Defend against fireball + sword combos",
+      "Practice pillar jumping defense",
+      "Test different block placements"
+    ],
+    tips: ["Always have blocks ready", "Stay calm under pressure", "Use elevation to your advantage"]
+  },
+  {
+    name: "Generator Control",
+    icon: "⚡",
+    difficulty: "Intermediate",
+    color: "#3b82f6",
+    rgb: "59,130,246",
+    description: "Learn to control and upgrade generators effectively",
+    drills: [
+      "Time generator upgrades perfectly",
+      "Practice stealing enemy gens",
+      "Defend your gen while upgrading",
+      "Coordinate gen control with team"
+    ],
+    tips: ["Know upgrade costs", "Time upgrades with fights", "Protect your gen at all costs"]
+  },
+  {
+    name: "Team Coordination",
+    icon: "🤝",
+    difficulty: "Advanced",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    description: "Master team communication and positioning",
+    drills: [
+      "Practice calling out enemy positions",
+      "Coordinate group fights",
+      "Learn to rotate as a team",
+      "Master bed break timing"
+    ],
+    tips: ["Use voice chat effectively", "Know your roles", "Trust your team"]
+  }
+];
+
 /* ─── SNOW ─── */
 function SnowLayer({ dark }) {
   const flakes = useMemo(
@@ -401,8 +591,13 @@ function FeaturedStrip({ dark }) {
 }
 
 /* ─── COMP CARD ─── */
-function CompCard({ comp, dark }) {
+function CompCard({ comp, dark, isFavorite, onToggleFavorite }) {
   const [open, setOpen] = useState(false);
+
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation();
+    onToggleFavorite();
+  };
 
   return (
     <div
@@ -491,20 +686,43 @@ function CompCard({ comp, dark }) {
             </div>
           </div>
 
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              flexShrink: 0,
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
-              color: dark ? "rgba(255,255,255,0.46)" : "rgba(0,0,0,0.4)",
-            }}
-          >
-            <ChevronIcon open={open} />
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button
+              onClick={handleFavoriteClick}
+              style={{
+                width: 32,
+                height: 32,
+                flexShrink: 0,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: isFavorite ? "#f59e0b" : (dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"),
+                fontSize: 16,
+                transition: "all 0.2s ease",
+              }}
+            >
+              {isFavorite ? "⭐" : "☆"}
+            </button>
+
+            <div
+              style={{
+                width: 32,
+                height: 32,
+                flexShrink: 0,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
+                color: dark ? "rgba(255,255,255,0.46)" : "rgba(0,0,0,0.4)",
+              }}
+            >
+              <ChevronIcon open={open} />
+            </div>
           </div>
         </div>
 
@@ -573,6 +791,649 @@ function CompCard({ comp, dark }) {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── MAPS SECTION ─── */
+function MapsSection({ dark }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {MAPS.map((map, i) => (
+        <div
+          key={i}
+          style={{
+            borderRadius: 22,
+            padding: "20px",
+            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+            <span style={{ fontSize: 28 }}>{map.icon}</span>
+            <div>
+              <h3 style={{
+                margin: 0,
+                fontSize: 18,
+                fontWeight: 700,
+                color: dark ? "#ffffff" : "#111111",
+                marginBottom: 4
+              }}>
+                {map.name}
+              </h3>
+              <span style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: map.color,
+                background: `rgba(${map.rgb},0.1)`,
+                padding: "2px 8px",
+                borderRadius: 12,
+                border: `1px solid rgba(${map.rgb},0.2)`
+              }}>
+                {map.difficulty}
+              </span>
+            </div>
+          </div>
+
+          <p style={{
+            margin: "0 0 16px 0",
+            fontSize: 14,
+            lineHeight: 1.5,
+            color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)"
+          }}>
+            <strong>Layout:</strong> {map.layout}
+          </p>
+
+          <div style={{ marginBottom: 16 }}>
+            <h4 style={{
+              margin: "0 0 8px 0",
+              fontSize: 14,
+              fontWeight: 700,
+              color: dark ? "#ffffff" : "#111111"
+            }}>
+              Key Strategies
+            </h4>
+            <ul style={{
+              margin: 0,
+              paddingLeft: 20,
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)"
+            }}>
+              {map.strategies.map((strat, j) => (
+                <li key={j}>{strat}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <h4 style={{
+                margin: "0 0 8px 0",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#ef4444",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Weak Spots
+              </h4>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {map.weakSpots.map((spot, j) => (
+                  <span key={j} style={{
+                    fontSize: 11,
+                    padding: "4px 8px",
+                    background: "rgba(239,68,68,0.1)",
+                    border: "1px solid rgba(239,68,68,0.2)",
+                    borderRadius: 8,
+                    color: "#ef4444"
+                  }}>
+                    {spot}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <h4 style={{
+                margin: "0 0 8px 0",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#10b981",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Strong Spots
+              </h4>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {map.strongSpots.map((spot, j) => (
+                  <span key={j} style={{
+                    fontSize: 11,
+                    padding: "4px 8px",
+                    background: "rgba(16,185,129,0.1)",
+                    border: "1px solid rgba(16,185,129,0.2)",
+                    borderRadius: 8,
+                    color: "#10b981"
+                  }}>
+                    {spot}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── TIMINGS SECTION ─── */
+function TimingsSection({ dark }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {Object.entries(TIMINGS).map(([phase, data]) => (
+        <div
+          key={phase}
+          style={{
+            borderRadius: 22,
+            padding: "20px",
+            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+            <span style={{ fontSize: 24 }}>{data.icon}</span>
+            <h3 style={{
+              margin: 0,
+              fontSize: 18,
+              fontWeight: 700,
+              color: dark ? "#ffffff" : "#111111"
+            }}>
+              {phase}
+            </h3>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+            {data.items.map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "12px",
+                  background: `rgba(${data.rgb},0.08)`,
+                  border: `1px solid rgba(${data.rgb},0.15)`,
+                  borderRadius: 12,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: dark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.8)",
+                  textAlign: "center"
+                }}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── COUNTERS SECTION ─── */
+function CountersSection({ dark }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {COUNTERS.map((counter, i) => (
+        <div
+          key={i}
+          style={{
+            borderRadius: 22,
+            padding: "20px",
+            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+            <span style={{ fontSize: 24 }}>{counter.icon}</span>
+            <h3 style={{
+              margin: 0,
+              fontSize: 18,
+              fontWeight: 700,
+              color: dark ? "#ffffff" : "#111111"
+            }}>
+              Countering {counter.target}
+            </h3>
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <h4 style={{
+              margin: "0 0 8px 0",
+              fontSize: 14,
+              fontWeight: 700,
+              color: dark ? "#ffffff" : "#111111"
+            }}>
+              Strategies
+            </h4>
+            <ul style={{
+              margin: 0,
+              paddingLeft: 20,
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)"
+            }}>
+              {counter.strategies.map((strat, j) => (
+                <li key={j}>{strat}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <h4 style={{
+                margin: "0 0 8px 0",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#10b981",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Recommended
+              </h4>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {counter.recommended.map((rec, j) => (
+                  <span key={j} style={{
+                    fontSize: 11,
+                    padding: "4px 8px",
+                    background: "rgba(16,185,129,0.1)",
+                    border: "1px solid rgba(16,185,129,0.2)",
+                    borderRadius: 8,
+                    color: "#10b981"
+                  }}>
+                    {rec}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <h4 style={{
+                margin: "0 0 8px 0",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#ef4444",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Avoid
+              </h4>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {counter.avoid.map((avoid, j) => (
+                  <span key={j} style={{
+                    fontSize: 11,
+                    padding: "4px 8px",
+                    background: "rgba(239,68,68,0.1)",
+                    border: "1px solid rgba(239,68,68,0.2)",
+                    borderRadius: 8,
+                    color: "#ef4444"
+                  }}>
+                    {avoid}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── PRACTICE SECTION ─── */
+function PracticeSection({ dark }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {PRACTICE.map((drill, i) => (
+        <div
+          key={i}
+          style={{
+            borderRadius: 22,
+            padding: "20px",
+            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ fontSize: 24 }}>{drill.icon}</span>
+              <div>
+                <h3 style={{
+                  margin: 0,
+                  fontSize: 18,
+                  fontWeight: 700,
+                  color: dark ? "#ffffff" : "#111111",
+                  marginBottom: 4
+                }}>
+                  {drill.name}
+                </h3>
+                <span style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: drill.color,
+                  background: `rgba(${drill.rgb},0.1)`,
+                  padding: "2px 8px",
+                  borderRadius: 12,
+                  border: `1px solid rgba(${drill.rgb},0.2)`
+                }}>
+                  {drill.difficulty}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p style={{
+            margin: "0 0 16px 0",
+            fontSize: 14,
+            lineHeight: 1.5,
+            color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)"
+          }}>
+            {drill.description}
+          </p>
+
+          <div style={{ marginBottom: 16 }}>
+            <h4 style={{
+              margin: "0 0 8px 0",
+              fontSize: 14,
+              fontWeight: 700,
+              color: dark ? "#ffffff" : "#111111"
+            }}>
+              Practice Drills
+            </h4>
+            <ul style={{
+              margin: 0,
+              paddingLeft: 20,
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)"
+            }}>
+              {drill.drills.map((d, j) => (
+                <li key={j}>{d}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 style={{
+              margin: "0 0 8px 0",
+              fontSize: 12,
+              fontWeight: 700,
+              color: "#3b82f6",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px"
+            }}>
+              Pro Tips
+            </h4>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+              {drill.tips.map((tip, j) => (
+                <span key={j} style={{
+                  fontSize: 11,
+                  padding: "4px 8px",
+                  background: "rgba(59,130,246,0.1)",
+                  border: "1px solid rgba(59,130,246,0.2)",
+                  borderRadius: 8,
+                  color: "#3b82f6"
+                }}>
+                  {tip}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── SETTINGS SECTION ─── */
+function SettingsSection({ dark, setDark, favorites, setFavorites }) {
+  const clearFavorites = () => {
+    if (window.confirm("Are you sure you want to clear all favorites?")) {
+      setFavorites([]);
+    }
+  };
+
+  const exportData = () => {
+    const data = {
+      favorites,
+      exportDate: new Date().toISOString(),
+      version: "1.0"
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bedwars-app-data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {/* Theme Settings */}
+      <div
+        style={{
+          borderRadius: 22,
+          padding: "20px",
+          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h3 style={{
+          margin: "0 0 16px 0",
+          fontSize: 18,
+          fontWeight: 700,
+          color: dark ? "#ffffff" : "#111111",
+          display: "flex",
+          alignItems: "center",
+          gap: 8
+        }}>
+          🎨 Theme
+        </h3>
+
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <div style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: dark ? "#ffffff" : "#111111",
+              marginBottom: 4
+            }}>
+              Dark Mode
+            </div>
+            <div style={{
+              fontSize: 12,
+              color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"
+            }}>
+              Toggle between light and dark themes
+            </div>
+          </div>
+
+          <button
+            onClick={() => setDark(!dark)}
+            style={{
+              width: 50,
+              height: 26,
+              borderRadius: 13,
+              border: "none",
+              background: dark ? "#f59e0b" : "#e5e7eb",
+              cursor: "pointer",
+              position: "relative",
+              transition: "background 0.2s ease",
+            }}
+          >
+            <div
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                background: "#ffffff",
+                position: "absolute",
+                top: 3,
+                left: dark ? 27 : 3,
+                transition: "left 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 10,
+              }}
+            >
+              {dark ? "🌙" : "☀️"}
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Data Management */}
+      <div
+        style={{
+          borderRadius: 22,
+          padding: "20px",
+          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h3 style={{
+          margin: "0 0 16px 0",
+          fontSize: 18,
+          fontWeight: 700,
+          color: dark ? "#ffffff" : "#111111",
+          display: "flex",
+          alignItems: "center",
+          gap: 8
+        }}>
+          💾 Data Management
+        </h3>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <div style={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: dark ? "#ffffff" : "#111111",
+                marginBottom: 2
+              }}>
+                Favorite Comps
+              </div>
+              <div style={{
+                fontSize: 12,
+                color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"
+              }}>
+                {favorites.length} saved
+              </div>
+            </div>
+
+            <button
+              onClick={clearFavorites}
+              disabled={favorites.length === 0}
+              style={{
+                padding: "8px 16px",
+                borderRadius: 8,
+                border: `1px solid ${dark ? "rgba(239,68,68,0.3)" : "rgba(239,68,68,0.2)"}`,
+                background: "transparent",
+                color: "#ef4444",
+                fontSize: 12,
+                fontWeight: 500,
+                cursor: favorites.length > 0 ? "pointer" : "not-allowed",
+                opacity: favorites.length > 0 ? 1 : 0.5,
+              }}
+            >
+              Clear All
+            </button>
+          </div>
+
+          <div style={{ borderTop: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`, margin: "8px 0" }} />
+
+          <button
+            onClick={exportData}
+            style={{
+              padding: "12px 16px",
+              borderRadius: 12,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
+              background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
+              color: dark ? "#ffffff" : "#111111",
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            📤 Export Data
+          </button>
+        </div>
+      </div>
+
+      {/* App Info */}
+      <div
+        style={{
+          borderRadius: 22,
+          padding: "20px",
+          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h3 style={{
+          margin: "0 0 16px 0",
+          fontSize: 18,
+          fontWeight: 700,
+          color: dark ? "#ffffff" : "#111111",
+          display: "flex",
+          alignItems: "center",
+          gap: 8
+        }}>
+          ℹ️ About
+        </h3>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{
+            fontSize: 14,
+            color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)",
+            lineHeight: 1.5
+          }}>
+            <strong>Bedwars Strategy Guide</strong> - Your comprehensive companion for mastering Bedwars tactics, compositions, and gameplay.
+          </div>
+
+          <div style={{
+            fontSize: 12,
+            color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
+            marginTop: 8
+          }}>
+            Features: Comps • Maps • Timings • Counters • Practice • Guides • Roles
           </div>
         </div>
       </div>
@@ -849,8 +1710,13 @@ function RolesSection({ dark }) {
 function TabBar({ tab, setTab, dark }) {
   const tabs = [
     { key: "comps",  label: "Comps",  icon: "⚔️" },
+    { key: "maps",   label: "Maps",   icon: "🗺️" },
+    { key: "timings", label: "Timings", icon: "⏰" },
+    { key: "counters", label: "Counters", icon: "🛡️" },
+    { key: "practice", label: "Practice", icon: "🎯" },
     { key: "guides", label: "Guides", icon: "📋" },
     { key: "roles",  label: "Roles",  icon: "👥" },
+    { key: "settings", label: "Settings", icon: "⚙️" },
   ];
 
   return (
@@ -924,10 +1790,35 @@ export default function App() {
   const [dark, setDark] = useState(true);
   const [tab, setTab] = useState("comps");
   const [mounted, setMounted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     setMounted(true);
+    const savedFavorites = localStorage.getItem("bw-favorites");
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("bw-favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  const toggleFavorite = (compName) => {
+    setFavorites(prev =>
+      prev.includes(compName)
+        ? prev.filter(name => name !== compName)
+        : [...prev, compName]
+    );
+  };
+
+  const filteredComps = COMPS.filter(comp =>
+    searchQuery === "" ||
+    comp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    comp.short.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    comp.why.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (!mounted) return null;
 
@@ -1263,14 +2154,137 @@ export default function App() {
       >
         {tab === "comps" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {COMPS.map((c, i) => (
-              <CompCard key={i} comp={c} dark={dark} />
+            {/* Search and Filter Bar */}
+            <div
+              style={{
+                borderRadius: 16,
+                padding: "16px",
+                background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+                border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+                boxShadow: dark ? "0 8px 24px rgba(0,0,0,0.2)" : "0 8px 22px rgba(0,0,0,0.05)",
+              }}
+            >
+              <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
+                <div style={{ position: "relative", flex: 1 }}>
+                  <input
+                    type="text"
+                    placeholder="Search comps, kits, or strategies..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "10px 16px",
+                      paddingLeft: 40,
+                      borderRadius: 12,
+                      border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
+                      background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
+                      color: dark ? "#ffffff" : "#111111",
+                      fontSize: 14,
+                      outline: "none",
+                    }}
+                  />
+                  <span style={{
+                    position: "absolute",
+                    left: 12,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
+                    fontSize: 16
+                  }}>
+                    🔍
+                  </span>
+                </div>
+                <button
+                  onClick={() => setTab(tab === "favorites" ? "comps" : "favorites")}
+                  style={{
+                    padding: "10px 16px",
+                    borderRadius: 12,
+                    border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
+                    background: favorites.length > 0 && tab !== "favorites" ? "rgba(245,158,11,0.1)" : "transparent",
+                    color: favorites.length > 0 && tab !== "favorites" ? "#f59e0b" : (dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)"),
+                    fontSize: 14,
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  ⭐ {favorites.length > 0 ? favorites.length : ""}
+                  {tab === "favorites" ? "All Comps" : "Favorites"}
+                </button>
+              </div>
+
+              {searchQuery && (
+                <div style={{
+                  fontSize: 12,
+                  color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
+                  textAlign: "center"
+                }}>
+                  Found {filteredComps.length} comp{filteredComps.length !== 1 ? "s" : ""} matching "{searchQuery}"
+                </div>
+              )}
+            </div>
+
+            {/* Comps List */}
+            {(tab === "favorites" ? COMPS.filter(c => favorites.includes(c.name)) : filteredComps).map((c, i) => (
+              <CompCard
+                key={i}
+                comp={c}
+                dark={dark}
+                isFavorite={favorites.includes(c.name)}
+                onToggleFavorite={() => toggleFavorite(c.name)}
+              />
             ))}
+
+            {tab === "favorites" && favorites.length === 0 && (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "40px 20px",
+                  color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+                }}
+              >
+                <div style={{ fontSize: 48, marginBottom: 16 }}>⭐</div>
+                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#111111" }}>
+                  No Favorite Comps Yet
+                </h3>
+                <p style={{ margin: 0, fontSize: 14 }}>
+                  Tap the star icon on any comp to add it to your favorites!
+                </p>
+              </div>
+            )}
+
+            {filteredComps.length === 0 && searchQuery && (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "40px 20px",
+                  color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
+                }}
+              >
+                <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
+                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#111111" }}>
+                  No Comps Found
+                </h3>
+                <p style={{ margin: 0, fontSize: 14 }}>
+                  Try adjusting your search terms or browse all comps.
+                </p>
+              </div>
+            )}
           </div>
         )}
 
+        {tab === "maps" && <MapsSection dark={dark} />}
+        {tab === "timings" && <TimingsSection dark={dark} />}
+        {tab === "counters" && <CountersSection dark={dark} />}
+        {tab === "practice" && <PracticeSection dark={dark} />}
+
         {tab === "guides" && <GuidesSection dark={dark} />}
         {tab === "roles" && <RolesSection dark={dark} />}
+        {tab === "settings" && <SettingsSection dark={dark} setDark={setDark} favorites={favorites} setFavorites={setFavorites} />}
       </div>
 
       {/* FOOTER */}
