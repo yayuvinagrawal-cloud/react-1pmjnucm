@@ -188,7 +188,7 @@ export default function App() {
   const fisherFisherStrats = [
     "Don't mess around early. Double Fisher works only if both survive and build value.",
     "Fighters should hold back and trade wisely, not risk everything on every chance.",
-    "After t1 make sure to JJUMP on any fish thats not dim gold or ems!.",
+    "After t1 make sure to JUMP on any fish thats not dim gold or ems!.",
     " Your need to get fishing rod early and try to ",
   ];
 
