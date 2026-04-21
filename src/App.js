@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import PlayerSearch from "./PlayerSearch";
 
 /* ─── FONT LOADER ─── */
 function useFonts() {
@@ -805,7 +804,6 @@ function TabBar({ tab, setTab, dark }) {
     { key: "comps",  label: "Comps",  icon: "⚔️" },
     { key: "guides", label: "Guides", icon: "📋" },
     { key: "roles",  label: "Roles",  icon: "👥" },
-    { key: "lookup", label: "Lookup", icon: "🔍" },
   ];
 
   return (
@@ -1226,7 +1224,6 @@ export default function App() {
 
         {tab === "guides" && <GuidesSection dark={dark} />}
         {tab === "roles" && <RolesSection dark={dark} />}
-        {tab === "lookup" && <PlayerSearch dark={dark} />}
       </div>
 
       {/* FOOTER */}
