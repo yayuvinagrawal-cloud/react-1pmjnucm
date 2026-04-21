@@ -1274,7 +1274,17 @@ export default function App() {
         >
           BEDWARS SQUADS META REFERENCE · 4-STACK RANKED PLAY
         </div>
-      </div>
+      </div><p style={{
+  position: "fixed",
+  bottom: "10px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  fontSize: "12px",
+  opacity: 0.7,
+  letterSpacing: "1px"
+}}>
+  made by justcyril
+</p>
     </div>
   );
 }
