@@ -182,7 +182,7 @@ export default function App() {
     "Protect scaling kits early.",
     "Get blocks and stone sword first.",
     "One good team fight can win the game.",
-    "Vs cheaters: don't ego fight. Build gear, stack blocks and TNT, let one player hunt for openings.",
+    "Vs cheaters: don't ego fight. Build gear, stack blocks and TNT rain and bb! PLAY KITS LIKE AMY OR FREYA THAT DONT REQUIRE KILLS AND JUST CYCLE DIMS",
   ];
 
   const fisherFisherStrats = [
