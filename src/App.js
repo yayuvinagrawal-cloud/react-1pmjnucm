@@ -79,8 +79,8 @@ export default function App() {
       why: "Solid, balanced comp that keeps pressure on, holds up well, and scales steadily.",
       useWhen:
         "Pick this if your team coordinates well and your Beekeeper can get value early. Grab bees fast without overcommitting to base.",
-      early: "Split 2 mid / 2 base. Only jump into fights you can win.",
-      mid: "Use Sheila and Star to control the map and force one clean team fight.",
+      early: "Split at 2:20 after t1 2 mid / 2 base. Only jump into fights you can win.",
+      mid: "Use Sheila and Star to control the map, try to get t3 before 6 mins and bb other teams when ur up on iron with tnt!",
       win: "After winning a fight, hit their bed right away.",
     },
     {
@@ -92,7 +92,7 @@ export default function App() {
         ? "0 0 40px rgba(52,211,153,0.18)"
         : "0 8px 40px rgba(5,150,105,0.14)",
       icon: "💰",
-      why: "Steady scaling with solid defense.",
+      why: "Reliable loot with solid defense.",
       useWhen:
         "Go for this if you're running a stable economy with two bed defenders and want to scale safely into mid game.",
       early: "Don't force bad fights. Keep your economy kits safe.",
@@ -200,7 +200,7 @@ export default function App() {
   ];
 
   const bbStrats = [
-    "Your BB should not perma ego fight. Their job is to watch spacing and punish openings.",
+    "Your BB should not ego fight. Their job is to watch spacing and punish openings.",
     "Pressure first, break second. Good bed breaks usually come after forcing defenders out of position.",
     "If the map is locked, threaten side lanes and make the enemy split before committing.",
     "When one opening appears, everyone should understand the conversion instantly and collapse fast.",
