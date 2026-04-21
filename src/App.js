@@ -214,9 +214,9 @@ export default function BedwarsMetaSite() {
       letterSpacing: "-0.03em",
       lineHeight: 1.1,
       margin: 0,
-      background: d
-        ? "linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%)"
-        : "linear-gradient(135deg, #0f172a 0%, #334155 100%)",
+  background: d
+    ? "linear-gradient(135deg, #ffffff 20%, #60a5fa 100%)"
+    : "linear-gradient(135deg, #0f172a 0%, #334155 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
       backgroundClip: "text",
