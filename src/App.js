@@ -114,6 +114,39 @@ export default function App() {
       mid: "Keep side pressure and avoid full team fights.",
       win: "Punish openings fast, break bed, and collapse.",
     },
+    ,
+    {
+      name: "Davey / Umbra / Fisher / Fisher",
+      tag: "BB strat",
+      accent: isDark ? "#f59e0b" : "#d97706",
+      accentBg: isDark ? "rgba(245,158,11,0.08)" : "rgba(217,119,6,0.06)",
+      glow: isDark
+        ? "0 0 40px rgba(245,158,11,0.18)"
+        : "0 8px 40px rgba(217,119,6,0.14)",
+      icon: "💥",
+      why: "Aggressive bed break comp that creates fast pressure with Umbra space control and double Fisher scaling.",
+      useWhen:
+        "Use when your BB is confident, your team can play fast, and you want to punish slower setups before they fully scale.",
+      early: "Let Davey look for early openings while both Fishers build value and Umbra helps control space.",
+      mid: "Force awkward fights, pressure side lanes, and make teams split attention between base and map control.",
+      win: "Get one clean opening, send Davey through, and convert instantly off pressure.",
+    },
+    {
+      name: "Amy / Umbra / Fisher / Fisher",
+      tag: "Fisher Fisher",
+      accent: isDark ? "#a78bfa" : "#7c3aed",
+      accentBg: isDark ? "rgba(167,139,250,0.08)" : "rgba(124,58,237,0.06)",
+      glow: isDark
+        ? "0 0 40px rgba(167,139,250,0.18)"
+        : "0 8px 40px rgba(124,58,237,0.14)",
+      icon: "🌊",
+      why: "Safe scaling comp with strong late-game value and solid fight control through Amy and Umbra.",
+      useWhen:
+        "Use when your team wants stable scaling, trusts the Amy player in fights, and can protect both Fishers early.",
+      early: "Avoid random fights, keep both Fishers alive, and let Amy take only strong trades.",
+      mid: "Play around gear timing, enchants, and Umbra utility while keeping pressure without overforcing.",
+      win: "Outscale, take one strong grouped fight, then roll map control into bed pressure.",
+    }
   ];
 
   const roles = [
@@ -152,10 +185,36 @@ export default function App() {
     "One clean team fight can decide the game.",
     "Vs cheaters: do not ego fight. Play gear, stack blocks and TNT, let one player look for openings.",
   ];
+    const fisherFisherStrats = [
+    "Do not troll early. Double Fisher only works if both stay alive and keep value building.",
+    "Your fighters should stall and trade smart instead of coinflipping every opening.",
+    "Hit gear timings together. Do not let one side be stacked while the other is weak.",
+    "Once both Fishers are online, force grouped fights and snowball map control.",
+  ];
+
+  const realStrats = [
+    "Core comps are strongest when every player sticks to role instead of freestyling.",
+    "Do not send your value kits into useless fights just because your team wants action.",
+    "If your comp scales, your job is to survive cleanly to mid game, not fake early dominance.",
+    "Most games are won by one clean grouped fight and a fast conversion, not random clips.",
+  ];
+
+  const bbStrats = [
+    "Your BB should not perma ego fight. Their job is to watch spacing and punish openings.",
+    "Pressure first, break second. Good bed breaks usually come after forcing defenders out of position.",
+    "If the map is locked, threaten side lanes and make the enemy split before committing.",
+    "When one opening appears, everyone should understand the conversion instantly and collapse fast.",
+  ];
 
   const d = isDark;
 
   const styles = {
+        miniGrid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+      gap: 20,
+      marginTop: 24,
+    }, 
     page: {
       minHeight: "100vh",
       background: d
@@ -717,5 +776,54 @@ export default function App() {
         </div>
       </div>
     </div>
+        <div style={styles.twoCol} className="bw-fadeup bw-fadeup-4">
+          <div style={styles.section}>
+            <div style={styles.sectionHead}>
+              <h2 style={styles.h2}>Fisher Fisher strats</h2>
+              <span style={styles.smallPill}>double fisher</span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {fisherFisherStrats.map((item, i) => (
+                <div key={i} style={styles.checkItem(i)} className="check-row">
+                  <div style={styles.numBadge(i)}>{i + 1}</div>
+                  <p style={styles.checkText}>{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={styles.section}>
+            <div style={styles.sectionHead}>
+              <h2 style={styles.h2}>Real strats</h2>
+              <span style={styles.smallPill}>macro</span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {realStrats.map((item, i) => (
+                <div key={i} style={styles.checkItem(i)} className="check-row">
+                  <div style={styles.numBadge(i)}>{i + 1}</div>
+                  <p style={styles.checkText}>{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={styles.section} className="bw-fadeup bw-fadeup-4">
+          <div style={styles.sectionHead}>
+            <h2 style={styles.h2}>BB strats</h2>
+            <span style={styles.smallPill}>bed break</span>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {bbStrats.map((item, i) => (
+              <div key={i} style={styles.checkItem(i)} className="check-row">
+                <div style={styles.numBadge(i)}>{i + 1}</div>
+                <p style={styles.checkText}>{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
   );
 }
