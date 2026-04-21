@@ -230,48 +230,6 @@ const GUIDES = {
   },
 };
 
-/* ─── ITEM TIMINGS ─── */
-const TIMINGS = {
-  "Early Game (0-3 min)": {
-    icon: "🌅",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    items: [
-      "Starter weapon (immediate)",
-      "Basic armor",
-      "Blocks (constant)",
-      "Generator prioritization",
-      "Early health potions",
-      "Resource farming"
-    ]
-  },
-  "Mid Game (3-6 min)": {
-    icon: "🌇",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    items: [
-      "Upgraded armor",
-      "Better sword",
-      "Bow setup",
-      "Generator upgrades",
-      "Speed potions",
-      "Heal potions"
-    ]
-  },
-  "Late Game (6+ min)": {
-    icon: "🌙",
-    color: "#ef4444",
-    rgb: "239,68,68",
-    items: [
-      "Full armor upgrade",
-      "Sword upgrades",
-      "Bow with arrows",
-      "Speed II potions",
-      "Healing items",
-      "Utility equipment"
-    ]
-  }
-};
 
 /* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
@@ -746,59 +704,6 @@ function CompCard({ comp, dark, isFavorite, onToggleFavorite }) {
   );
 }
 
-/* ─── TIMINGS SECTION ─── */
-function TimingsSection({ dark }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      {Object.entries(TIMINGS).map(([phase, data]) => (
-        <div
-          key={phase}
-          style={{
-            borderRadius: 22,
-            padding: "20px",
-            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-            <span style={{ fontSize: 24 }}>{data.icon}</span>
-            <h3 style={{
-              margin: 0,
-              fontSize: 18,
-              fontWeight: 700,
-              color: dark ? "#ffffff" : "#111111"
-            }}>
-              {phase}
-            </h3>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
-            {data.items.map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: "12px",
-                  background: `rgba(${data.rgb},0.08)`,
-                  border: `1px solid rgba(${data.rgb},0.15)`,
-                  borderRadius: 12,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: dark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.8)",
-                  textAlign: "center"
-                }}
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 /* ─── COUNTERS SECTION ─── */
 function CountersSection({ dark }) {
@@ -1523,7 +1428,6 @@ function RolesSection({ dark }) {
 function TabBar({ tab, setTab, dark }) {
   const tabs = [
     { key: "comps",  label: "Comps",  icon: "⚔️" },
-    { key: "timings", label: "Timings", icon: "⏰" },
     { key: "counters", label: "Counters", icon: "🛡️" },
     { key: "practice", label: "Practice", icon: "🎯" },
     { key: "guides", label: "Guides", icon: "📋" },
@@ -2089,7 +1993,7 @@ export default function App() {
           </div>
         )}
 
-        {tab === "timings" && <TimingsSection dark={dark} />}
+        {/* Timings section removed */}
         {tab === "counters" && <CountersSection dark={dark} />}
         {tab === "practice" && <PracticeSection dark={dark} />}
 
