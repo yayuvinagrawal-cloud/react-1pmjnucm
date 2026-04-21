@@ -637,19 +637,20 @@ export default function App() {
 
           <h1 style={{ margin: "0 0 12px", lineHeight: 1.05 }}>
             <GlitchText style={{
-              fontSize: "clamp(2.2rem, 9vw, 4.5rem)",
-              fontWeight: 900,
-              fontFamily: "'Space Mono', monospace",
-              letterSpacing: "-0.03em",
-              color: dark ? "#ffffff" : "#0f172a",
-              display: "block",
-            }}>SQUADS</GlitchText>
+            fontSize: "clamp(2.4rem, 9vw, 5rem)",
+            fontWeight: 900,
+            fontFamily: "'Space Mono', monospace",
+            letterSpacing: "-0.05em",
+            color: dark ? "#ffffff" : "#0f172a",
+            display: "block",
+            textShadow: dark ? "0 0 30px rgba(37,99,235,0.18)" : "none",
+          }}>SQUADS</GlitchText>
             <span style={{
               fontSize: "clamp(1.1rem, 4vw, 1.8rem)",
               fontWeight: 700,
               fontFamily: "'Space Mono', monospace",
               letterSpacing: "0.08em",
-              background: "linear-gradient(90deg, #1e3a8a, #2563eb, #dc2626)",
+              background: "linear-gradient(90deg, #60a5fa 0%, #2563eb 45%, #dc2626 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
