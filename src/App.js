@@ -242,8 +242,7 @@ const COUNTERS = [
       "Force early fights before they scale",
       "Target fishers with fireball + TNT",
       "Use knockback to separate them",
-      "Control emerald gen to starve them"
-    ],
+]    ],
     recommended: ["Sheila", "Star", "Umbra", "Amy"],
     avoid: ["Single target damage", "Letting them group"]
   },
