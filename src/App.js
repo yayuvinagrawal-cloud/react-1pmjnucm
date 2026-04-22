@@ -136,6 +136,22 @@ const COMPS = [
     win:
       "Outscale, win one big grouped fight, then use map control to take bed and close.",
   },
+  {
+    name: "Lucia / Umbra / Baker / Whisper",
+    short: "Macro Core",
+    icon: "🧠",
+    color: "#06b6d4",
+    rgb: "6,182,212",
+    why: "Strong macro comp with eco, intel, sustain, and real pressure threat. Good for duo-q or cleaner coordinated games.",
+    useWhen:
+      "Use this when you want a safer comp that still has map pressure and cleaner rotations instead of random all-in fighting.",
+    early:
+      "Let Lucia and Whisper stabilize macro while Baker keeps tempo clean and Umbra looks for smart entries instead of forced ones.",
+    mid:
+      "Use owl info and Umbra pressure to create cleaner fights. Keep your resets tight and don't waste your scaling by overforcing.",
+    win:
+      "Scale into better gear, keep map control, then convert one clean pressure window into bed damage and a grouped finish.",
+  },
 ];
 
 const ROLES = [
@@ -145,7 +161,7 @@ const ROLES = [
     desc: "Scaling kits like Metal Beekeeper and Farmer. Their job is value first.",
     color: "#10b981",
     rgb: "16,185,129",
-    kits: ["Bee Keeper", "Metal", "Farmer", "Star", "Thalya", "Sigrid", "Davey", "Double Fisher"],
+    kits: ["Bee Keeper", "Metal", "Farmer", "Star", "Thalya", "Sigrid", "Davey", "Double Fisher", "Lucia"],
   },
   {
     key: "BD",
@@ -161,7 +177,7 @@ const ROLES = [
     desc: "Main fighter. Handles most PvP and sets the pace in bigger fights.",
     color: "#ef4444",
     rgb: "239,68,68",
-    kits: ["Sheila Aery", "Silas", "Amy", "Freya", "Cait", "Mech", "Lucia"],
+    kits: ["Sheila Aery", "Silas", "Amy", "Freya", "Cait", "Mech", "Lucia", "Umbra"],
   },
   {
     key: "SJ",
@@ -169,7 +185,7 @@ const ROLES = [
     desc: "Second fighter. Supports the main and adds utility, peel, and pressure.",
     color: "#f59e0b",
     rgb: "245,158,11",
-    kits: ["Star", "Amy", "Mech", "Zeno", "Lassy", "Wren", "Noelle", "Umeko", "Umbra", "Nahla", "Melody"],
+    kits: ["Star", "Amy", "Mech", "Zeno", "Lassy", "Wren", "Noelle", "Umeko", "Umbra", "Nahla", "Melody", "Whisper", "Baker"],
   },
   {
     key: "BBER",
@@ -245,6 +261,87 @@ const TIMING_ITEMS = [
   "Don't be too open - always be aware of your surroundings and stay vigilant.",
 ];
 
+/* ─── DRAFT BUILDER DATA ─── */
+const DRAFT_KITS = [
+  { name: "Lucia", roles: ["economy"] },
+  { name: "Whisper", roles: ["support"] },
+  { name: "Umbra", roles: ["juggernaut"] },
+  { name: "Aery", roles: ["juggernaut"] },
+  { name: "Eldertree", roles: ["juggernaut"] },
+  { name: "Barbarian", roles: ["juggernaut"] },
+  { name: "Yuzi", roles: ["juggernaut"] },
+  { name: "Baker", roles: ["support", "defender"] },
+  { name: "Builder", roles: ["defender"] },
+  { name: "Marina", roles: ["defender"] },
+  { name: "Fisher", roles: ["defender"] },
+  { name: "Noelle", roles: ["defender"] },
+  { name: "Grim Reaper", roles: ["juggernaut"] },
+  { name: "Beekeeper", roles: ["economy"] },
+];
+
+function getKit(name) {
+  return DRAFT_KITS.find((k) => k.name === name);
+}
+
+function evaluateDraft(picks) {
+  const chosen = picks.map(getKit).filter(Boolean);
+  const hasRole = (role) => chosen.some((k) => k.roles.includes(role));
+
+  const hasEconomy = hasRole("economy");
+  const hasJuggernaut = hasRole("juggernaut");
+  const hasSupport = hasRole("support");
+  const hasDefender = hasRole("defender");
+
+  const warnings = [];
+  const positives = [];
+  const suggestions = [];
+
+  if (!hasDefender) {
+    warnings.push("No BD detected — add a bed defender or your team is too exposed to fast breaks.");
+    suggestions.push("Add Baker, Marina, Fisher, or Noelle.");
+  }
+
+  if (!hasJuggernaut) {
+    warnings.push("No real frontline detected — early fights will be harder to convert cleanly.");
+    suggestions.push("Add Eldertree, Aery, Umbra, Barbarian, or Yuzi.");
+  }
+
+  if (!hasEconomy) {
+    warnings.push("No economy slot detected — your comp can fall behind on real gear timings.");
+    suggestions.push("Add Lucia or Beekeeper.");
+  }
+
+  if (!hasSupport) {
+    warnings.push("No support slot detected — your team loses sustain, intel, or cleaner commit help.");
+    suggestions.push("Add Whisper or Baker.");
+  }
+
+  if (picks.includes("Lucia") && picks.includes("Whisper")) {
+    positives.push("Lucia + Whisper = strong macro core with economy, intel, and cleaner map control.");
+  }
+
+  if (picks.includes("Umbra") && picks.includes("Whisper")) {
+    positives.push("Umbra + Whisper = cleaner engage timing and better pressure setup.");
+  }
+
+  if (picks.includes("Lucia") && picks.includes("Baker")) {
+    positives.push("Lucia + Baker = safe scaling core with cleaner resets.");
+  }
+
+  if (hasEconomy && hasJuggernaut && hasSupport && hasDefender) {
+    positives.push("Comp check passed — all core roles are covered.");
+  }
+
+  return {
+    hasEconomy,
+    hasJuggernaut,
+    hasSupport,
+    hasDefender,
+    warnings,
+    positives,
+    suggestions: [...new Set(suggestions)],
+  };
+}
 
 /* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
@@ -510,6 +607,172 @@ function FeaturedStrip({ dark }) {
   );
 }
 
+/* ─── DRAFT BUILDER SECTION ─── */
+function DraftBuilderSection({ dark }) {
+  const [pick1, setPick1] = useState("Lucia");
+  const [pick2, setPick2] = useState("Whisper");
+  const [pick3, setPick3] = useState("Umbra");
+  const [pick4, setPick4] = useState("Baker");
+
+  const picks = [pick1, pick2, pick3, pick4];
+  const result = useMemo(() => evaluateDraft(picks), [pick1, pick2, pick3, pick4]);
+
+  const rolePill = (ok) => ({
+    fontSize: 11,
+    fontWeight: 800,
+    padding: "7px 10px",
+    borderRadius: 999,
+    border: `1px solid ${ok ? "rgba(16,185,129,0.26)" : "rgba(239,68,68,0.22)"}`,
+    background: ok ? "rgba(16,185,129,0.10)" : "rgba(239,68,68,0.08)",
+    color: ok ? "#10b981" : "#ef4444",
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+    fontFamily: "'JetBrains Mono', monospace",
+  });
+
+  return (
+    <div
+      style={{
+        borderRadius: 24,
+        background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+        border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        overflow: "hidden",
+        boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
+      }}
+    >
+      <div
+        style={{
+          padding: "13px 18px 12px",
+          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+          display: "flex",
+          alignItems: "center",
+          gap: 9,
+        }}
+      >
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: "#06b6d4",
+            boxShadow: "0 0 10px #06b6d4",
+          }}
+        />
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 800,
+            letterSpacing: "0.1em",
+            color: "#06b6d4",
+            fontFamily: "'JetBrains Mono', monospace",
+          }}
+        >
+          DRAFT BUILDER
+        </span>
+      </div>
+
+      <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 14 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+            gap: 10,
+          }}
+        >
+          {[pick1, pick2, pick3, pick4].map((value, i) => (
+            <select
+              key={i}
+              value={value}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (i === 0) setPick1(v);
+                if (i === 1) setPick2(v);
+                if (i === 2) setPick3(v);
+                if (i === 3) setPick4(v);
+              }}
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                borderRadius: 12,
+                border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
+                background: dark ? "#111827" : "#ffffff",
+                color: dark ? "#ffffff" : "#111827",
+                fontSize: 14,
+                outline: "none",
+              }}
+            >
+              {DRAFT_KITS.map((kit) => (
+                <option key={kit.name} value={kit.name}>
+                  {kit.name}
+                </option>
+              ))}
+            </select>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <span style={rolePill(result.hasEconomy)}>Economy {result.hasEconomy ? "✓" : "✕"}</span>
+          <span style={rolePill(result.hasJuggernaut)}>Juggernaut {result.hasJuggernaut ? "✓" : "✕"}</span>
+          <span style={rolePill(result.hasSupport)}>Support {result.hasSupport ? "✓" : "✕"}</span>
+          <span style={rolePill(result.hasDefender)}>BD {result.hasDefender ? "✓" : "✕"}</span>
+        </div>
+
+        {result.positives.map((item, i) => (
+          <div
+            key={`p-${i}`}
+            style={{
+              borderRadius: 15,
+              padding: "12px 14px",
+              background: "rgba(16,185,129,0.08)",
+              border: "1px solid rgba(16,185,129,0.18)",
+              color: "#10b981",
+              fontSize: 13.3,
+              lineHeight: 1.65,
+            }}
+          >
+            ✔ {item}
+          </div>
+        ))}
+
+        {result.warnings.map((item, i) => (
+          <div
+            key={`w-${i}`}
+            style={{
+              borderRadius: 15,
+              padding: "12px 14px",
+              background: "rgba(239,68,68,0.08)",
+              border: "1px solid rgba(239,68,68,0.18)",
+              color: "#ef4444",
+              fontSize: 13.3,
+              lineHeight: 1.65,
+            }}
+          >
+            ⚠ {item}
+          </div>
+        ))}
+
+        {result.suggestions.length > 0 && (
+          <div
+            style={{
+              borderRadius: 15,
+              padding: "12px 14px",
+              background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
+              border: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
+              color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
+              fontSize: 13.3,
+              lineHeight: 1.65,
+            }}
+          >
+            <strong style={{ color: dark ? "#fff" : "#0f0f10" }}>Suggested fixes:</strong> {result.suggestions.join(" ")}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ─── COMP CARD ─── */
 function CompCard({ comp, dark, isFavorite, onToggleFavorite }) {
   const [open, setOpen] = useState(false);
@@ -717,7 +980,6 @@ function CompCard({ comp, dark, isFavorite, onToggleFavorite }) {
     </div>
   );
 }
-
 
 /* ─── COUNTERS SECTION ─── */
 function CountersSection({ dark }) {
@@ -939,240 +1201,6 @@ function PracticeSection({ dark }) {
   );
 }
 
-/* ─── SETTINGS SECTION ─── */
-function SettingsSection({ dark, setDark, favorites, setFavorites }) {
-  const clearFavorites = () => {
-    if (window.confirm("Are you sure you want to clear all favorites?")) {
-      setFavorites([]);
-    }
-  };
-
-  const exportData = () => {
-    const data = {
-      favorites,
-      exportDate: new Date().toISOString(),
-      version: "1.0"
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'bedwars-app-data.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      {/* Theme Settings */}
-      <div
-        style={{
-          borderRadius: 22,
-          padding: "20px",
-          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-        }}
-      >
-        <h3 style={{
-          margin: "0 0 16px 0",
-          fontSize: 18,
-          fontWeight: 700,
-          color: dark ? "#ffffff" : "#3b82f6",
-          display: "flex",
-          alignItems: "center",
-          gap: 8
-        }}>
-          🎨 Theme
-        </h3>
-
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div>
-            <div style={{
-              fontSize: 14,
-              fontWeight: 600,
-              color: dark ? "#ffffff" : "#3b82f6",
-              marginBottom: 4
-            }}>
-              Dark Mode
-            </div>
-            <div style={{
-              fontSize: 12,
-              color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"
-            }}>
-              Toggle between light and dark themes
-            </div>
-          </div>
-
-          <button
-            onClick={() => setDark(!dark)}
-            style={{
-              width: 50,
-              height: 26,
-              borderRadius: 13,
-              border: "none",
-              background: dark ? "#f59e0b" : "#e5e7eb",
-              cursor: "pointer",
-              position: "relative",
-              transition: "background 0.2s ease",
-            }}
-          >
-            <div
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
-                background: "#ffffff",
-                position: "absolute",
-                top: 3,
-                left: dark ? 27 : 3,
-                transition: "left 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 10,
-              }}
-            >
-              {dark ? "🌙" : "☀️"}
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Data Management */}
-      <div
-        style={{
-          borderRadius: 22,
-          padding: "20px",
-          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-        }}
-      >
-        <h3 style={{
-          margin: "0 0 16px 0",
-          fontSize: 18,
-          fontWeight: 700,
-          color: dark ? "#ffffff" : "#3b82f6",
-          display: "flex",
-          alignItems: "center",
-          gap: 8
-        }}>
-          💾 Data Management
-        </h3>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div>
-              <div style={{
-                fontSize: 14,
-                fontWeight: 600,
-                color: dark ? "#ffffff" : "#3b82f6",
-                marginBottom: 2
-              }}>
-                Favorite Comps
-              </div>
-              <div style={{
-                fontSize: 12,
-                color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"
-              }}>
-                {favorites.length} saved
-              </div>
-            </div>
-
-            <button
-              onClick={clearFavorites}
-              disabled={favorites.length === 0}
-              style={{
-                padding: "8px 16px",
-                borderRadius: 8,
-                border: `1px solid ${dark ? "rgba(239,68,68,0.3)" : "rgba(239,68,68,0.2)"}`,
-                background: "transparent",
-                color: "#ef4444",
-                fontSize: 12,
-                fontWeight: 500,
-                cursor: favorites.length > 0 ? "pointer" : "not-allowed",
-                opacity: favorites.length > 0 ? 1 : 0.5,
-              }}
-            >
-              Clear All
-            </button>
-          </div>
-
-          <div style={{ borderTop: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`, margin: "8px 0" }} />
-
-          <button
-            onClick={exportData}
-            style={{
-              padding: "12px 16px",
-              borderRadius: 12,
-              border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
-              background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
-              color: dark ? "#ffffff" : "#3b82f6",
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-            }}
-          >
-            📤 Export Data
-          </button>
-        </div>
-      </div>
-
-      {/* App Info */}
-      <div
-        style={{
-          borderRadius: 22,
-          padding: "20px",
-          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-        }}
-      >
-        <h3 style={{
-          margin: "0 0 16px 0",
-          fontSize: 18,
-          fontWeight: 700,
-          color: dark ? "#ffffff" : "#3b82f6",
-          display: "flex",
-          alignItems: "center",
-          gap: 8
-        }}>
-          ℹ️ About
-        </h3>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{
-            fontSize: 14,
-            color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)",
-            lineHeight: 1.5
-          }}>
-            <strong>Bedwars Strategy Guide</strong> - Your comprehensive companion for mastering Bedwars tactics, compositions, and gameplay.
-          </div>
-
-          <div style={{
-            fontSize: 12,
-            color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
-            marginTop: 8
-          }}>
-            Features: Comps • Maps • Timings • Counters • Practice • Guides • Roles
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── GUIDES SECTION ─── */
 function GuidesSection({ dark }) {
   const [active, setActive] = useState("Win Checklist");
@@ -1325,115 +1353,100 @@ function GuidesSection({ dark }) {
   );
 }
 
-/* ─── ROLES SECTION ─── */
-function RolesSection({ dark }) {
+/* ─── TIMING SECTION ─── */
+function TimingSection({ dark }) {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-        gap: 10,
-      }}
-    >
-      {ROLES.map((r) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div
+        style={{
+          borderRadius: 24,
+          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          overflow: "hidden",
+          boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
+        }}
+      >
         <div
-          className="roleCard"
-          key={r.key}
           style={{
-            borderRadius: 22,
-            padding: "18px 14px",
-            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-            transition: "transform 0.25s ease, box-shadow 0.25s ease",
+            padding: "13px 18px 12px",
+            borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+            display: "flex",
+            alignItems: "center",
+            gap: 9,
           }}
         >
           <div
             style={{
-              width: 46,
-              height: 46,
-              borderRadius: 14,
-              marginBottom: 12,
-              background: `linear-gradient(135deg, rgba(${r.rgb},0.18), rgba(${r.rgb},0.08))`,
-              border: `1px solid rgba(${r.rgb},0.22)`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 22,
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: "#06b6d4",
+              boxShadow: "0 0 10px #06b6d4",
             }}
-          >
-            {r.emoji}
-          </div>
-
-          <div
+          />
+          <span
             style={{
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: 800,
-              letterSpacing: "0.16em",
+              letterSpacing: "0.1em",
+              color: "#06b6d4",
               fontFamily: "'JetBrains Mono', monospace",
-              color: r.color,
-              marginBottom: 8,
             }}
           >
-            {r.key}
-          </div>
+            GAME TIMING
+          </span>
+        </div>
 
-          <p
-            style={{
-              margin: 0,
-              fontSize: 12.4,
-              lineHeight: 1.62,
-              color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.56)",
-              marginBottom: 12,
-            }}
-          >
-            {r.desc}
-          </p>
-
-          <div
-            style={{
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              fontFamily: "'JetBrains Mono', monospace",
-              color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
-              marginBottom: 8,
-              textTransform: "uppercase",
-            }}
-          >
-            Kits
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 4,
-            }}
-          >
-            {r.kits.map((kit) => (
-              <span
-                key={kit}
+        <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
+          {TIMING_ITEMS.map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: 12,
+                alignItems: "flex-start",
+                borderRadius: 15,
+                padding: "12px 14px",
+                background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
+                border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+              }}
+            >
+              <div
                 style={{
-                  fontSize: 9.5,
-                  fontWeight: 600,
-                  padding: "3px 6px",
-                  borderRadius: 6,
-                  background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-                  color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.7)",
-                  border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"}`,
+                  flexShrink: 0,
+                  width: 28,
+                  height: 28,
+                  borderRadius: 9,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 11,
+                  fontWeight: 800,
                   fontFamily: "'JetBrains Mono', monospace",
-                  letterSpacing: "0.02em",
+                  background: "rgba(6,182,212,0.12)",
+                  color: "#06b6d4",
+                  border: "1px solid rgba(6,182,212,0.22)",
                 }}
               >
-                {kit}
-              </span>
-            ))}
-          </div>
+                {i + 1}
+              </div>
+              <p
+                style={{
+                  margin: 0,
+                  paddingTop: 2,
+                  fontSize: 13.4,
+                  lineHeight: 1.68,
+                  color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
+                }}
+              >
+                {item}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
@@ -1442,12 +1455,11 @@ function RolesSection({ dark }) {
 function TabBar({ tab, setTab, dark }) {
   const tabs = [
     { key: "comps",  label: "Comps",  icon: "⚔️" },
+    { key: "draft", label: "Draft", icon: "🧠" },
     { key: "counters", label: "Counters", icon: "🛡️" },
     { key: "practice", label: "Practice", icon: "🎯" },
     { key: "guides", label: "Guides", icon: "📋" },
     { key: "timing", label: "Game Timing", icon: "⏱️" },
-    { key: "roles",  label: "Roles",  icon: "👥" },
-    { key: "settings", label: "Settings", icon: "⚙️" },
   ];
 
   return (
@@ -1577,7 +1589,29 @@ export default function App() {
           background: ${dark ? "#09090d" : "#f7f7f5"};
         }
         ::-webkit-scrollbar { display: none; }
-        button { font-family: inherit; }
+        button, select { font-family: inherit; }
+
+        select {
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          color-scheme: dark;
+        }
+
+        select option {
+          background: #111827;
+          color: #ffffff;
+        }
+
+        select option:checked {
+          background: #2563eb;
+          color: #ffffff;
+        }
+
+        select option:hover {
+          background: #1d4ed8;
+          color: #ffffff;
+        }
 
         @keyframes fade-up {
           from { opacity: 0; transform: translateY(18px); }
@@ -1613,11 +1647,6 @@ export default function App() {
           .compCard:hover {
             transform: translateY(-4px);
             box-shadow: 0 22px 46px rgba(0,0,0,0.20);
-          }
-
-          .roleCard:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.16);
           }
         }
       `}</style>
@@ -1794,7 +1823,7 @@ export default function App() {
             color: dark ? "rgba(255,255,255,0.82)" : "rgba(0,0,0,0.82)",
           }}
         >
-          Comps · Roles · Win conditions
+          Comps · Drafts · Counters
         </p>
 
         <p
@@ -1820,8 +1849,8 @@ export default function App() {
           }}
         >
           {[
-            { val: "5", label: "Comps" },
-            { val: "5", label: "Roles" },
+            { val: "6", label: "Comps" },
+            { val: "1", label: "Draft tool" },
             { val: "4", label: "Guides" },
           ].map((s) => (
             <div
@@ -1885,7 +1914,6 @@ export default function App() {
       >
         {tab === "comps" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {/* Search and Filter Bar */}
             <div
               style={{
                 borderRadius: 16,
@@ -1959,7 +1987,6 @@ export default function App() {
               )}
             </div>
 
-            {/* Comps List */}
             {(tab === "favorites" ? COMPS.filter(c => favorites.includes(c.name)) : filteredComps).map((c, i) => (
               <CompCard
                 key={i}
@@ -2008,107 +2035,11 @@ export default function App() {
           </div>
         )}
 
-        {/* Timings section removed */}
+        {tab === "draft" && <DraftBuilderSection dark={dark} />}
         {tab === "counters" && <CountersSection dark={dark} />}
         {tab === "practice" && <PracticeSection dark={dark} />}
-
         {tab === "guides" && <GuidesSection dark={dark} />}
-{tab === "timing" && (
-  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-    <div
-      style={{
-        borderRadius: 24,
-        background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-        border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        overflow: "hidden",
-        boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
-      }}
-    >
-      <div
-        style={{
-          padding: "13px 18px 12px",
-          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-          display: "flex",
-          alignItems: "center",
-          gap: 9,
-        }}
-      >
-        <div
-          style={{
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            background: "#06b6d4",
-            boxShadow: "0 0 10px #06b6d4",
-          }}
-        />
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 800,
-            letterSpacing: "0.1em",
-            color: "#06b6d4",
-            fontFamily: "'JetBrains Mono', monospace",
-          }}
-        >
-          GAME TIMING
-        </span>
-      </div>
-      <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
-        {TIMING_ITEMS.map((item, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              gap: 12,
-              alignItems: "flex-start",
-              borderRadius: 15,
-              padding: "12px 14px",
-              background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            }}
-          >
-            <div
-              style={{
-                flexShrink: 0,
-                width: 28,
-                height: 28,
-                borderRadius: 9,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 11,
-                fontWeight: 800,
-                fontFamily: "'JetBrains Mono', monospace",
-                background: "rgba(6,182,212,0.12)",
-                color: "#06b6d4",
-                border: "1px solid rgba(6,182,212,0.22)",
-              }}
-            >
-              {i + 1}
-            </div>
-            <p
-              style={{
-                margin: 0,
-                paddingTop: 2,
-                fontSize: 13.4,
-                lineHeight: 1.68,
-                color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
-              }}
-            >
-              {item}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-)}
-
-        {tab === "roles" && <RolesSection dark={dark} />}
-        {tab === "settings" && <SettingsSection dark={dark} setDark={setDark} favorites={favorites} setFavorites={setFavorites} />}
+        {tab === "timing" && <TimingSection dark={dark} />}
       </div>
 
       {/* FOOTER */}
@@ -2200,19 +2131,3 @@ export default function App() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
