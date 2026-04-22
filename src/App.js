@@ -313,11 +313,7 @@ const DRAFT_KITS = [
 
   // LOW META / OPTIONAL
   { name: "Eldertree", roles: ["juggernaut"] }, // still ass but included
-  const hasBedbreaker = chosen.some(k => k.roles.includes("bedbreaker"));
-if (!hasBedbreaker) {
-  warnings.push("No real bed pressure — you might struggle to actually end games.");
-  suggestions.push("Add Ragnar, Dino, Davey, Triton, or Yuzi.");
-}
+  
 ];
 
 function getKit(name) {
@@ -379,7 +375,7 @@ if (!hasJuggernaut) {
     positives,
     suggestions: [...new Set(suggestions)],
   };
-}
+
 
 /* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
