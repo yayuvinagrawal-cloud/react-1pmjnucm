@@ -2040,7 +2040,7 @@ export default function App() {
             height: 8,
             borderRadius: "50%",
             background: "#06b6d4",
-            boxShadow: "0 0 10px rgba(6,182,212,0.45)",
+            boxShadow: "0 0 10px #06b6d4",
           }}
         />
         <span
@@ -2200,6 +2200,7 @@ gba(6,182,212,0.12),
     </div>
   );
 }
+
 
 
 
