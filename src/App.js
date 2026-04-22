@@ -270,7 +270,7 @@ const DRAFT_KITS = [
   { name: "Davey", roles: ["economy", "bedbreaker"] },
   { name: "Triton", roles: ["economy", "bedbreaker"] },
 
-  // MAIN JUGG (PRIMARY FIGHTER)
+  // MAIN JUGG
   { name: "Lucia", roles: ["juggernaut", "economy"] },
   { name: "Aery", roles: ["juggernaut"] },
   { name: "Barbarian", roles: ["juggernaut"] },
@@ -278,13 +278,13 @@ const DRAFT_KITS = [
   { name: "Sheila", roles: ["juggernaut"] },
   { name: "Freya", roles: ["juggernaut"] },
   { name: "Grim Reaper", roles: ["juggernaut"] },
+  { name: "Warden", roles: ["juggernaut"] },
+  { name: "Nyx", roles: ["juggernaut"] },
 
-  // SECOND JUGG / FLEX (SJ)
+  // SJ / FLEX
   { name: "Umbra", roles: ["support", "juggernaut"] },
   { name: "Lani", roles: ["support", "juggernaut"] },
   { name: "Hannah", roles: ["support", "defender"] },
-  { name: "Warden", roles: ["juggernaut"] },
-  { name: "Nyx", roles: ["juggernaut"] },
 
   // SUPPORT
   { name: "Whisper", roles: ["support"] },
@@ -300,7 +300,7 @@ const DRAFT_KITS = [
   { name: "Ragnar", roles: ["bedbreaker"] },
   { name: "Dino Tamer", roles: ["bedbreaker"] },
 
-  // DEFENDER (BD)
+  // DEFENDER
   { name: "Noelle", roles: ["defender"] },
   { name: "Builder", roles: ["defender"] },
   { name: "Marina", roles: ["defender"] },
@@ -312,46 +312,41 @@ const DRAFT_KITS = [
   { name: "Baker", roles: ["support", "defender"] },
 
   // LOW META / OPTIONAL
-  { name: "Eldertree", roles: ["juggernaut"] }, // still ass but included
-  
+  { name: "Eldertree", roles: ["juggernaut"] },
 ];
 
 function getKit(name) {
   return DRAFT_KITS.find((k) => k.name === name);
 }
 
-const hasEconomy = hasRole("economy");
-const hasJuggernaut = hasRole("juggernaut");
-const hasSupport = hasRole("support");
-const hasDefender = hasRole("defender");
+function evaluateDraft(picks) {
+  const chosen = picks.map(getKit).filter(Boolean);
+  const hasRole = (role) => chosen.some((k) => k.roles.includes(role));
 
-const hasBedbreaker = chosen.some(k => k.roles.includes("bedbreaker"));
+ 
 
-const warnings = [];
-const positives = [];
-const suggestions = [];
-
-if (!hasDefender) {
-  warnings.push("No BD detected — add a bed defender.");
-}
-
-if (!hasJuggernaut) {
+  if (!hasJuggernaut) {
     warnings.push("No real frontline detected — early fights will be harder to convert cleanly.");
-    suggestions.push("Add Eldertree, Aery, Umbra, Barbarian, or Yuzi.");
+    suggestions.push("Add Lucia, Aery, Sheila, Amy, or Warden.");
   }
 
   if (!hasEconomy) {
     warnings.push("No economy slot detected — your comp can fall behind on real gear timings.");
-    suggestions.push("Add Lucia or Beekeeper.");
+    suggestions.push("Add Beekeeper, Farmer, Metal Detector, or Lucia.");
   }
 
   if (!hasSupport) {
     warnings.push("No support slot detected — your team loses sustain, intel, or cleaner commit help.");
-    suggestions.push("Add Whisper or Baker.");
+    suggestions.push("Add Whisper, Baker, Star Collector, or Umbra.");
+  }
+
+  if (!hasBedbreaker) {
+    warnings.push("No real bed pressure — you might struggle to actually end games.");
+    suggestions.push("Add Ragnar, Dino Tamer, Davey, Triton, or Yuzi.");
   }
 
   if (picks.includes("Lucia") && picks.includes("Whisper")) {
-    positives.push("Lucia + Whisper = strong macro core with economy, intel, and cleaner map control.");
+    positives.push("Lucia + Whisper = strong macro pressure core and very good duo-q combo.");
   }
 
   if (picks.includes("Umbra") && picks.includes("Whisper")) {
@@ -360,6 +355,10 @@ if (!hasJuggernaut) {
 
   if (picks.includes("Lucia") && picks.includes("Baker")) {
     positives.push("Lucia + Baker = safe scaling core with cleaner resets.");
+  }
+
+  if (picks.includes("Warden") && picks.includes("Lani")) {
+    positives.push("Warden + Lani = strong bypass pressure duo.");
   }
 
   if (hasEconomy && hasJuggernaut && hasSupport && hasDefender) {
@@ -375,6 +374,7 @@ if (!hasJuggernaut) {
     positives,
     suggestions: [...new Set(suggestions)],
   };
+}
 
 
 /* ─── COUNTER STRATEGIES ─── */
