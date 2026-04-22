@@ -234,23 +234,18 @@ const GUIDES = {
 /* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
   {
-    target: "Double Fisher",
-    icon: "🎣",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    strategies: [
-      "Force early fights before they scale",
-      "Target fishers with fireball + TNT",
-<<<<<<< HEAD
-      "Use knockback to separate them",
-]    ],
-=======
-      "Use knockback to separate them"
-    ],
->>>>>>> 0663946 (Remove 'Control emerald gen to starve them' from Double Fisher counter)
-    recommended: ["Sheila", "Star", "Umbra", "Amy"],
-    avoid: ["Single target damage", "Letting them group"]
-  },
+  target: "Double Fisher",
+  icon: "🎣",
+  color: "#8b5cf6",
+  rgb: "139,92,246",
+  strategies: [
+    "Force early fights before they scale",
+    "Target fishers with fireball + TNT",
+    "Use knockback to separate them"
+  ],
+  recommended: ["Sheila", "Star", "Umbra", "Amy"],
+  avoid: ["Single target damage", "Letting them group"]
+},
   {
     target: "BB Comp",
     icon: "💥",
