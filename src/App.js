@@ -241,8 +241,13 @@ const COUNTERS = [
     strategies: [
       "Force early fights before they scale",
       "Target fishers with fireball + TNT",
+<<<<<<< HEAD
       "Use knockback to separate them",
 ]    ],
+=======
+      "Use knockback to separate them"
+    ],
+>>>>>>> 0663946 (Remove 'Control emerald gen to starve them' from Double Fisher counter)
     recommended: ["Sheila", "Star", "Umbra", "Amy"],
     avoid: ["Single target damage", "Letting them group"]
   },
