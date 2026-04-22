@@ -2012,7 +2012,8 @@ export default function App() {
         {tab === "counters" && <CountersSection dark={dark} />}
         {tab === "practice" && <PracticeSection dark={dark} />}
 
-        {tab === "guides" && <GuidesSection dark={dark} />}$1        {tab === "timing" && (
+        {tab === "guides" && <GuidesSection dark={dark} />}
+{tab === "timing" && (
   <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
     <div
       style={{
@@ -2081,8 +2082,7 @@ export default function App() {
                 fontSize: 11,
                 fontWeight: 800,
                 fontFamily: "'JetBrains Mono', monospace",
-                background: 
-gba(6,182,212,0.12),
+                background: "rgba(6,182,212,0.12)",
                 color: "#06b6d4",
                 border: "1px solid rgba(6,182,212,0.22)",
               }}
