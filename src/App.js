@@ -274,7 +274,7 @@ const DRAFT_KITS = [
   { name: "Lucia", roles: ["juggernaut", "economy"] },
   { name: "Aery", roles: ["juggernaut"] },
   { name: "Barbarian", roles: ["juggernaut"] },
-  { name: "Amy", roles: ["juggernaut"] },
+  { name: "Amy", roles: ["juggernaut", "support"] },
   { name: "Sheila", roles: ["juggernaut"] },
   { name: "Freya", roles: ["juggernaut"] },
   { name: "Grim Reaper", roles: ["juggernaut"] },
@@ -304,7 +304,7 @@ const DRAFT_KITS = [
   { name: "Noelle", roles: ["defender"] },
   { name: "Builder", roles: ["defender"] },
   { name: "Marina", roles: ["defender"] },
-  { name: "Fisher", roles: ["defender"] },
+  { name: "Fisher", roles: ["defender", "economy"] },
   { name: "Wren", roles: ["defender"] },
   { name: "Zola", roles: ["defender"] },
 
