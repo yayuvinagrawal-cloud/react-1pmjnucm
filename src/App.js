@@ -208,8 +208,8 @@ const GUIDES = {
   },
   "Real Strats": {
     icon: "🧠",
-    color: "#111111",
-    rgb: "17,17,17",
+    color: "#3b82f6",
+    rgb: "59,130,246",
     items: [
       "Core comps work best when everyone sticks to their role and timing.",
       "Do not throw scaling kits into pointless fights just for excitement.",
@@ -503,7 +503,7 @@ function FeaturedStrip({ dark }) {
               fontSize: 16,
               fontWeight: 800,
               letterSpacing: "-0.03em",
-              color: dark ? "#ffffff" : "#111111",
+              color: dark ? "#ffffff" : "#3b82f6",
             }}
           >
             {item.value}
@@ -746,7 +746,7 @@ function CountersSection({ dark }) {
               margin: 0,
               fontSize: 18,
               fontWeight: 700,
-              color: dark ? "#ffffff" : "#111111"
+              color: dark ? "#ffffff" : "#3b82f6"
             }}>
               Countering {counter.target}
             </h3>
@@ -757,7 +757,7 @@ function CountersSection({ dark }) {
               margin: "0 0 8px 0",
               fontSize: 14,
               fontWeight: 700,
-              color: dark ? "#ffffff" : "#111111"
+              color: dark ? "#ffffff" : "#3b82f6"
             }}>
               Strategies
             </h4>
@@ -860,7 +860,7 @@ function PracticeSection({ dark }) {
                   margin: 0,
                   fontSize: 18,
                   fontWeight: 700,
-                  color: dark ? "#ffffff" : "#111111",
+                  color: dark ? "#ffffff" : "#3b82f6",
                   marginBottom: 4
                 }}>
                   {drill.name}
@@ -894,7 +894,7 @@ function PracticeSection({ dark }) {
               margin: "0 0 8px 0",
               fontSize: 14,
               fontWeight: 700,
-              color: dark ? "#ffffff" : "#111111"
+              color: dark ? "#ffffff" : "#3b82f6"
             }}>
               Practice Drills
             </h4>
@@ -984,7 +984,7 @@ function SettingsSection({ dark, setDark, favorites, setFavorites }) {
           margin: "0 0 16px 0",
           fontSize: 18,
           fontWeight: 700,
-          color: dark ? "#ffffff" : "#111111",
+          color: dark ? "#ffffff" : "#3b82f6",
           display: "flex",
           alignItems: "center",
           gap: 8
@@ -997,7 +997,7 @@ function SettingsSection({ dark, setDark, favorites, setFavorites }) {
             <div style={{
               fontSize: 14,
               fontWeight: 600,
-              color: dark ? "#ffffff" : "#111111",
+              color: dark ? "#ffffff" : "#3b82f6",
               marginBottom: 4
             }}>
               Dark Mode
@@ -1061,7 +1061,7 @@ function SettingsSection({ dark, setDark, favorites, setFavorites }) {
           margin: "0 0 16px 0",
           fontSize: 18,
           fontWeight: 700,
-          color: dark ? "#ffffff" : "#111111",
+          color: dark ? "#ffffff" : "#3b82f6",
           display: "flex",
           alignItems: "center",
           gap: 8
@@ -1075,7 +1075,7 @@ function SettingsSection({ dark, setDark, favorites, setFavorites }) {
               <div style={{
                 fontSize: 14,
                 fontWeight: 600,
-                color: dark ? "#ffffff" : "#111111",
+                color: dark ? "#ffffff" : "#3b82f6",
                 marginBottom: 2
               }}>
                 Favorite Comps
@@ -1116,7 +1116,7 @@ function SettingsSection({ dark, setDark, favorites, setFavorites }) {
               borderRadius: 12,
               border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
               background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
-              color: dark ? "#ffffff" : "#111111",
+              color: dark ? "#ffffff" : "#3b82f6",
               fontSize: 14,
               fontWeight: 500,
               cursor: "pointer",
@@ -1147,7 +1147,7 @@ function SettingsSection({ dark, setDark, favorites, setFavorites }) {
           margin: "0 0 16px 0",
           fontSize: 18,
           fontWeight: 700,
-          color: dark ? "#ffffff" : "#111111",
+          color: dark ? "#ffffff" : "#3b82f6",
           display: "flex",
           alignItems: "center",
           gap: 8
@@ -1493,7 +1493,7 @@ function TabBar({ tab, setTab, dark }) {
               style={{
                 fontSize: 10,
                 fontWeight: isA ? 800 : 600,
-                color: isA ? (dark ? "#ffffff" : "#111111") : dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.4)",
+                color: isA ? (dark ? "#ffffff" : "#3b82f6") : dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.4)",
                 letterSpacing: isA ? "0.01em" : 0,
               }}
             >
@@ -1506,7 +1506,7 @@ function TabBar({ tab, setTab, dark }) {
                   width: 20,
                   height: 3,
                   borderRadius: 999,
-                  background: dark ? "#ffffff" : "#111111",
+                  background: dark ? "#ffffff" : "#3b82f6",
                 }}
               />
             )}
@@ -1563,7 +1563,7 @@ export default function App() {
         background: dark
           ? "linear-gradient(180deg, #07070a 0%, #0b0b10 46%, #0e1016 100%)"
           : "linear-gradient(180deg, #f7f7f5 0%, #ffffff 46%, #f1f1ee 100%)",
-        color: dark ? "#f5f7fb" : "#111111",
+        color: dark ? "#f5f7fb" : "#3b82f6",
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
         position: "relative",
         overflowX: "hidden",
@@ -1680,7 +1680,7 @@ export default function App() {
                   fontSize: 14.5,
                   fontWeight: 900,
                   letterSpacing: "-0.03em",
-                  color: dark ? "#ffffff" : "#111111",
+                  color: dark ? "#ffffff" : "#3b82f6",
                   lineHeight: 1.05,
                 }}
               >
@@ -1758,7 +1758,7 @@ export default function App() {
               width: 7,
               height: 7,
               borderRadius: "50%",
-              background: dark ? "#ffffff" : "#111111",
+              background: dark ? "#ffffff" : "#3b82f6",
             }}
           />
           <span
@@ -1782,7 +1782,7 @@ export default function App() {
             fontWeight: 900,
             letterSpacing: "-0.07em",
             lineHeight: 0.92,
-            color: dark ? "#ffffff" : "#111111",
+            color: dark ? "#ffffff" : "#3b82f6",
           }}
         >
           Squads
@@ -1851,7 +1851,7 @@ export default function App() {
                   fontSize: "1.6rem",
                   fontWeight: 900,
                   fontFamily: "'JetBrains Mono', monospace",
-                  color: dark ? "#ffffff" : "#111111",
+                  color: dark ? "#ffffff" : "#3b82f6",
                 }}
               >
                 {s.val}
@@ -1914,7 +1914,7 @@ export default function App() {
                       borderRadius: 12,
                       border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
                       background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
-                      color: dark ? "#ffffff" : "#111111",
+                      color: dark ? "#ffffff" : "#3b82f6",
                       fontSize: 14,
                       outline: "none",
                     }}
@@ -1982,7 +1982,7 @@ export default function App() {
                 }}
               >
                 <div style={{ fontSize: 48, marginBottom: 16 }}>⭐</div>
-                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#111111" }}>
+                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#3b82f6" }}>
                   No Favorite Comps Yet
                 </h3>
                 <p style={{ margin: 0, fontSize: 14 }}>
@@ -2000,7 +2000,7 @@ export default function App() {
                 }}
               >
                 <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
-                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#111111" }}>
+                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#3b82f6" }}>
                   No Comps Found
                 </h3>
                 <p style={{ margin: 0, fontSize: 14 }}>
@@ -2051,7 +2051,7 @@ export default function App() {
               fontSize: "clamp(1.15rem, 4vw, 1.6rem)",
               fontWeight: 900,
               letterSpacing: "-0.03em",
-              color: dark ? "#ffffff" : "#111111",
+              color: dark ? "#ffffff" : "#3b82f6",
             }}
           >
             Play cleaner. Scale faster.
@@ -2086,7 +2086,7 @@ export default function App() {
                 width: 6,
                 height: 6,
                 borderRadius: "50%",
-                background: dark ? "#ffffff" : "#111111",
+                background: dark ? "#ffffff" : "#3b82f6",
               }}
             />
             <span
