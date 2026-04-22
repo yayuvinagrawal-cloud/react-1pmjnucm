@@ -253,8 +253,8 @@ const COUNTERS = [
     rgb: "245,158,11",
     strategies: [
       "Stack beds with obsidian",
-      "Use anti-knockback enchant",
-      "Keep distance from base",
+      "Use Counter tnt enchant",
+      "Keep distance from tnt and try to get the guy raining b4 he can start!",
       "Counter with your own BB pressure"
     ],
     recommended: ["Noelle", "Wren", "Baker", "Zola"],
