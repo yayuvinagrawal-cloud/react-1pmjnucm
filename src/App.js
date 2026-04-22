@@ -324,25 +324,22 @@ function getKit(name) {
   return DRAFT_KITS.find((k) => k.name === name);
 }
 
-function evaluateDraft(picks) {
-  const chosen = picks.map(getKit).filter(Boolean);
-  const hasRole = (role) => chosen.some((k) => k.roles.includes(role));
+const hasEconomy = hasRole("economy");
+const hasJuggernaut = hasRole("juggernaut");
+const hasSupport = hasRole("support");
+const hasDefender = hasRole("defender");
 
-  const hasEconomy = hasRole("economy");
-  const hasJuggernaut = hasRole("juggernaut");
-  const hasSupport = hasRole("support");
-  const hasDefender = hasRole("defender");
+const hasBedbreaker = chosen.some(k => k.roles.includes("bedbreaker"));
 
-  const warnings = [];
-  const positives = [];
-  const suggestions = [];
+const warnings = [];
+const positives = [];
+const suggestions = [];
 
-  if (!hasDefender) {
-    warnings.push("No BD detected — add a bed defender or your team is too exposed to fast breaks.");
-    suggestions.push("Add Baker, Marina, Fisher, or Noelle.");
-  }
+if (!hasDefender) {
+  warnings.push("No BD detected — add a bed defender.");
+}
 
-  if (!hasJuggernaut) {
+if (!hasJuggernaut) {
     warnings.push("No real frontline detected — early fights will be harder to convert cleanly.");
     suggestions.push("Add Eldertree, Aery, Umbra, Barbarian, or Yuzi.");
   }
