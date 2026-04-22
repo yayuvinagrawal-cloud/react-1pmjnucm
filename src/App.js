@@ -1677,25 +1677,25 @@ select option:checked {
           0%,100% { transform: scale(1); opacity: 1; }
           50% { transform: scale(1.35); opacity: 0.65; }
         }
-        @keyframes snow-fall {
-          0% {
-            transform: translateY(-10vh);
-            opacity: 0;
-          }
-        
-          10% {
-            opacity: 1;
-          }
-        
-          80% {
-            opacity: 1;
-          }
-        
-          100% {
-            transform: translateY(115vh);
-            opacity: 0;
-          }
+             @keyframes snow-fall {
+        0% {
+          transform: translateY(-10vh);
+          opacity: 0;
         }
+      
+        12% {
+          opacity: 0.9;
+        }
+      
+        55% {
+          opacity: 0.9;
+        }
+      
+        100% {
+          transform: translateY(100vh);
+          opacity: 0;
+        }
+      }
 
         @keyframes snow-sway {
           0%,100% { margin-left: -5px; }
