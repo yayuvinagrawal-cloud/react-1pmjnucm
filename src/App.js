@@ -90,7 +90,7 @@ const COMPS = [
       "Use your gear lead to win one clean grouped fight and roll that into bed pressure.",
   },
   {
-    name: "Lani / Lani / Warden / Fisher",
+    name: "Lani/ Umbra / Warden / Fisher",
     short: "Bypass",
     icon: "🏃",
     color: "#ef4444",
@@ -139,7 +139,7 @@ const COMPS = [
   },
   {
   name: "Amy / Freya / Fisher / Fisher",
-  short: "Fisher Aggro",
+  short: "No Scale Jugg",
   icon: "⚡",
   color: "#22c55e",
   rgb: "34,197,94",
