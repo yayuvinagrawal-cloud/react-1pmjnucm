@@ -323,7 +323,19 @@ function evaluateDraft(picks) {
   const chosen = picks.map(getKit).filter(Boolean);
   const hasRole = (role) => chosen.some((k) => k.roles.includes(role));
 
- 
+  const hasEconomy = hasRole("economy");
+  const hasJuggernaut = hasRole("juggernaut");
+  const hasSupport = hasRole("support");
+  const hasDefender = hasRole("defender");
+
+  const warnings = [];
+  const positives = [];
+  const suggestions = [];
+
+  if (!hasDefender) {
+    warnings.push("No BD detected — add a bed defender.");
+    suggestions.push("Add Noelle, Builder, Fisher, Wren, or Baker.");
+  }
 
   if (!hasJuggernaut) {
     warnings.push("No real frontline detected — early fights will be harder to convert cleanly.");
@@ -338,11 +350,6 @@ function evaluateDraft(picks) {
   if (!hasSupport) {
     warnings.push("No support slot detected — your team loses sustain, intel, or cleaner commit help.");
     suggestions.push("Add Whisper, Baker, Star Collector, or Umbra.");
-  }
-
-  if (!hasBedbreaker) {
-    warnings.push("No real bed pressure — you might struggle to actually end games.");
-    suggestions.push("Add Ragnar, Dino Tamer, Davey, Triton, or Yuzi.");
   }
 
   if (picks.includes("Lucia") && picks.includes("Whisper")) {
