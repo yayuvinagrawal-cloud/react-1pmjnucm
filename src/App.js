@@ -228,24 +228,43 @@ const GUIDES = {
       "When an opening appears, the whole team commits fast with no hesitation.",
     ],
   },
+  "Timing Strategy": {
+    icon: "⏱️",
+    color: "#06b6d4",
+    rgb: "6,182,212",
+    items: [
+      "Add timing and early game focus - prioritize stone sword and blocks first.",
+      "Split again after t1 to maintain map pressure and control space.",
+      "Try to get iron armour before guards spawn at 3 minutes.",
+      "Aim for 5-6 minute t3 timing to scale efficiently.",
+      "If you get first t3, use it immediately and bedbreak all other teams.",
+      "Try to get enchants around t3 for better scaling potential.",
+      "Forest farm if possible as main jugg to build value safely.",
+      "Second jugg should start coming with you and bbing with that first t3.",
+      "Try not to get reset and feed bounty to maintain momentum.",
+      "By 20 minutes after beds break, get at least 1k blocks, 2-3 teslas, and as many fireballs and TNT as you can.",
+      "In late-game, don't ego fight too much and try to stick together with your team behind blocks.",
+      "Don't be too open - always be aware of your surroundings and stay vigilant.",
+    ],
+  },
 };
 
 
 /* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
   {
-  target: "Double Fisher",
-  icon: "🎣",
-  color: "#8b5cf6",
-  rgb: "139,92,246",
-  strategies: [
-    "Force early fights before they scale",
-    "Target fishers with fireball + TNT",
-    "Use knockback to separate them"
-  ],
-  recommended: ["Sheila", "Star", "Umbra", "Amy"],
-  avoid: ["Single target damage", "Letting them group"]
-},
+    target: "Double Fisher",
+    icon: "🎣",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    strategies: [
+      "Force early fights before they scale",
+      "Target fishers with fireball + TNT",
+      "Use knockback to separate them"
+    ],
+    recommended: ["Sheila", "Star", "Umbra", "Amy"],
+    avoid: ["Single target damage", "Letting them group"]
+  },
   {
     target: "BB Comp",
     icon: "💥",
@@ -253,8 +272,8 @@ const COUNTERS = [
     rgb: "245,158,11",
     strategies: [
       "Stack beds with obsidian",
-      "Use Counter tnt enchant",
-      "Keep distance from tnt and try to get the guy raining b4 he can start!",
+      "Use anti-knockback enchant",
+      "Keep distance from base",
       "Counter with your own BB pressure"
     ],
     recommended: ["Noelle", "Wren", "Baker", "Zola"],
