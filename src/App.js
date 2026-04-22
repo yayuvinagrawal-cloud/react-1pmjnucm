@@ -276,7 +276,7 @@ const DRAFT_KITS = [
   { name: "Barbarian", roles: ["juggernaut"] },
   { name: "Amy", roles: ["juggernaut", "support"] },
   { name: "Sheila", roles: ["juggernaut"] },
-  { name: "Freya", roles: ["juggernaut"] },
+  { name: "Freya", roles: ["juggernaut", "support"] },
   { name: "Grim Reaper", roles: ["juggernaut"] },
   { name: "Warden", roles: ["juggernaut"] },
   { name: "Nyx", roles: ["juggernaut"] },
