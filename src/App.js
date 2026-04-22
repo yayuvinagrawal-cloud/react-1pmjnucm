@@ -394,7 +394,7 @@ const COUNTERS = [
     strategies: [
       "Force early fights before they scale",
       "Target fishers with fireball + TNT",
-      "Use knockback to separate them"
+      "Try to hit them with projectiles to interup fishing"
     ],
     recommended: ["Sheila", "Star", "Umbra", "Amy"],
     avoid: ["Single target damage", "Letting them group"]
@@ -406,12 +406,12 @@ const COUNTERS = [
     rgb: "245,158,11",
     strategies: [
       "Stack beds with obsidian",
-      "Use anti-knockback enchant",
+      "HAVE COUNTER TNT!",
       "Keep distance from base",
       "Counter with your own BB pressure"
     ],
     recommended: ["Noelle", "Wren", "Baker", "Zola"],
-    avoid: ["Exposing bed location", "Solo fights near base"]
+    avoid: ["Exposing bed location", "Not being aware of their location"]
   },
   {
     target: "Cheater Comp",
@@ -488,7 +488,7 @@ function SnowLayer({ dark }) {
         size: 2 + (i % 4),
         duration: 8 + (i % 6) * 1.2,
         delay: (i % 10) * 0.8,
-        opacity: dark ? 0.45 - (i % 5) * 0.05 : 0.3 - (i % 5) * 0.035,
+        opacity: dark ? 0.45 - (i % 50) * 0.05 : 0.3 - (i % 5) * 0.035,
       })),
     [dark]
   );
