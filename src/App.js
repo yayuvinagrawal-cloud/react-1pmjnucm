@@ -56,6 +56,7 @@ const ChevronIcon = ({ open }) => (
 
 /* ─── DATA ─── */
 const COMPS = [
+  
   {
     name: "Sheila / Star / Noelle / Beekeeper",
     short: "Core Comp",
@@ -136,6 +137,22 @@ const COMPS = [
     win:
       "Outscale, win one big grouped fight, then use map control to take bed and close.",
   },
+  {
+  name: "Amy / Freya / Fisher / Fisher",
+  short: "Fisher Aggro",
+  icon: "⚡",
+  color: "#22c55e",
+  rgb: "34,197,94",
+  why: "Double Fisher scaling with strong fight pressure from Amy and Freya. Lets you build value while still taking real fights instead of full passive scaling jugg kits.",
+  useWhen:
+    "Use this when your fighters are confident and can stay alive. Good into slower comps you can pressure early.",
+  early:
+    "Keep both Fishers alive at all costs. No need to take early fights as you DONT need kills with this strat focus t3.",
+  mid:
+    "Play around bb timing and Amy jugg. Take fights when you are up or outnumber.",
+  win:
+    "Outscale with double Fisher, win a clean fight with Amy + Freya, then convert fast into bed pressure.",
+},
   {
     name: "Lucia / Umbra / Baker / Whisper",
     short: "Macro Core",
