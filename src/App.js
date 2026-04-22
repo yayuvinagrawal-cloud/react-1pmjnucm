@@ -228,26 +228,22 @@ const GUIDES = {
       "When an opening appears, the whole team commits fast with no hesitation.",
     ],
   },
-  "Timing Strategy": {
-    icon: "⏱️",
-    color: "#06b6d4",
-    rgb: "6,182,212",
-    items: [
-      "Add timing and early game focus - prioritize stone sword and blocks first.",
-      "Split again after t1 to maintain map pressure and control space.",
-      "Try to get iron armour before guards spawn at 3 minutes.",
-      "Aim for 5-6 minute t3 timing to scale efficiently.",
-      "If you get first t3, use it immediately and bedbreak all other teams.",
-      "Try to get enchants around t3 for better scaling potential.",
-      "Forest farm if possible as main jugg to build value safely.",
-      "Second jugg should start coming with you and bbing with that first t3.",
-      "Try not to get reset and feed bounty to maintain momentum.",
-      "By 20 minutes after beds break, get at least 1k blocks, 2-3 teslas, and as many fireballs and TNT as you can.",
-      "In late-game, don't ego fight too much and try to stick together with your team behind blocks.",
-      "Don't be too open - always be aware of your surroundings and stay vigilant.",
-    ],
-  },
 };
+
+const TIMING_ITEMS = [
+  "Add timing and early game focus - prioritize stone sword and blocks first.",
+  "Split again after t1 to maintain map pressure and control space.",
+  "Try to get iron armour before guards spawn at 3 minutes.",
+  "Aim for 5-6 minute t3 timing to scale efficiently.",
+  "If you get first t3, use it immediately and bedbreak all other teams.",
+  "Try to get enchants around t3 for better scaling potential.",
+  "Forest farm if possible as main jugg to build value safely.",
+  "Second jugg should start coming with you and bbing with that first t3.",
+  "Try not to get reset and feed bounty to maintain momentum.",
+  "By 20 minutes after beds break, get at least 1k blocks, 2-3 teslas, and as many fireballs and TNT as you can.",
+  "In late-game, don't ego fight too much and try to stick together with your team behind blocks.",
+  "Don't be too open - always be aware of your surroundings and stay vigilant.",
+];
 
 
 /* ─── COUNTER STRATEGIES ─── */
@@ -1449,6 +1445,7 @@ function TabBar({ tab, setTab, dark }) {
     { key: "counters", label: "Counters", icon: "🛡️" },
     { key: "practice", label: "Practice", icon: "🎯" },
     { key: "guides", label: "Guides", icon: "📋" },
+    { key: "timing", label: "Game Timing", icon: "⏱️" },
     { key: "roles",  label: "Roles",  icon: "👥" },
     { key: "settings", label: "Settings", icon: "⚙️" },
   ];
@@ -2015,7 +2012,100 @@ export default function App() {
         {tab === "counters" && <CountersSection dark={dark} />}
         {tab === "practice" && <PracticeSection dark={dark} />}
 
-        {tab === "guides" && <GuidesSection dark={dark} />}
+        {tab === "guides" && <GuidesSection dark={dark} />}$1        {tab === "timing" && (
+  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+    <div
+      style={{
+        borderRadius: 24,
+        background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
+        border: 1px solid ,
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        overflow: "hidden",
+        boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
+      }}
+    >
+      <div
+        style={{
+          padding: "13px 18px 12px",
+          borderBottom: 1px solid ,
+          display: "flex",
+          alignItems: "center",
+          gap: 9,
+        }}
+      >
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: "#06b6d4",
+            boxShadow:   0 10px rgba(6,182,212,0.45),
+          }}
+        />
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 800,
+            letterSpacing: "0.1em",
+            color: "#06b6d4",
+            fontFamily: "'JetBrains Mono', monospace",
+          }}
+        >
+          GAME TIMING
+        </span>
+      </div>
+      <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
+        {TIMING_ITEMS.map((item, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              gap: 12,
+              alignItems: "flex-start",
+              borderRadius: 15,
+              padding: "12px 14px",
+              background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
+              border: 1px solid ,
+            }}
+          >
+            <div
+              style={{
+                flexShrink: 0,
+                width: 28,
+                height: 28,
+                borderRadius: 9,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 11,
+                fontWeight: 800,
+                fontFamily: "'JetBrains Mono', monospace",
+                background: gba(6,182,212,0.12),
+                color: "#06b6d4",
+                border: 1px solid rgba(6,182,212,0.22),
+              }}
+            >
+              {i + 1}
+            </div>
+            <p
+              style={{
+                margin: 0,
+                paddingTop: 2,
+                fontSize: 13.4,
+                lineHeight: 1.68,
+                color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
+              }}
+            >
+              {item}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
         {tab === "roles" && <RolesSection dark={dark} />}
         {tab === "settings" && <SettingsSection dark={dark} setDark={setDark} favorites={favorites} setFavorites={setFavorites} />}
       </div>
@@ -2109,3 +2199,8 @@ export default function App() {
     </div>
   );
 }
+
+
+
+
+
