@@ -485,10 +485,10 @@ function SnowLayer({ dark }) {
       Array.from({ length: 34 }, (_, i) => ({
         id: i,
         left: `${(i * 2.9 + (i % 7) * 11) % 100}%`,
-        size: 2 + (i % 4),
+        size: 4 + (i % 4),
         duration: 8 + (i % 6) * 1.2,
         delay: (i % 10) * 0.8,
-        opacity: dark ? 0.45 - (i % 50) * 0.05 : 0.3 - (i % 5) * 0.035,
+        opacity: dark ? 0.9 : 0.7,
       })),
     [dark]
   );
@@ -513,7 +513,7 @@ function SnowLayer({ dark }) {
             width: flake.size,
             height: flake.size,
             borderRadius: "50%",
-            background: dark ? "rgba(255,255,255,0.95)" : "rgba(20,20,20,0.65)",
+            background: dark ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.9)",
             filter: `blur(${flake.size > 4 ? 0.6 : 0}px)`,
             opacity: flake.opacity,
             animation: `snow-fall ${flake.duration}s linear ${flake.delay}s infinite, snow-sway ${3.6 + (flake.id % 5)}s ease-in-out ${flake.delay}s infinite`,
