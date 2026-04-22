@@ -261,22 +261,63 @@ const TIMING_ITEMS = [
   "Don't be too open - always be aware of your surroundings and stay vigilant.",
 ];
 
-/* ─── DRAFT BUILDER DATA ─── */
 const DRAFT_KITS = [
-  { name: "Lucia", roles: ["economy"] },
-  { name: "Whisper", roles: ["support"] },
-  { name: "Umbra", roles: ["juggernaut"] },
+  // ECONOMY / CYCLE
+  { name: "Beekeeper", roles: ["economy"] },
+  { name: "Farmer", roles: ["economy"] },
+  { name: "Metal Detector", roles: ["economy"] },
+  { name: "Yuzi", roles: ["economy", "bedbreaker"] },
+  { name: "Davey", roles: ["economy", "bedbreaker"] },
+  { name: "Triton", roles: ["economy", "bedbreaker"] },
+
+  // MAIN JUGG (PRIMARY FIGHTER)
+  { name: "Lucia", roles: ["juggernaut", "economy"] },
   { name: "Aery", roles: ["juggernaut"] },
-  { name: "Eldertree", roles: ["juggernaut"] },
   { name: "Barbarian", roles: ["juggernaut"] },
-  { name: "Yuzi", roles: ["juggernaut"] },
-  { name: "Baker", roles: ["support", "defender"] },
+  { name: "Amy", roles: ["juggernaut"] },
+  { name: "Sheila", roles: ["juggernaut"] },
+  { name: "Freya", roles: ["juggernaut"] },
+  { name: "Grim Reaper", roles: ["juggernaut"] },
+
+  // SECOND JUGG / FLEX (SJ)
+  { name: "Umbra", roles: ["support", "juggernaut"] },
+  { name: "Lani", roles: ["support", "juggernaut"] },
+  { name: "Hannah", roles: ["support", "defender"] },
+  { name: "Warden", roles: ["juggernaut"] },
+  { name: "Nyx", roles: ["juggernaut"] },
+
+  // SUPPORT
+  { name: "Whisper", roles: ["support"] },
+  { name: "Star Collector", roles: ["support"] },
+  { name: "Melody", roles: ["support"] },
+  { name: "Lassy", roles: ["support"] },
+  { name: "Zeno", roles: ["support"] },
+  { name: "Smoke", roles: ["support"] },
+  { name: "Milo", roles: ["support"] },
+  { name: "Regent", roles: ["support"] },
+
+  // BED BREAKERS
+  { name: "Ragnar", roles: ["bedbreaker"] },
+  { name: "Dino Tamer", roles: ["bedbreaker"] },
+
+  // DEFENDER (BD)
+  { name: "Noelle", roles: ["defender"] },
   { name: "Builder", roles: ["defender"] },
   { name: "Marina", roles: ["defender"] },
   { name: "Fisher", roles: ["defender"] },
-  { name: "Noelle", roles: ["defender"] },
-  { name: "Grim Reaper", roles: ["juggernaut"] },
-  { name: "Beekeeper", roles: ["economy"] },
+  { name: "Wren", roles: ["defender"] },
+  { name: "Zola", roles: ["defender"] },
+
+  // HYBRID
+  { name: "Baker", roles: ["support", "defender"] },
+
+  // LOW META / OPTIONAL
+  { name: "Eldertree", roles: ["juggernaut"] }, // still ass but included
+  const hasBedbreaker = chosen.some(k => k.roles.includes("bedbreaker"));
+if (!hasBedbreaker) {
+  warnings.push("No real bed pressure — you might struggle to actually end games.");
+  suggestions.push("Add Ragnar, Dino, Davey, Triton, or Yuzi.");
+}
 ];
 
 function getKit(name) {
