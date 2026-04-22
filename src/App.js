@@ -1677,10 +1677,24 @@ select option:checked {
           0%,100% { transform: scale(1); opacity: 1; }
           50% { transform: scale(1.35); opacity: 0.65; }
         }
-
         @keyframes snow-fall {
-          0% { transform: translateY(-10vh); }
-          100% { transform: translateY(115vh); }
+          0% {
+            transform: translateY(-10vh);
+            opacity: 0;
+          }
+        
+          10% {
+            opacity: 1;
+          }
+        
+          80% {
+            opacity: 1;
+          }
+        
+          100% {
+            transform: translateY(115vh);
+            opacity: 0;
+          }
         }
 
         @keyframes snow-sway {
