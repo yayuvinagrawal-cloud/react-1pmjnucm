@@ -1568,19 +1568,7 @@ function TabBar({ tab, setTab, dark }) {
     </div>
   );
 }
-const [seconds, setSeconds] = useState(0);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setSeconds((s) => s + 1);
-  }, 1000);
-  return () => clearInterval(interval);
-}, []);
-
-const formatTime = (s) => {
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return `${m}:${sec.toString().padStart(2, "0")}`;
 };
 
 /* ─── MAIN ─── */
@@ -1662,25 +1650,24 @@ const formatTime = (s) => {
         button, select { font-family: inherit; }
 
         select {
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          color-scheme: dark;
-        }
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
 
-        select option {
-          background: #111827;
-          color: #ffffff;
-        }
+select option {
+  background: #111827;
+  color: #ffffff;
+}
 
-        select option:checked {
-          background: #2563eb;
-          color: #ffffff;
-        }
+select option:hover {
+  background: #1f2937;
+}
 
-        select option:hover {
-          background: #1d4ed8;
-          color: #ffffff;
+select option:checked {
+  background: #2563eb;
+  color: #ffffff;
+}
         }
 
         @keyframes fade-up {
