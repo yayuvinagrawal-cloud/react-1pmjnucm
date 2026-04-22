@@ -744,11 +744,13 @@ function DraftBuilderSection({ dark }) {
                 outline: "none",
               }}
             >
-              {DRAFT_KITS.map((kit) => (
+                          {[...DRAFT_KITS]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((kit) => (
                 <option key={kit.name} value={kit.name}>
                   {kit.name}
                 </option>
-              ))}
+            ))}
             </select>
           ))}
         </div>
