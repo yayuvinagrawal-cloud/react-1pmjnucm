@@ -1569,8 +1569,6 @@ function TabBar({ tab, setTab, dark }) {
   );
 }
 
-};
-
 /* ─── MAIN ─── */
 export default function App() {
   useFonts();
@@ -1668,7 +1666,7 @@ select option:checked {
   background: #2563eb;
   color: #ffffff;
 }
-        }
+  
 
         @keyframes fade-up {
           from { opacity: 0; transform: translateY(18px); }
