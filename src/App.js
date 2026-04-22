@@ -2018,7 +2018,7 @@ export default function App() {
       style={{
         borderRadius: 24,
         background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-        border: 1px solid ,
+        border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
         overflow: "hidden",
@@ -2028,7 +2028,7 @@ export default function App() {
       <div
         style={{
           padding: "13px 18px 12px",
-          borderBottom: 1px solid ,
+          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
           display: "flex",
           alignItems: "center",
           gap: 9,
@@ -2040,7 +2040,7 @@ export default function App() {
             height: 8,
             borderRadius: "50%",
             background: "#06b6d4",
-            boxShadow:   0 10px rgba(6,182,212,0.45),
+            boxShadow: "0 0 10px rgba(6,182,212,0.45)",
           }}
         />
         <span
@@ -2066,7 +2066,7 @@ export default function App() {
               borderRadius: 15,
               padding: "12px 14px",
               background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
-              border: 1px solid ,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
             }}
           >
             <div
@@ -2081,9 +2081,10 @@ export default function App() {
                 fontSize: 11,
                 fontWeight: 800,
                 fontFamily: "'JetBrains Mono', monospace",
-                background: gba(6,182,212,0.12),
+                background: 
+gba(6,182,212,0.12),
                 color: "#06b6d4",
-                border: 1px solid rgba(6,182,212,0.22),
+                border: "1px solid rgba(6,182,212,0.22)",
               }}
             >
               {i + 1}
@@ -2199,6 +2200,16 @@ export default function App() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
