@@ -1568,11 +1568,38 @@ function TabBar({ tab, setTab, dark }) {
     </div>
   );
 }
+const [seconds, setSeconds] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setSeconds((s) => s + 1);
+  }, 1000);
+  return () => clearInterval(interval);
+}, []);
+
+const formatTime = (s) => {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+};
 
 /* ─── MAIN ─── */
 export default function App() {
   useFonts();
+const [seconds, setSeconds] = useState(0);
 
+useEffect(() => {
+  const interval = setInterval(() => {
+    setSeconds((s) => s + 1);
+  }, 1000);
+  return () => clearInterval(interval);
+}, []);
+
+const formatTime = (s) => {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+};
   const [dark, setDark] = useState(true);
   const [tab, setTab] = useState("comps");
   const [mounted, setMounted] = useState(false);
@@ -1856,6 +1883,23 @@ export default function App() {
         >
           Squads
         </h1>
+            <div
+  style={{
+    marginTop: 18,
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "8px 16px",
+    borderRadius: 999,
+    background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
+    border: `1px solid ${dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+    fontFamily: "'JetBrains Mono', monospace",
+    fontWeight: 800,
+    letterSpacing: "0.08em",
+  }}
+>
+  ⏱ {formatTime(seconds)}
+</div>
 
         <p
           style={{
