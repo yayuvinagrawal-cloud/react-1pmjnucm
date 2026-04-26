@@ -281,6 +281,8 @@ const TIMING_ITEMS = [
 const DRAFT_KITS = [
   // ECONOMY / CYCLE
   { name: "Beekeeper", roles: ["economy"] },
+  { name: "Taliyah", roles: ["economy"] },
+
   { name: "Farmer", roles: ["economy"] },
   { name: "Metal Detector", roles: ["economy"] },
   { name: "Yuzi", roles: ["bedbreaker"] },
@@ -318,7 +320,7 @@ const DRAFT_KITS = [
   { name: "Dino Tamer", roles: ["bedbreaker"] },
 
   // DEFENDER
-  { name: "Noelle", roles: ["defender"] },
+  { name: "Noelle", roles: ["defender", "support"] },
   { name: "Builder", roles: ["defender"] },
   { name: "Marina", roles: ["defender"] },
   { name: "Fisher", roles: ["defender", "economy"] },
