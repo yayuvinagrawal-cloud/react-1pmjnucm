@@ -283,9 +283,9 @@ const DRAFT_KITS = [
   { name: "Beekeeper", roles: ["economy"] },
   { name: "Farmer", roles: ["economy"] },
   { name: "Metal Detector", roles: ["economy"] },
-  { name: "Yuzi", roles: ["economy", "bedbreaker"] },
+  { name: "Yuzi", roles: ["bedbreaker"] },
   { name: "Davey", roles: ["economy", "bedbreaker"] },
-  { name: "Triton", roles: ["economy", "bedbreaker"] },
+  { name: "Triton", roles: ["bedbreaker"] },
 
   // MAIN JUGG
   { name: "Lucia", roles: ["juggernaut", "economy"] },
@@ -299,8 +299,8 @@ const DRAFT_KITS = [
   { name: "Nyx", roles: ["juggernaut"] },
 
   // SJ / FLEX
-  { name: "Umbra", roles: ["support", "juggernaut"] },
-  { name: "Lani", roles: ["support", "juggernaut"] },
+  { name: "Umbra", roles: ["support"] },
+  { name: "Lani", roles: ["support"] },
   { name: "Hannah", roles: ["support", "defender"] },
 
   // SUPPORT
