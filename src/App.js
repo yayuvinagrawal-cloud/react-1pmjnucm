@@ -14,53 +14,101 @@ function useFonts() {
   }, []);
 }
 
+function GlossMouseLayer() {
+  const [pos, setPos] = useState({ x: 50, y: 18 });
+
+  useEffect(() => {
+    const move = (e) => {
+      setPos({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      });
+    };
+
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+
+  return (
+    <div
+      className="glossMouse"
+      style={{
+        "--mx": `${pos.x}%`,
+        "--my": `${pos.y}%`,
+      }}
+    />
+  );
+}
+
+function useCardGloss() {
+  useEffect(() => {
+    const move = (e) => {
+      const card = e.target.closest(
+        ".glassCard, .buildCard, .draftPanel, .draftResult, .roleCard, .counterCard, .timeCard, .practiceCard, .statCard"
+      );
+
+      if (!card) return;
+
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--card-x", `${e.clientX - rect.left}px`);
+      card.style.setProperty("--card-y", `${e.clientY - rect.top}px`);
+    };
+
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+}
+
 const META_BUILDS = [
   {
     name: "Cait / Lassy / Star / Metal / Noelle",
     tag: "Most Reliable",
+    tier: "S",
     icon: "◎",
     accent: "#38bdf8",
     gradient: "linear-gradient(135deg, #38bdf8, #2563eb)",
     why:
       "This build has pressure, setup, economy, sustain, and base control. Cait gets clean contract value, Lassy creates pick windows, Star keeps fights stable, Metal scales the team, and Noelle protects the bed.",
     early:
-      "Start with Cait and Lassy looking for safe pressure while Metal builds value. Noelle stays disciplined at base. Star should stay close enough to turn small fights.",
+      "Cait and Lassy pressure together without taking random solo deaths. Metal farms value. Noelle stays disciplined and calls incoming pressure early.",
     mid:
-      "Use Lassy to force a target out of position, then let Cait finish or secure the contract value. Metal should turn economy into armor, upgrades, and clean team pushes.",
+      "Use Lassy to force one target out of position, then let Cait finish or secure contract value. Turn Metal economy into armor, upgrades, and clean grouped pressure.",
     win:
-      "Group when you have gear advantage, force one pick, then turn that into bed pressure. This build wins by staying stable and never giving away free deaths.",
+      "Group when you have gear advantage, force one pick, then convert instantly into bed pressure.",
     bestInto: "Balanced teams, greedy economy teams, and players who overextend.",
-    weakness: "If Cait wastes contracts or Lassy misses setup windows, the build loses a lot of pressure.",
+    weakness: "If Cait wastes contracts or Lassy misses setup windows, pressure drops fast.",
   },
   {
     name: "Cait / Cait / Metal / Noelle / Star",
     tag: "Contract Pressure",
+    tier: "S",
     icon: "◇",
     accent: "#60a5fa",
     gradient: "linear-gradient(135deg, #60a5fa, #1d4ed8)",
     why:
-      "Double Cait creates constant contract pressure. One Cait can pressure the front while the other punishes weak targets. Metal gives scaling, Star gives sustain, and Noelle keeps the bed safe.",
+      "Double Cait creates constant contract pressure. One Cait can pressure the front while the other punishes weak targets. Metal gives scaling, Star gives sustain, and Noelle keeps bed safe.",
     early:
       "Both Cait players should avoid random solo fights. Pick smart targets, pressure with teammates, and let Metal quietly stack resources.",
     mid:
       "Rotate pressure between two contract targets. If one target escapes, the other Cait should still be creating value somewhere else.",
     win:
-      "Once Cait has value built up, force grouped fights and snowball kills into bed pressure. The longer the game goes, the scarier this gets.",
+      "Once Cait value is built up, force grouped fights and snowball kills into bed pressure.",
     bestInto: "Teams with weak peel, exposed economy kits, or messy positioning.",
-    weakness: "Needs smart Cait players. If both Caits chase bad fights, the whole build feels useless.",
+    weakness: "Needs smart Cait players. If both Caits chase bad fights, the build feels useless.",
   },
   {
     name: "Silas / Cait / Lassy / Metal / Noelle",
     tag: "Aura Core",
+    tier: "S",
     icon: "✦",
     accent: "#22d3ee",
     gradient: "linear-gradient(135deg, #22d3ee, #0891b2)",
     why:
-      "Silas makes every team fight stronger. Cait and Lassy create pick pressure, Metal handles economy, and Noelle keeps the team from losing bed for free.",
+      "Silas makes every team fight stronger while Cait and Lassy create pick pressure. Metal handles economy, and Noelle keeps the team from losing bed for free.",
     early:
-      "Silas should stay near the team instead of playing alone. Cait and Lassy should look for safe pressure while Metal gets value.",
+      "Silas should stay near the team instead of playing alone. Cait and Lassy look for safe pressure while Metal gets value.",
     mid:
-      "Before a full fight, group with Silas so the aura actually matters. Lassy pulls a target, Cait pressures, and the team collapses together.",
+      "Before a full fight, group with Silas so the aura actually matters. Lassy pulls a target, Cait pressures, and everyone collapses together.",
     win:
       "Win repeated fights with the aura advantage, then push bed when the enemy team is low or split.",
     bestInto: "Teams that like long fights or stack together.",
@@ -68,7 +116,8 @@ const META_BUILDS = [
   },
   {
     name: "Warden / Melody / Melody / Hannah / Fisher",
-    tag: "Bypass",
+    tag: "Sustain Wall",
+    tier: "A+",
     icon: "◌",
     accent: "#67e8f9",
     gradient: "linear-gradient(135deg, #67e8f9, #0ea5e9)",
@@ -86,6 +135,7 @@ const META_BUILDS = [
   {
     name: "Davey / Umbra / Umbra / Fisher / Fisher",
     tag: "Bed Pressure",
+    tier: "A+",
     icon: "✧",
     accent: "#93c5fd",
     gradient: "linear-gradient(135deg, #93c5fd, #3b82f6)",
@@ -102,12 +152,56 @@ const META_BUILDS = [
   },
 ];
 
+const META_KITS = [
+  { name: "Cait", roles: ["Frontline", "Pressure"] },
+  { name: "Lassy", roles: ["Support", "Pressure"] },
+  { name: "Star", roles: ["Support"] },
+  { name: "Metal", roles: ["Economy"] },
+  { name: "Noelle", roles: ["Defender"] },
+  { name: "Silas", roles: ["Frontline", "Support"] },
+  { name: "Warden", roles: ["Frontline"] },
+  { name: "Melody", roles: ["Support"] },
+  { name: "Hannah", roles: ["Support", "Defender"] },
+  { name: "Fisher", roles: ["Economy", "Defender"] },
+  { name: "Davey", roles: ["Bed Breaker", "Pressure"] },
+  { name: "Pirate Davey", roles: ["Bed Breaker", "Pressure"] },
+  { name: "Umbra", roles: ["Support", "Bed Breaker", "Pressure"] },
+  { name: "Archer", roles: ["Ranged", "Pressure"] },
+  { name: "Umeko", roles: ["Ranged", "Pressure"] },
+  { name: "Uma", roles: ["Ranged", "Pressure"] },
+  { name: "Wren", roles: ["Defender"] },
+  { name: "Whim", roles: ["Ranged", "Pressure"] },
+];
+
+const EXTRA_KITS = [
+  { name: "Farmer", roles: ["Economy"] },
+  { name: "Lucia", roles: ["Economy", "Frontline"] },
+  { name: "Beekeeper", roles: ["Economy"] },
+  { name: "Sheila", roles: ["Frontline"] },
+  { name: "Freya", roles: ["Frontline"] },
+  { name: "Eldertree", roles: ["Frontline"] },
+  { name: "Baker", roles: ["Support", "Defender"] },
+  { name: "Whisper", roles: ["Support"] },
+  { name: "Ragnar", roles: ["Bed Breaker"] },
+  { name: "Triton", roles: ["Bed Breaker"] },
+  { name: "Sigrid", roles: ["Bed Breaker"] },
+  { name: "Dino Tamer", roles: ["Bed Breaker", "Pressure"] },
+  { name: "Zeno", roles: ["Ranged"] },
+  { name: "Zola", roles: ["Defender"] },
+  { name: "Nyx", roles: ["Frontline", "Pressure"] },
+  { name: "Aery", roles: ["Frontline"] },
+  { name: "Amy", roles: ["Frontline", "Support"] },
+  { name: "Lani", roles: ["Support", "Pressure"] },
+  { name: "Smoke", roles: ["Support", "Pressure"] },
+  { name: "Marina", roles: ["Defender"] },
+];
+
 const ROLE_GUIDE = [
   {
     role: "Frontline",
     icon: "⚔",
     job: "Starts fights, takes space, and protects the support players.",
-    kits: ["Cait", "Silas", "Warden", "Uma", "Whim", "Eldertree", "Sheila", "Freya"],
+    kits: ["Cait", "Silas", "Warden", "Uma", "Eldertree", "Whim", "Sheila", "Freya"],
   },
   {
     role: "Support",
@@ -139,50 +233,6 @@ const ROLE_GUIDE = [
     job: "Chips teams before fights and controls bridges from distance.",
     kits: ["Archer", "Uma", "Umeko", "Whim", "Zeno"],
   },
-];
-
-const META_KITS = [
-  { name: "Cait", roles: ["Frontline", "Pressure"] },
-  { name: "Lassy", roles: ["Support", "Pressure"] },
-  { name: "Star", roles: ["Support"] },
-  { name: "Metal", roles: ["Economy"] },
-  { name: "Noelle", roles: ["Defender"] },
-  { name: "Silas", roles: ["Frontline", "Support"] },
-  { name: "Warden", roles: ["Frontline"] },
-  { name: "Melody", roles: ["Support"] },
-  { name: "Hannah", roles: ["Support", "Defender"] },
-  { name: "Fisher", roles: ["Economy", "Defender"] },
-  { name: "Davey", roles: ["Bed Breaker", "Pressure"] },
-  { name: "Pirate Davey", roles: ["Bed Breaker", "Pressure"] },
-  { name: "Umbra", roles: ["Support", "Bed Breaker", "Pressure"] },
-  { name: "Archer", roles: ["Ranged", "Pressure"] },
-  { name: "Uma", roles: ["Frontline", "Ranged", "Pressure"] },
-  { name: "Umeko", roles: ["Ranged", "Pressure"] },
-  { name: "Whim", roles: ["Ranged", "Frontline", "Pressure"] },
-  { name: "Wren", roles: ["Defender"] },
-];
-
-const EXTRA_KITS = [
-  { name: "Farmer", roles: ["Economy"] },
-  { name: "Lucia", roles: ["Economy", "Frontline"] },
-  { name: "Beekeeper", roles: ["Economy"] },
-  { name: "Sheila", roles: ["Frontline"] },
-  { name: "Freya", roles: ["Frontline"] },
-  { name: "Eldertree", roles: ["Frontline"] },
-  { name: "Baker", roles: ["Support", "Defender"] },
-  { name: "Whisper", roles: ["Support"] },
-  { name: "Ragnar", roles: ["Bed Breaker"] },
-  { name: "Triton", roles: ["Bed Breaker"] },
-  { name: "Sigrid", roles: ["Bed Breaker"] },
-  { name: "Dino Tamer", roles: ["Bed Breaker"] },
-  { name: "Zeno", roles: ["Ranged"] },
-  { name: "Zola", roles: ["Defender"] },
-  { name: "Nyx", roles: ["Frontline", "Pressure"] },
-  { name: "Aery", roles: ["Frontline"] },
-  { name: "Amy", roles: ["Frontline", "Support"] },
-  { name: "Lani", roles: ["Support", "Pressure"] },
-  { name: "Smoke", roles: ["Support", "Pressure"] },
-  { name: "Marina", roles: ["Defender"] },
 ];
 
 const COUNTERS = [
@@ -298,33 +348,6 @@ function getKitsByCategory(showMore) {
   return categories;
 }
 
-function MouseGlossLayer() {
-  const [pos, setPos] = useState({ x: 50, y: 12 });
-
-  useEffect(() => {
-    const move = (event) => {
-      const x = (event.clientX / window.innerWidth) * 100;
-      const y = (event.clientY / window.innerHeight) * 100;
-      setPos({ x, y });
-      document.documentElement.style.setProperty("--mx", `${x}%`);
-      document.documentElement.style.setProperty("--my", `${y}%`);
-    };
-
-    window.addEventListener("pointermove", move);
-    return () => window.removeEventListener("pointermove", move);
-  }, []);
-
-  return (
-    <div
-      className="mouseGloss"
-      style={{
-        "--mx": `${pos.x}%`,
-        "--my": `${pos.y}%`,
-      }}
-    />
-  );
-}
-
 function evaluateDraft(picks) {
   const chosen = picks.map(getKit).filter(Boolean);
   const has = (role) => chosen.some((kit) => kit.roles.includes(role));
@@ -405,7 +428,7 @@ function SectionHeader({ eyebrow, title, text }) {
 
 function StatCard({ label, value }) {
   return (
-    <div className="statCard">
+    <div className="statCard glassCard">
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
@@ -415,9 +438,15 @@ function StatCard({ label, value }) {
 function Hero({ setTab }) {
   return (
     <section className="hero">
-      <div className="heroBadge">
-        <span className="liveDot" />
-        Live Season 16 5v5 Meta
+      <div className="heroBadgeStack">
+        <div className="heroBadge">
+          <span className="liveDot" />
+          Live Season 16 5v5 Meta
+        </div>
+
+        <div className="madeBy">
+          made by <span>justcyril</span>
+        </div>
       </div>
 
       <h1>
@@ -453,7 +482,7 @@ function BuildCard({ build }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <article className={`buildCard ${open ? "open" : ""}`}>
+    <article className={`buildCard glassCard ${open ? "open" : ""}`}>
       <button className="buildTop" onClick={() => setOpen((v) => !v)}>
         <div className="buildIcon" style={{ background: build.gradient }}>
           {build.icon}
@@ -464,6 +493,7 @@ function BuildCard({ build }) {
           <h3>{build.name}</h3>
         </div>
 
+        <div className="buildTier">Tier {build.tier}</div>
         <div className="expand">{open ? "−" : "+"}</div>
       </button>
 
@@ -525,11 +555,11 @@ function DraftBuilder() {
       <SectionHeader
         eyebrow="Draft Builder"
         title="Check if your 5v5 team makes sense"
-        text="Kits are grouped by role inside each dropdown, so your draft never resets when choosing categories."
+        text="Kits are grouped inside the dropdown by role, so your draft will not reset when browsing."
       />
 
       <div className="draftShell">
-        <div className="draftPanel">
+        <div className="draftPanel glassCard">
           <div className="draftTop">
             <div>
               <span className="miniLabel">Your Team</span>
@@ -565,12 +595,12 @@ function DraftBuilder() {
           </div>
 
           <div className="draftHint">
-            Meta kits stay clean by default. Use <strong>Show More Kits</strong> for Uma,
-            Eldertree, Whim, Whisper, Zola, Nyx, Aery, Amy, and more.
+            Pro tip: build around one frontline, one support, one economy, one defender,
+            and one real pressure slot.
           </div>
         </div>
 
-        <div className="draftResult">
+        <div className="draftResult glassCard">
           <div className="scoreCircle">
             <strong>{result.score}</strong>
             <span>/100</span>
@@ -621,7 +651,7 @@ function RolesSection() {
 
       <div className="roleGrid">
         {ROLE_GUIDE.map((role) => (
-          <div className="roleCard" key={role.role}>
+          <div className="roleCard glassCard" key={role.role}>
             <div className="roleIcon">{role.icon}</div>
             <h3>{role.role}</h3>
             <p>{role.job}</p>
@@ -648,7 +678,7 @@ function CountersSection() {
 
       <div className="counterGrid">
         {COUNTERS.map((counter) => (
-          <div className="counterCard" key={counter.title}>
+          <div className="counterCard glassCard" key={counter.title}>
             <div className="counterIcon">{counter.icon}</div>
             <h3>{counter.title}</h3>
             <p>{counter.plan}</p>
@@ -681,7 +711,7 @@ function TimingSection() {
 
       <div className="timeline">
         {TIMING.map((item) => (
-          <div className="timeCard" key={item.time}>
+          <div className="timeCard glassCard" key={item.time}>
             <div className="timeStamp">{item.time}</div>
             <div>
               <h3>{item.title}</h3>
@@ -705,7 +735,7 @@ function PracticeSection() {
 
       <div className="practiceGrid">
         {PRACTICE.map((drill) => (
-          <div className="practiceCard" key={drill.title}>
+          <div className="practiceCard glassCard" key={drill.title}>
             <span>{drill.level}</span>
             <h3>{drill.title}</h3>
             <p>{drill.text}</p>
@@ -722,27 +752,30 @@ function BottomNav({ tab, setTab }) {
     { key: "meta", label: "5v5 Meta", icon: "◆" },
     { key: "draft", label: "Draft", icon: "◎" },
     { key: "roles", label: "Roles", icon: "⬡" },
-    { key: "more", label: "More", icon: "⋯" },
+    { key: "more", label: "More", icon: "•••" },
   ];
 
   return (
-    <nav className="bottomNav">
-      {tabs.map((item) => (
-        <button
-          key={item.key}
-          onClick={() => setTab(item.key)}
-          className={tab === item.key ? "navItem active" : "navItem"}
-        >
-          <span>{item.icon}</span>
-          {item.label}
-        </button>
-      ))}
+    <nav className="bottomNavShell">
+      <div className="bottomNav">
+        {tabs.map((item) => (
+          <button
+            key={item.key}
+            onClick={() => setTab(item.key)}
+            className={tab === item.key ? "navItem active" : "navItem"}
+          >
+            <span>{item.icon}</span>
+            {item.label}
+          </button>
+        ))}
+      </div>
     </nav>
   );
 }
 
 export default function App() {
   useFonts();
+  useCardGloss();
   const [tab, setTab] = useState("home");
 
   const renderTab = () => {
@@ -772,7 +805,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <MouseGlossLayer />
+      <GlossMouseLayer />
+
       <style>{`
         * {
           box-sizing: border-box;
@@ -788,6 +822,7 @@ export default function App() {
           color: #f8fafc;
           font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
           -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
         }
 
         button,
@@ -801,14 +836,33 @@ export default function App() {
 
         .app {
           min-height: 100vh;
-          padding-bottom: 92px;
+          padding-bottom: 132px;
           background:
-            radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 36%),
+            radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 36%),
             radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 34%),
+            radial-gradient(circle at 50% 110%, rgba(14, 165, 233, 0.12), transparent 35%),
             linear-gradient(180deg, #020617 0%, #030712 48%, #050816 100%);
           color: #f8fafc;
           overflow-x: hidden;
           position: relative;
+        }
+
+        .glossMouse {
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            radial-gradient(
+              760px circle at var(--mx) var(--my),
+              rgba(186, 230, 253, 0.22),
+              rgba(56, 189, 248, 0.14) 22%,
+              rgba(37, 99, 235, 0.08) 38%,
+              transparent 62%
+            );
+          mix-blend-mode: screen;
+          opacity: 1;
+          transition: background 0.05s linear;
         }
 
         .app::before {
@@ -824,6 +878,16 @@ export default function App() {
           z-index: 0;
         }
 
+        .app::after {
+          content: "";
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.045), transparent 18%, transparent 82%, rgba(0,0,0,0.24));
+        }
+
         .app > * {
           position: relative;
           z-index: 1;
@@ -836,23 +900,59 @@ export default function App() {
           text-align: center;
         }
 
-        .heroBadge {
+        .heroBadgeStack {
           width: fit-content;
           margin: 0 auto 18px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .heroBadge {
+          width: fit-content;
+          margin: 0 auto;
           display: flex;
           align-items: center;
           gap: 9px;
           padding: 9px 14px;
-          border: 1px solid rgba(125, 211, 252, 0.24);
+          border: 1px solid rgba(125, 211, 252, 0.28);
           border-radius: 999px;
-          background: rgba(15, 23, 42, 0.64);
-          backdrop-filter: blur(22px);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035)),
+            rgba(15, 23, 42, 0.58);
+          backdrop-filter: blur(24px) saturate(1.4);
+          -webkit-backdrop-filter: blur(24px) saturate(1.4);
           color: #7dd3fc;
           font-family: "JetBrains Mono", monospace;
           font-size: 12px;
           font-weight: 800;
           letter-spacing: 0.04em;
           text-transform: uppercase;
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.16),
+            inset 0 -1px 0 rgba(255,255,255,0.055),
+            0 16px 42px rgba(0,0,0,0.2);
+        }
+
+        .madeBy {
+          width: fit-content;
+          padding: 7px 12px;
+          border-radius: 999px;
+          color: rgba(226, 232, 240, 0.66);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.025));
+          border: 1px solid rgba(255,255,255,0.1);
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.02em;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .madeBy span {
+          color: #7dd3fc;
+          font-family: "JetBrains Mono", monospace;
+          letter-spacing: 0.06em;
         }
 
         .liveDot {
@@ -881,10 +981,11 @@ export default function App() {
           line-height: 0.9;
           letter-spacing: -0.08em;
           font-weight: 900;
-          background: linear-gradient(180deg, #ffffff, #a5f3fc 56%, #60a5fa);
+          background: linear-gradient(180deg, #ffffff, #dff8ff 36%, #a5f3fc 58%, #60a5fa);
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
+          text-shadow: 0 18px 60px rgba(56, 189, 248, 0.16);
         }
 
         .hero p {
@@ -910,28 +1011,35 @@ export default function App() {
           cursor: pointer;
           border-radius: 999px;
           font-weight: 800;
-          transition: 0.22s ease;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
         }
 
         .primaryBtn {
           padding: 14px 22px;
           color: #020617;
-          background: linear-gradient(135deg, #ffffff, #7dd3fc);
-          box-shadow: 0 18px 40px rgba(56, 189, 248, 0.22);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.98), rgba(186,230,253,0.92));
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.95),
+            0 18px 44px rgba(56,189,248,0.32);
         }
 
         .ghostBtn {
           padding: 14px 22px;
           color: #e0f2fe;
-          background: rgba(15, 23, 42, 0.72);
-          border: 1px solid rgba(255, 255, 255, 0.11);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.095), rgba(255,255,255,0.035));
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.09);
         }
 
         .smallBtn {
           padding: 9px 13px;
           color: #e0f2fe;
-          background: rgba(14, 165, 233, 0.12);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.095), rgba(255,255,255,0.035));
           border: 1px solid rgba(125, 211, 252, 0.18);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
           font-size: 12px;
         }
 
@@ -949,6 +1057,7 @@ export default function App() {
           margin: 34px auto 0;
         }
 
+        .glassCard,
         .statCard,
         .buildCard,
         .draftPanel,
@@ -957,10 +1066,90 @@ export default function App() {
         .counterCard,
         .timeCard,
         .practiceCard {
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          background: linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(15, 23, 42, 0.46));
-          backdrop-filter: blur(26px);
-          box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+          position: relative;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.13);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.028)),
+            linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.5));
+          backdrop-filter: blur(18px) saturate(1.35);
+          -webkit-backdrop-filter: blur(18px) saturate(1.35);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.12),
+            inset 0 -1px 0 rgba(255,255,255,0.04),
+            0 18px 48px rgba(0, 0, 0, 0.24);
+        }
+
+        .glassCard::before,
+        .statCard::before,
+        .buildCard::before,
+        .draftPanel::before,
+        .draftResult::before,
+        .roleCard::before,
+        .counterCard::before,
+        .timeCard::before,
+        .practiceCard::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            linear-gradient(
+              125deg,
+              rgba(255,255,255,0.2) 0%,
+              rgba(255,255,255,0.07) 18%,
+              transparent 42%
+            );
+          opacity: 0.5;
+        }
+
+        .glassCard::after,
+        .statCard::after,
+        .buildCard::after,
+        .draftPanel::after,
+        .draftResult::after,
+        .roleCard::after,
+        .counterCard::after,
+        .timeCard::after,
+        .practiceCard::after {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          pointer-events: none;
+          background:
+            radial-gradient(
+              500px circle at var(--card-x, 50%) var(--card-y, 0%),
+              rgba(255,255,255,0.22),
+              rgba(125,211,252,0.11) 30%,
+              transparent 58%
+            );
+          opacity: 0;
+          transition: opacity 0.18s ease;
+        }
+
+        .glassCard:hover::after,
+        .statCard:hover::after,
+        .buildCard:hover::after,
+        .draftPanel:hover::after,
+        .draftResult:hover::after,
+        .roleCard:hover::after,
+        .counterCard:hover::after,
+        .timeCard:hover::after,
+        .practiceCard:hover::after {
+          opacity: 1;
+        }
+
+        .glassCard > *,
+        .statCard > *,
+        .buildCard > *,
+        .draftPanel > *,
+        .draftResult > *,
+        .roleCard > *,
+        .counterCard > *,
+        .timeCard > *,
+        .practiceCard > * {
+          position: relative;
+          z-index: 1;
         }
 
         .statCard {
@@ -1020,13 +1209,16 @@ export default function App() {
 
         .buildCard {
           border-radius: 30px;
-          overflow: hidden;
-          transition: 0.25s ease;
+          transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
         .buildCard:hover {
           transform: translateY(-2px);
-          border-color: rgba(125, 211, 252, 0.2);
+          border-color: rgba(125, 211, 252, 0.24);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.16),
+            0 28px 70px rgba(14,165,233,0.13),
+            0 18px 48px rgba(0,0,0,0.3);
         }
 
         .buildTop {
@@ -1077,6 +1269,18 @@ export default function App() {
           line-height: 1.2;
         }
 
+        .buildTier {
+          flex: 0 0 auto;
+          padding: 6px 9px;
+          border-radius: 999px;
+          color: #bae6fd;
+          background: rgba(56,189,248,0.08);
+          border: 1px solid rgba(125,211,252,0.14);
+          font-size: 11px;
+          font-weight: 900;
+          font-family: "JetBrains Mono", monospace;
+        }
+
         .expand {
           width: 34px;
           height: 34px;
@@ -1087,6 +1291,7 @@ export default function App() {
           color: #bae6fd;
           font-size: 22px;
           font-weight: 600;
+          flex: 0 0 auto;
         }
 
         .buildWhy {
@@ -1097,13 +1302,13 @@ export default function App() {
           line-height: 1.7;
         }
 
-                .buildDetails {
+        .buildDetails {
           display: grid;
           gap: 10px;
           padding: 0 22px 22px;
           animation: detailsIn 0.18s ease-out both;
         }
-        
+
         @keyframes detailsIn {
           from {
             opacity: 0;
@@ -1175,37 +1380,6 @@ export default function App() {
           letter-spacing: -0.04em;
         }
 
-        .roleFilters {
-          display: flex;
-          gap: 8px;
-          overflow-x: auto;
-          padding-bottom: 8px;
-          margin-bottom: 14px;
-          scrollbar-width: none;
-        }
-
-        .roleFilters::-webkit-scrollbar {
-          display: none;
-        }
-
-        .filter {
-          flex: 0 0 auto;
-          border: 1px solid rgba(255,255,255,0.1);
-          background: rgba(255,255,255,0.05);
-          color: rgba(226,232,240,0.68);
-          padding: 8px 12px;
-          border-radius: 999px;
-          font-size: 12px;
-          font-weight: 800;
-          cursor: pointer;
-        }
-
-        .filter.active {
-          background: rgba(56, 189, 248, 0.16);
-          color: #7dd3fc;
-          border-color: rgba(125, 211, 252, 0.28);
-        }
-
         .pickGrid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1230,19 +1404,38 @@ export default function App() {
 
         select {
           width: 100%;
-          border: none;
           outline: none;
           border-radius: 13px;
           padding: 12px;
           color: #f8fafc;
-          background: #0f172a;
+          background:
+            linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.78));
+          border: 1px solid rgba(255,255,255,0.1);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
           font-size: 14px;
           font-weight: 750;
+        }
+
+        optgroup {
+          background: #0f172a;
+          color: #7dd3fc;
+          font-weight: 900;
         }
 
         option {
           background: #0f172a;
           color: #f8fafc;
+        }
+
+        .draftHint {
+          margin-top: 14px;
+          border-radius: 16px;
+          padding: 12px 13px;
+          color: rgba(226, 232, 240, 0.62);
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          font-size: 13px;
+          line-height: 1.55;
         }
 
         .draftResult {
@@ -1357,6 +1550,16 @@ export default function App() {
         .practiceCard {
           border-radius: 28px;
           padding: 22px;
+          transition: transform 0.18s ease, border-color 0.18s ease;
+        }
+
+        .roleCard:hover,
+        .counterCard:hover,
+        .practiceCard:hover,
+        .timeCard:hover,
+        .statCard:hover {
+          transform: translateY(-2px);
+          border-color: rgba(125,211,252,0.22);
         }
 
         .roleIcon,
@@ -1410,6 +1613,7 @@ export default function App() {
           gap: 18px;
           border-radius: 26px;
           padding: 18px;
+          transition: transform 0.18s ease, border-color 0.18s ease;
         }
 
         .timeStamp {
@@ -1434,29 +1638,42 @@ export default function App() {
           font-family: "JetBrains Mono", monospace;
         }
 
-        .bottomNav {
+        .bottomNavShell {
           position: fixed;
           left: 50%;
           bottom: 16px;
           transform: translateX(-50%);
-          width: min(640px, calc(100% - 24px));
+          width: min(690px, calc(100% - 24px));
+          z-index: 20;
+          padding: 1px;
+          border-radius: 31px;
+          background:
+            linear-gradient(135deg, rgba(255,255,255,0.28), rgba(125,211,252,0.1), rgba(255,255,255,0.08));
+          box-shadow: 0 26px 90px rgba(0,0,0,0.52);
+        }
+
+        .bottomNav {
           display: grid;
           grid-template-columns: repeat(5, minmax(0, 1fr));
           gap: 6px;
           padding: 8px;
-          border-radius: 28px;
-          background: rgba(2, 6, 23, 0.82);
+          border-radius: 30px;
+          background:
+            radial-gradient(circle at 50% -20%, rgba(255,255,255,0.18), transparent 42%),
+            linear-gradient(180deg, rgba(15,23,42,0.72), rgba(2,6,23,0.78));
           border: 1px solid rgba(255,255,255,0.12);
-          backdrop-filter: blur(30px);
-          box-shadow: 0 20px 60px rgba(0,0,0,0.42);
-          z-index: 20;
+          backdrop-filter: blur(28px) saturate(1.55);
+          -webkit-backdrop-filter: blur(28px) saturate(1.55);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.14),
+            inset 0 -1px 0 rgba(255,255,255,0.045);
         }
 
         .navItem {
           border: none;
           background: transparent;
           color: rgba(226,232,240,0.48);
-          border-radius: 20px;
+          border-radius: 22px;
           padding: 10px 6px;
           font-size: 11px;
           font-weight: 850;
@@ -1465,6 +1682,7 @@ export default function App() {
           flex-direction: column;
           align-items: center;
           gap: 4px;
+          transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease;
         }
 
         .navItem span {
@@ -1472,178 +1690,18 @@ export default function App() {
           line-height: 1;
         }
 
+        .navItem:hover {
+          color: rgba(226,232,240,0.75);
+          transform: translateY(-1px);
+        }
+
         .navItem.active {
           color: #e0f2fe;
-          background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(37,99,235,0.16));
-        }
-
-
-
-        .mouseGloss {
-          position: fixed;
-          inset: 0;
-          pointer-events: none;
-          z-index: 0;
           background:
-            radial-gradient(
-              620px circle at var(--mx) var(--my),
-              rgba(125, 211, 252, 0.16),
-              rgba(59, 130, 246, 0.07) 28%,
-              transparent 58%
-            );
-          mix-blend-mode: screen;
-          opacity: 0.86;
-          transition: background 0.08s linear;
-        }
-
-        .draftHint {
-          margin-top: 14px;
-          border-radius: 16px;
-          padding: 12px 13px;
-          color: rgba(226, 232, 240, 0.64);
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          font-size: 13px;
-          line-height: 1.55;
-        }
-
-        optgroup {
-          background: #0f172a;
-          color: #7dd3fc;
-          font-weight: 900;
-        }
-
-        .statCard,
-        .buildCard,
-        .draftPanel,
-        .draftResult,
-        .roleCard,
-        .counterCard,
-        .timeCard,
-        .practiceCard {
-          position: relative;
-          overflow: hidden;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.105), rgba(255,255,255,0.035)),
-            linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.48));
-          border: 1px solid rgba(255,255,255,0.13);
+            linear-gradient(180deg, rgba(56,189,248,0.24), rgba(37,99,235,0.2));
           box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.13),
-            0 24px 70px rgba(0,0,0,0.28);
-        }
-
-        .statCard::before,
-        .buildCard::before,
-        .draftPanel::before,
-        .draftResult::before,
-        .roleCard::before,
-        .counterCard::before,
-        .timeCard::before,
-        .practiceCard::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background:
-            linear-gradient(
-              125deg,
-              rgba(255,255,255,0.22) 0%,
-              rgba(255,255,255,0.08) 18%,
-              transparent 42%
-            );
-          opacity: 0.42;
-        }
-
-        .statCard::after,
-        .buildCard::after,
-        .draftPanel::after,
-        .draftResult::after,
-        .roleCard::after,
-        .counterCard::after,
-        .timeCard::after,
-        .practiceCard::after {
-          content: "";
-          position: absolute;
-          inset: -2px;
-          pointer-events: none;
-          background:
-            radial-gradient(
-              420px circle at var(--mx, 50%) var(--my, 0%),
-              rgba(255,255,255,0.16),
-              transparent 48%
-            );
-          opacity: 0;
-          transition: opacity 0.22s ease;
-        }
-
-        .statCard:hover::after,
-        .buildCard:hover::after,
-        .draftPanel:hover::after,
-        .draftResult:hover::after,
-        .roleCard:hover::after,
-        .counterCard:hover::after,
-        .timeCard:hover::after,
-        .practiceCard:hover::after {
-          opacity: 1;
-        }
-
-        .statCard > *,
-        .buildCard > *,
-        .draftPanel > *,
-        .draftResult > *,
-        .roleCard > *,
-        .counterCard > *,
-        .timeCard > *,
-        .practiceCard > * {
-          position: relative;
-          z-index: 1;
-        }
-
-        .buildCard:hover,
-        .statCard:hover,
-        .roleCard:hover,
-        .counterCard:hover,
-        .timeCard:hover,
-        .practiceCard:hover {
-          transform: translateY(-5px) scale(1.006);
-          border-color: rgba(186, 230, 253, 0.24);
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.18),
-            0 30px 85px rgba(14,165,233,0.14),
-            0 24px 70px rgba(0,0,0,0.32);
-        }
-
-        .primaryBtn {
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.95), rgba(186,230,253,0.92));
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.9),
-            0 18px 44px rgba(56,189,248,0.28);
-        }
-
-        .ghostBtn,
-        .smallBtn,
-        .expand {
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
-          border: 1px solid rgba(255,255,255,0.13);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-        }
-
-        select {
-          background:
-            linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.78));
-          border: 1px solid rgba(255,255,255,0.1);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-
-        .bottomNav {
-          background:
-            linear-gradient(180deg, rgba(15,23,42,0.86), rgba(2,6,23,0.84));
-          border: 1px solid rgba(255,255,255,0.14);
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.11),
-            0 24px 80px rgba(0,0,0,0.48);
+            inset 0 1px 0 rgba(255,255,255,0.16),
+            0 12px 28px rgba(37,99,235,0.22);
         }
 
         @media (max-width: 860px) {
@@ -1689,13 +1747,22 @@ export default function App() {
             align-items: flex-start;
           }
 
-          .bottomNav {
+          .buildTier {
+            display: none;
+          }
+
+          .bottomNavShell {
             bottom: 10px;
-            border-radius: 24px;
+            border-radius: 26px;
+          }
+
+          .bottomNav {
+            border-radius: 25px;
           }
 
           .navItem {
             font-size: 10px;
+            border-radius: 18px;
           }
         }
       `}</style>
