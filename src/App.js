@@ -469,13 +469,15 @@ function BuildCard({ build }) {
 
       <p className="buildWhy">{build.why}</p>
 
-      <div className="buildDetails">
-        <InfoBlock label="Early Plan" text={build.early} />
-        <InfoBlock label="Mid Game Plan" text={build.mid} />
-        <InfoBlock label="Win Condition" text={build.win} />
-        <InfoBlock label="Best Into" text={build.bestInto} />
-        <InfoBlock label="Weakness" text={build.weakness} danger />
-      </div>
+      {open && (
+        <div className="buildDetails">
+          <InfoBlock label="Early Plan" text={build.early} />
+          <InfoBlock label="Mid Game Plan" text={build.mid} />
+          <InfoBlock label="Win Condition" text={build.win} />
+          <InfoBlock label="Best Into" text={build.bestInto} />
+          <InfoBlock label="Weakness" text={build.weakness} danger />
+        </div>
+      )}
     </article>
   );
 }
@@ -1013,6 +1015,7 @@ export default function App() {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 16px;
+          align-items: start;
         }
 
         .buildCard {
@@ -1022,8 +1025,8 @@ export default function App() {
         }
 
         .buildCard:hover {
-          transform: translateY(-3px);
-          border-color: rgba(125, 211, 252, 0.22);
+          transform: translateY(-2px);
+          border-color: rgba(125, 211, 252, 0.2);
         }
 
         .buildTop {
@@ -1094,20 +1097,22 @@ export default function App() {
           line-height: 1.7;
         }
 
-        .buildDetails {
+                .buildDetails {
           display: grid;
           gap: 10px;
-          max-height: 0;
-          opacity: 0;
-          overflow: hidden;
-          padding: 0 22px;
-          transition: 0.35s ease;
-        }
-
-        .buildCard.open .buildDetails {
-          max-height: 900px;
-          opacity: 1;
           padding: 0 22px 22px;
+          animation: detailsIn 0.18s ease-out both;
+        }
+        
+        @keyframes detailsIn {
+          from {
+            opacity: 0;
+            transform: translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .infoBlock {
