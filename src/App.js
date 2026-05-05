@@ -1,2218 +1,1471 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-/* ─── FONT LOADER ─── */
 function useFonts() {
   useEffect(() => {
-    const id = "bw-apple-fonts";
+    const id = "bw-premium-fonts";
     if (!document.getElementById(id)) {
-      const l = document.createElement("link");
-      l.id = id;
-      l.rel = "stylesheet";
-      l.href =
-        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap";
-      document.head.appendChild(l);
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href =
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap";
+      document.head.appendChild(link);
     }
   }, []);
 }
 
-/* ─── ICONS ─── */
-const SunIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <circle cx="12" cy="12" r="4" />
-    <line x1="12" y1="2" x2="12" y2="6" />
-    <line x1="12" y1="18" x2="12" y2="22" />
-    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-    <line x1="2" y1="12" x2="6" y2="12" />
-    <line x1="18" y1="12" x2="22" y2="12" />
-    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const ChevronIcon = ({ open }) => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    style={{
-      transition: "transform 0.3s ease",
-      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-    }}
-  >
-    <polyline points="6 9 12 15 18 9" />
-  </svg>
-);
-
-/* ─── DATA ─── */
-const COMPS = [
-  {
-    name: "Cait / Cait / Metal / Noelle / Star",
-    short: "Double Cait",
-    icon: "☠️",
-    color: "#2f6bff",
-    rgb: "47,107,255",
-    why: "Two Caits means double contract chains running at all times. If either Cait tags someone, the decay + contract combo is almost guaranteed to close — and the kill counts for both if a teammate or the void finishes it.",
-    useWhen:
-      "Run this when both Cait players know how to chain contracts and won't waste tags on random 1v1s. Strongest into any team that doesn't have good peel for their economy kits.",
-    early:
-      "Both Caits should pick separate contracts ASAP and start applying decay early. Metal builds value quietly. Noelle locks down base. Star keeps both Caits topped off.",
-    mid:
-      "Rotate contracts together so one Cait is always on an active tag. Use Star pulls to set up cleaner decay trades and let the decay do the closing work.",
-    win:
-      "Once both Caits have multiple contract stacks, the team becomes nearly unkillable in extended fights. Group up, force fights, and use decay pressure to run through any remaining teams.",
-  },
+const META_BUILDS = [
   {
     name: "Cait / Lassy / Star / Metal / Noelle",
-    short: "Lasso Cait",
-    icon: "🪢",
-    color: "#ef4444",
-    rgb: "239,68,68",
-    why: "Lassy is Cait's best setup tool in 5v5. Lasso pulls a tagged target straight into Cait's decay range or off the map — either way the contract closes and Cait keeps scaling.",
-    useWhen:
-      "Use this when your Lassy player is confident with lasso timing and can find good pulls on bridges and off-map edges. Destroys teams that stack in one lane.",
+    tag: "Most Reliable",
+    icon: "◎",
+    accent: "#38bdf8",
+    gradient: "linear-gradient(135deg, #38bdf8, #2563eb)",
+    why:
+      "This build has pressure, setup, economy, sustain, and base control. Cait gets clean contract value, Lassy creates pick windows, Star keeps fights stable, Metal scales the team, and Noelle protects the bed.",
     early:
-      "Lassy and Cait should be linked all game. Cait tags, Lassy watches for a pull window. Metal and Noelle hold base while Star supports fights.",
+      "Start with Cait and Lassy looking for safe pressure while Metal builds value. Noelle stays disciplined at base. Star should stay close enough to turn small fights.",
     mid:
-      "Look for lasso setups on bridges and gap crossings. One clean pull into the void closes a contract AND eliminates the player. Double value every time.",
+      "Use Lassy to force a target out of position, then let Cait finish or secure the contract value. Metal should turn economy into armor, upgrades, and clean team pushes.",
     win:
-      "With Cait scaled up from clean contract completions, push as a grouped 5. Lassy peels anyone trying to run. Noelle holds base while the front four close out.",
+      "Group when you have gear advantage, force one pick, then turn that into bed pressure. This build wins by staying stable and never giving away free deaths.",
+    bestInto: "Balanced teams, greedy economy teams, and players who overextend.",
+    weakness: "If Cait wastes contracts or Lassy misses setup windows, the build loses a lot of pressure.",
   },
   {
-    name: "Cait / Silas / Sheila / Lassy / Metal / Wren / Noelle",
-    short: "S16 Flex Core",
-    icon: "⚔️",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    why: "Your standard S16 5v5 flexible core. Cait brings contract pressure and decay, Silas brings a permanent healing and damage aura that makes every fight feel lopsided, and Lassy controls the pace of any engagement.",
-    useWhen:
-      "Default to this when you don't know what the enemy is running. Wren if you expect early rushes and BB threats, Noelle if you want a stronger base lock.",
+    name: "Cait / Cait / Metal / Noelle / Star",
+    tag: "Contract Pressure",
+    icon: "◇",
+    accent: "#60a5fa",
+    gradient: "linear-gradient(135deg, #60a5fa, #1d4ed8)",
+    why:
+      "Double Cait creates constant contract pressure. One Cait can pressure the front while the other punishes weak targets. Metal gives scaling, Star gives sustain, and Noelle keeps the bed safe.",
     early:
-      "Silas should stay near the group so his healing aura is active during any early fights. Cait starts contract chains. Metal builds econ. Lassy watches bridges.",
+      "Both Cait players should avoid random solo fights. Pick smart targets, pressure with teammates, and let Metal quietly stack resources.",
     mid:
-      "Switch Silas to damage aura before grouped fights. Lasso a priority target, Cait tags them, Silas and Sheila clean up with the damage buff active.",
+      "Rotate pressure between two contract targets. If one target escapes, the other Cait should still be creating value somewhere else.",
     win:
-      "Your team wins most prolonged fights because of Silas's permanent aura advantage. Force extended trades, keep stacking contracts, and close on beds when teams are low.",
+      "Once Cait has value built up, force grouped fights and snowball kills into bed pressure. The longer the game goes, the scarier this gets.",
+    bestInto: "Teams with weak peel, exposed economy kits, or messy positioning.",
+    weakness: "Needs smart Cait players. If both Caits chase bad fights, the whole build feels useless.",
+  },
+  {
+    name: "Silas / Cait / Lassy / Metal / Noelle",
+    tag: "Aura Core",
+    icon: "✦",
+    accent: "#22d3ee",
+    gradient: "linear-gradient(135deg, #22d3ee, #0891b2)",
+    why:
+      "Silas makes every team fight stronger. Cait and Lassy create pick pressure, Metal handles economy, and Noelle keeps the team from losing bed for free.",
+    early:
+      "Silas should stay near the team instead of playing alone. Cait and Lassy should look for safe pressure while Metal gets value.",
+    mid:
+      "Before a full fight, group with Silas so the aura actually matters. Lassy pulls a target, Cait pressures, and the team collapses together.",
+    win:
+      "Win repeated fights with the aura advantage, then push bed when the enemy team is low or split.",
+    bestInto: "Teams that like long fights or stack together.",
+    weakness: "Bad spacing ruins the build. Silas has to be near the team to matter.",
   },
   {
     name: "Warden / Melody / Melody / Hannah / Fisher",
-    short: "Double Melody",
-    icon: "🎵",
-    color: "#10b981",
-    rgb: "16,185,129",
-    why: "Double Melody in 5v5 is oppressive. The sustain stacks on every grouped fight and makes your team nearly unkillable in extended scraps. Warden tanks up front, Hannah provides utility, and Fisher scales the economy.",
-    useWhen:
-      "Pick this when you want to out-sustain everything and win slow grind fights. Best into aggressive comps that like to rush grouped because they're walking into a healing nightmare.",
+    tag: "Sustain Wall",
+    icon: "◌",
+    accent: "#67e8f9",
+    gradient: "linear-gradient(135deg, #67e8f9, #0ea5e9)",
+    why:
+      "This build is built to survive. Warden holds the front, double Melody keeps the team alive, Hannah adds utility, and Fisher scales the economy.",
     early:
-      "Stay grouped as much as possible so both Melody heals are always active. Fisher builds value. Let Warden absorb early pressure and don't waste Melody casts on solo fights.",
+      "Do not force pointless solo plays. Stay close enough that Melody healing matters and let Fisher build value.",
     mid:
-      "Group fights are basically free with double Melody active. Call the timing and send the full 5 into any fight where you have numbers or gear parity.",
+      "Take grouped fights when the team is ready. The goal is to outlast, not instantly burst everyone.",
     win:
-      "Scale into late game with Fisher economy, stack Melody heals in grouped fights, and grind down anything left standing. You don't need to rush — time is on your side.",
+      "Drag fights out, stack gear, and slowly crush teams that cannot break through the healing.",
+    bestInto: "Aggressive teams that keep running into grouped fights.",
+    weakness: "Fast bed pressure can punish it before the sustain becomes annoying.",
   },
   {
     name: "Davey / Umbra / Umbra / Fisher / Fisher",
-    short: "BB Bypass",
-    icon: "💥",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    why: "Double Umbra controls the map better than almost anything in 5v5 — two sets of ult pressure means you can always find an angle. Double Fisher feeds the economy while Davey waits for a clean bed break window.",
-    useWhen:
-      "Use this against coordinated teams that play slow and defensive. The pressure from two Umbras forces them to overextend and opens space for Davey to work.",
+    tag: "Bed Pressure",
+    icon: "✧",
+    accent: "#93c5fd",
+    gradient: "linear-gradient(135deg, #93c5fd, #3b82f6)",
+    why:
+      "This build is made to create openings. Double Umbra controls space, double Fisher scales, and Davey waits for the right bed break timing.",
     early:
-      "Both Fishers scale quietly. Umbras hold map pressure without overcommitting their ults. Davey scouts bed angles and waits for the right open.",
+      "Fisher players should scale safely. Umbra players hold pressure without wasting their main engage tools. Davey scouts bed angles.",
     mid:
-      "Use Umbra ults to split enemy teams or cut rotations before a grouped push. Once defenders are moved, call Davey through immediately.",
+      "Use Umbra pressure to split defenders. When the enemy rotates badly, Davey goes in immediately.",
     win:
-      "Get one clean Umbra setup, send Davey through on the bed, and have the second Umbra hold the reset point. Double Fisher economy means you can sustain any late game that follows.",
+      "Get one clean opening, break the bed, then use the economy lead to finish the game.",
+    bestInto: "Slow defensive teams that overprotect one lane.",
+    weakness: "If Davey gets tracked or the team has no counter-pressure, the build can stall.",
   },
 ];
 
-const ROLES = [
+const ROLE_GUIDE = [
   {
-    key: "CYCLE",
-    emoji: "♻️",
-    desc: "Economy kits. Build value quietly and don't die for no reason.",
-    color: "#10b981",
-    rgb: "16,185,129",
-    kits: ["Metal Detector", "Farmer", "Fisher", "Star Collector", "Lucia"],
+    role: "Frontline",
+    icon: "⚔",
+    job: "Starts fights, takes space, and protects the support players.",
+    kits: ["Cait", "Silas", "Warden", "Sheila", "Freya"],
   },
   {
-    key: "BD",
-    emoji: "🛡️",
-    desc: "Bed defender. Holds base, watches gen and pchests, has counter TNT ready.",
-    color: "#2f6bff",
-    rgb: "47,107,255",
-    kits: ["Noelle", "Wren", "Fisher", "Baker", "Hannah"],
+    role: "Support",
+    icon: "✚",
+    job: "Keeps fights clean with healing, setup, peel, or utility.",
+    kits: ["Star", "Lassy", "Melody", "Hannah", "Baker"],
   },
   {
-    key: "MJ",
-    emoji: "⚔️",
-    desc: "Main fighter. Handles most PvP and sets the pace of grouped fights.",
-    color: "#ef4444",
-    rgb: "239,68,68",
-    kits: ["Caitlyn", "Sheila", "Silas", "Warden", "Freya", "Nyx"],
+    role: "Economy",
+    icon: "⬡",
+    job: "Builds the gear lead so the team can win later fights.",
+    kits: ["Metal", "Fisher", "Farmer", "Lucia", "Beekeeper"],
   },
   {
-    key: "SJ",
-    emoji: "🤝",
-    desc: "Second fighter or support. Peels, sets up kills, and adds utility.",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    kits: ["Lassy", "Star Collector", "Umbra", "Silas", "Hannah", "Melody"],
+    role: "Defender",
+    icon: "⬢",
+    job: "Protects bed, watches incoming pressure, and prevents free breaks.",
+    kits: ["Noelle", "Wren", "Baker", "Hannah", "Fisher"],
   },
   {
-    key: "RANGE",
-    emoji: "🏹",
-    desc: "Ranged pressure. Archer only needs 6 ems for crossbow early — incredible value.",
-    color: "#06b6d4",
-    rgb: "6,182,212",
+    role: "Bed Breaker",
+    icon: "◆",
+    job: "Finds openings and turns pressure into bed breaks.",
+    kits: ["Davey", "Umbra", "Ragnar", "Triton", "Sigrid"],
+  },
+  {
+    role: "Ranged",
+    icon: "⌁",
+    job: "Chips teams before fights and controls bridges from distance.",
     kits: ["Archer", "Umeko", "Zeno"],
   },
+];
+
+const META_KITS = [
+  { name: "Cait", roles: ["Frontline", "Pressure"] },
+  { name: "Lassy", roles: ["Support", "Pressure"] },
+  { name: "Star", roles: ["Support"] },
+  { name: "Metal", roles: ["Economy"] },
+  { name: "Noelle", roles: ["Defender"] },
+  { name: "Silas", roles: ["Frontline", "Support"] },
+  { name: "Warden", roles: ["Frontline"] },
+  { name: "Melody", roles: ["Support"] },
+  { name: "Hannah", roles: ["Support", "Defender"] },
+  { name: "Fisher", roles: ["Economy", "Defender"] },
+  { name: "Davey", roles: ["Bed Breaker", "Pressure"] },
+  { name: "Umbra", roles: ["Support", "Bed Breaker", "Pressure"] },
+  { name: "Archer", roles: ["Ranged", "Pressure"] },
+  { name: "Wren", roles: ["Defender"] },
+];
+
+const EXTRA_KITS = [
+  { name: "Farmer", roles: ["Economy"] },
+  { name: "Lucia", roles: ["Economy", "Frontline"] },
+  { name: "Beekeeper", roles: ["Economy"] },
+  { name: "Sheila", roles: ["Frontline"] },
+  { name: "Freya", roles: ["Frontline"] },
+  { name: "Baker", roles: ["Support", "Defender"] },
+  { name: "Ragnar", roles: ["Bed Breaker"] },
+  { name: "Triton", roles: ["Bed Breaker"] },
+  { name: "Sigrid", roles: ["Bed Breaker"] },
+  { name: "Umeko", roles: ["Ranged"] },
+  { name: "Zeno", roles: ["Ranged"] },
+];
+
+const COUNTERS = [
   {
-    key: "BBER",
-    emoji: "💥",
-    desc: "Bed breaker. Tracks openings, finds angles, and ends games.",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    kits: ["Davey", "Umbra", "Sigrid", "Triton", "Ragnar"],
+    title: "Against Cait Pressure",
+    icon: "☠",
+    plan:
+      "Do not feed Cait free contract value. Keep economy kits protected, force Cait to fight through your frontline, and punish her when she overextends.",
+    good: ["Lassy", "Noelle", "Wren", "Silas"],
+    avoid: "Long messy fights where Cait keeps getting resets.",
+  },
+  {
+    title: "Against Double Melody",
+    icon: "♪",
+    plan:
+      "Do not take slow fights into stacked healing. Split their formation, burst one target fast, and pressure bed so they cannot sit grouped forever.",
+    good: ["Cait", "Archer", "Lassy", "Davey"],
+    avoid: "Standing in front of them and trading forever.",
+  },
+  {
+    title: "Against Umbra Bed Pressure",
+    icon: "◈",
+    plan:
+      "Track Umbra engages and keep a defender ready. If Davey is missing, assume bed pressure is coming and stop chasing random fights.",
+    good: ["Noelle", "Wren", "Hannah", "Baker"],
+    avoid: "Leaving base empty after winning one fight.",
   },
 ];
 
-const GUIDES = {
-  "Win Checklist": {
-    icon: "✅",
-    color: "#2f6bff",
-    rgb: "47,107,255",
-    items: [
-      "In 5v5 there are more bodies in every fight — don't go in solo unless you have a massive gear lead.",
-      "Protect your economy kits (Metal, Fisher) like they are your most valuable player — because they are.",
-      "Grouped fights win games. Split pushing is only good if the enemy splits to chase you.",
-      "Noelle and Wren are both meta BDs — make sure your BD player has counter TNT stocked at all times.",
-      "If Cait is on your team, never finish a tagged contract target yourself — let Cait get the kill to stack contracts.",
-      "Vs cheaters: don't ego fight. Stack gear, play distance, and use TNT rain when needed.",
-    ],
+const TIMING = [
+  {
+    time: "0:00 - 1:30",
+    title: "Open clean",
+    text: "Get blocks, basic weapon pressure, and early map info. Do not throw your first life for nothing.",
   },
-  "Cait Guide": {
-    icon: "☠️",
-    color: "#ef4444",
-    rgb: "239,68,68",
-    items: [
-      "Cait's kill credit mechanic is the core of her S16 value — if you tag someone and they die to void, TNT, or a teammate, Cait still gets the contract.",
-      "Pick your contract target based on their kit class to unlock the right bonus (support target = silence, economy target = bounty ems, etc.).",
-      "Lassy is Cait's best partner — lasso pulls a tagged target, Cait tags them, and either Lassy voids them or Cait finishes = clean contract every time.",
-      "Double Cait in 5v5 is broken because two separate contract chains are always running — always pressure two different targets.",
-      "Don't blow decay tags on throwaway trades. Tag someone you're going to close out or that Lassy can pull.",
-      "In late game with full contract stacks, Cait's decay essentially melts anyone without diamond armor in extended fights.",
-    ],
+  {
+    time: "1:30 - 3:00",
+    title: "Protect value",
+    text: "Economy kits need time. Defender watches bed. Frontline should pressure without taking stupid 1v3s.",
   },
-  "Silas Guide": {
-    icon: "🛡️",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    items: [
-      "Silas's aura is always active — stay near your team. A Silas playing solo is wasting 80% of his kit.",
-      "Switch to damage aura right before a group fight starts for the +10% damage buff on all 5 players simultaneously.",
-      "Press the Attack (Q) should be used at the START of fights, not when you're already losing — double the aura efficiency for 8 seconds.",
-      "Build Triumph stacks by getting assists too, not just kills. In 5v5 there are enough players that you should hit 10+ stacks in mid game.",
-      "At max stacks, consuming them with Q gives 20 shield to Silas and doubles healing + damage for all nearby teammates. This wins fight flips.",
-      "Pair Silas with Cait or Sheila — the damage aura makes their already strong kits even harder to fight against.",
-    ],
+  {
+    time: "3:00 - 6:00",
+    title: "First real push",
+    text: "Look for armor, upgrades, and a grouped timing. One good pick should become bed pressure.",
   },
-  "Archer Guide": {
-    icon: "🏹",
-    color: "#06b6d4",
-    rgb: "6,182,212",
-    items: [
-      "Archer's biggest S16 advantage is only needing 6 emeralds for the Tactical Crossbow early game — that's insane value per em spent.",
-      "Get the crossbow as your first purchase and start applying ranged pressure immediately — most teams won't have armor yet.",
-      "In 5v5 there are always players crossing bridges or clustering at mid — crossbow shots into groups deal massive early game value.",
-      "Archer is a support-damage role in 5v5, not a solo carry. Stay behind your fighters and apply pressure from range.",
-      "Your job isn't to get kills — it's to chip people below half health so your main jugg can close out fast.",
-      "Late game, bow damage combined with decay from a paired Cait or poison from Lassy is a lethal combination.",
-    ],
+  {
+    time: "6:00 - 10:00",
+    title: "Convert advantage",
+    text: "If you have gear lead, stop farming and start forcing fights. If behind, defend and look for a punish.",
   },
-};
-
-
-const TIMING_ITEMS = [
-  "In 5v5, games move faster with more bodies — prioritize stone sword and blocks immediately at spawn.",
-  "If you have Archer, buy the Tactical Crossbow FIRST (only 6 ems) — it's your best early investment.",
-  "Split 2 mid and 3 base in early game, or 3 mid 2 base depending on comp — never go 5 mid and leave base open.",
-  "Try to get iron armour before guards spawn at 3 minutes — in 5v5 you can die much faster without it.",
-  "Aim for a 5–6 minute t3 timing — whoever hits it first in 5v5 has a massive window to press beds.",
-  "If you get first t3, immediately send grouped pressure with TNT and grouped pushes — don't sit on it.",
-  "Try to get enchants around t3 timing — even one enchant on the main jugg swings fights heavily.",
-  "If running Cait, make sure every contract target is being tracked — don't let contract windows expire.",
-  "Silas should activate damage aura right before every grouped fight — it takes 1 second and is always worth it.",
-  "By 20 minutes after beds break, have at least 1k blocks, 2–3 teslas, and as many fireballs and TNT as possible.",
-  "In late game, stick together as 5 — solo plays in 5v5 get punished far harder than in 4v4.",
-  "Always be aware of which teams still have beds — in 5v5 bed tracking is harder with more teams on the map.",
+  {
+    time: "Late game",
+    title: "Stay disciplined",
+    text: "Beds gone means every death matters. Stack blocks, telepearls, fireballs, and move as a team.",
+  },
 ];
 
-const DRAFT_KITS = [
-  // META S16
-  { name: "Caitlyn", roles: ["juggernaut"] },
-  { name: "Lassy", roles: ["support", "juggernaut"] },
-  { name: "Star Collector", roles: ["support", "economy"] },
-  { name: "Archer", roles: ["support"] },
-  { name: "Silas", roles: ["support", "juggernaut"] },
-  { name: "Noelle", roles: ["defender", "support"] },
-  { name: "Wren", roles: ["defender"] },
-
-  // ECONOMY / CYCLE
-  { name: "Metal Detector", roles: ["economy"] },
-  { name: "Farmer", roles: ["economy"] },
-  { name: "Beekeeper", roles: ["economy"] },
-  { name: "Lucia", roles: ["economy", "juggernaut"] },
-  { name: "Davey", roles: ["economy", "bedbreaker"] },
-  { name: "Fisher", roles: ["defender", "economy"] },
-
-  // MAIN JUGG
-  { name: "Sheila", roles: ["juggernaut"] },
-  { name: "Aery", roles: ["juggernaut"] },
-  { name: "Amy", roles: ["juggernaut", "support"] },
-  { name: "Freya", roles: ["juggernaut", "support"] },
-  { name: "Warden", roles: ["juggernaut"] },
-  { name: "Nyx", roles: ["juggernaut"] },
-  { name: "Grim Reaper", roles: ["juggernaut"] },
-  { name: "Barbarian", roles: ["juggernaut"] },
-
-  // SUPPORT
-  { name: "Umbra", roles: ["support", "bedbreaker"] },
-  { name: "Melody", roles: ["support"] },
-  { name: "Hannah", roles: ["support", "defender"] },
-  { name: "Whisper", roles: ["support"] },
-  { name: "Baker", roles: ["support", "defender"] },
-  { name: "Lani", roles: ["support"] },
-  { name: "Zeno", roles: ["support"] },
-  { name: "Smoke", roles: ["support"] },
-
-  // BED BREAKERS
-  { name: "Ragnar", roles: ["bedbreaker"] },
-  { name: "Dino Tamer", roles: ["bedbreaker"] },
-  { name: "Triton", roles: ["bedbreaker"] },
-
-  // DEFENDER
-  { name: "Marina", roles: ["defender"] },
-  { name: "Zola", roles: ["defender"] },
-
-  // OTHER
-  { name: "Eldertree", roles: ["juggernaut"] },
+const PRACTICE = [
+  {
+    title: "Bridge Pressure",
+    level: "Beginner",
+    text: "Practice crossing, backing off, and baiting hits without falling or wasting blocks.",
+  },
+  {
+    title: "Bed Defense Reactions",
+    level: "Core Skill",
+    text: "Have one person break in while you practice blocking, countering TNT, and calling the angle.",
+  },
+  {
+    title: "5v5 Fight Calls",
+    level: "Advanced",
+    text: "Practice calling one target and collapsing together instead of everyone fighting different players.",
+  },
 ];
 
 function getKit(name) {
-  return DRAFT_KITS.find((k) => k.name === name);
+  return [...META_KITS, ...EXTRA_KITS].find((kit) => kit.name === name);
 }
 
 function evaluateDraft(picks) {
   const chosen = picks.map(getKit).filter(Boolean);
-  const hasRole = (role) => chosen.some((k) => k.roles.includes(role));
+  const has = (role) => chosen.some((kit) => kit.roles.includes(role));
 
-  const hasEconomy = hasRole("economy");
-  const hasJuggernaut = hasRole("juggernaut");
-  const hasSupport = hasRole("support");
-  const hasDefender = hasRole("defender");
+  const hasFrontline = has("Frontline");
+  const hasSupport = has("Support");
+  const hasEconomy = has("Economy");
+  const hasDefender = has("Defender");
+  const hasPressure = has("Bed Breaker") || has("Pressure") || has("Ranged");
 
-  const warnings = [];
+  let score = 0;
+  [hasFrontline, hasSupport, hasEconomy, hasDefender, hasPressure].forEach((ok) => {
+    if (ok) score += 20;
+  });
+
+  const missing = [];
+  if (!hasFrontline) missing.push("frontline");
+  if (!hasSupport) missing.push("support");
+  if (!hasEconomy) missing.push("economy");
+  if (!hasDefender) missing.push("defender");
+  if (!hasPressure) missing.push("bed pressure");
+
   const positives = [];
-  const suggestions = [];
-
-  if (!hasDefender) {
-    warnings.push("No BD detected — add a bed defender.");
-    suggestions.push("Add Noelle, Builder, Fisher, Wren, or Baker.");
+  if (picks.includes("Cait") && picks.includes("Lassy")) {
+    positives.push("Cait + Lassy gives clean pick pressure.");
+  }
+  if (picks.includes("Silas") && picks.includes("Cait")) {
+    positives.push("Silas makes Cait fights easier to win.");
+  }
+  if (picks.includes("Davey") && picks.includes("Umbra")) {
+    positives.push("Davey + Umbra creates strong bed break openings.");
+  }
+  if (picks.includes("Melody") && picks.includes("Warden")) {
+    positives.push("Warden + Melody is strong for long fights.");
+  }
+  if (picks.includes("Metal") || picks.includes("Fisher")) {
+    positives.push("Your build has scaling, so do not waste early lives.");
   }
 
-  if (!hasJuggernaut) {
-    warnings.push("No real frontline detected — early fights will be harder to convert cleanly.");
-    suggestions.push("Add Lucia, Aery, Sheila, Amy, or Warden.");
-  }
-
-  if (!hasEconomy) {
-    warnings.push("No economy slot detected — your comp can fall behind on real gear timings.");
-    suggestions.push("Add Beekeeper, Farmer, Metal Detector, or Lucia.");
-  }
-
-  if (!hasSupport) {
-    warnings.push("No support slot detected — your team loses sustain, intel, or cleaner commit help.");
-    suggestions.push("Add Whisper, Baker, Star Collector, or Umbra.");
-  }
-
-  if (picks.includes("Lucia") && picks.includes("Whisper")) {
-    positives.push("Lucia + Whisper = strong macro pressure core and very good duo-q combo.");
-  }
-
-  if (picks.includes("Umbra") && picks.includes("Whisper")) {
-    positives.push("Umbra + Whisper = cleaner engage timing and better pressure setup.");
-  }
-
-  if (picks.includes("Lucia") && picks.includes("Baker")) {
-    positives.push("Lucia + Baker = safe scaling core with cleaner resets.");
-  }
-
-  if (picks.includes("Warden") && picks.includes("Lani")) {
-    positives.push("Warden + Lani = strong bypass pressure duo.");
-  }
-
-  if (hasEconomy && hasJuggernaut && hasSupport && hasDefender) {
-    positives.push("Comp check passed — all core roles are covered.");
+  let verdict = "Risky";
+  let verdictText = "This build can work, but it is missing important 5v5 structure.";
+  if (score >= 100) {
+    verdict = "Elite";
+    verdictText = "This is a balanced 5v5 build with pressure, scaling, and defense.";
+  } else if (score >= 80) {
+    verdict = "Strong";
+    verdictText = "This build is good, but one role could still be cleaner.";
+  } else if (score >= 60) {
+    verdict = "Playable";
+    verdictText = "This can win, but you need to play carefully around the missing role.";
   }
 
   return {
-    hasEconomy,
-    hasJuggernaut,
-    hasSupport,
-    hasDefender,
-    warnings,
+    score,
+    verdict,
+    verdictText,
+    missing,
     positives,
-    suggestions: [...new Set(suggestions)],
+    roles: {
+      Frontline: hasFrontline,
+      Support: hasSupport,
+      Economy: hasEconomy,
+      Defender: hasDefender,
+      Pressure: hasPressure,
+    },
   };
 }
 
-
-const COUNTERS = [
-  {
-    target: "Double Cait",
-    icon: "☠️",
-    color: "#2f6bff",
-    rgb: "47,107,255",
-    strategies: [
-      "Don't let Cait tag your economy kits — keep Metal and Fisher behind the group",
-      "Apply static effects (lightning enchant, etc.) to reduce decay healing from Dark Insight",
-      "Burst Cait down before she completes contracts — she scales every kill",
-      "Use Lassy to pull Cait out of position before she can finish a tag",
-    ],
-    recommended: ["Lassy", "Noelle", "Wren", "Umbra"],
-    avoid: ["Letting Cait tag your support kits", "Extended fights where decay stacks up"]
-  },
-  {
-    target: "Double Melody",
-    icon: "🎵",
-    color: "#10b981",
-    rgb: "16,185,129",
-    strategies: [
-      "Apply static enchant — it prevents Melody's healing from ticking during static effect",
-      "Force split fights so not all 5 players are inside both Melody heal ranges",
-      "Focus the Warden first — removing their frontline collapses the comp",
-      "Burst fast and hard. Double Melody wins prolonged fights — don't give them time.",
-    ],
-    recommended: ["Caitlyn", "Archer", "Silas", "Lassy"],
-    avoid: ["Extended grind fights", "Letting their whole team stack together"]
-  },
-  {
-    target: "Double Umbra BB",
-    icon: "💥",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    strategies: [
-      "HAVE COUNTER TNT — Davey needs an opening and your base needs to survive it",
-      "Stack beds with obsidian layers and keep Noelle or Wren on base at all times",
-      "Track Umbra ults — both Umbras can't ult at the same time, there's always a window",
-      "Counter-pressure with your own BB to force them to split attention",
-    ],
-    recommended: ["Noelle", "Wren", "Baker", "Hannah"],
-    avoid: ["Leaving base undefended", "Ignoring Davey's position"]
-  },
-];
-
-
-/* ─── PRACTICE DRILLS ─── */
-const PRACTICE = [
-  {
-    name: "Bed Defense",
-    icon: "🛡️",
-    difficulty: "Beginner",
-    color: "#10b981",
-    rgb: "16,185,129",
-    description: "Practice defending your bed against different attack angles",
-    drills: [
-      "Place 10 beds in different positions",
-      "Defend against fireball + sword combos",
-      "Practice pillar jumping defense",
-      "Test different block placements"
-    ],
-    tips: ["Always have blocks ready", "Stay calm under pressure", "Use elevation to your advantage"]
-  },
-  {
-    name: "Generator Control",
-    icon: "⚡",
-    difficulty: "Intermediate",
-    color: "#3b82f6",
-    rgb: "59,130,246",
-    description: "Learn to control and upgrade generators effectively",
-    drills: [
-      "Time generator upgrades perfectly",
-      "Practice stealing enemy gens",
-      "Defend your gen while upgrading",
-      "Coordinate gen control with team"
-    ],
-    tips: ["Know upgrade costs", "Time upgrades with fights", "Protect your gen at all costs"]
-  },
-  {
-    name: "Team Coordination",
-    icon: "🤝",
-    difficulty: "Advanced",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    description: "Master team communication and positioning",
-    drills: [
-      "Practice calling out enemy positions",
-      "Coordinate group fights",
-      "Learn to rotate as a team",
-      "Master bed break timing"
-    ],
-    tips: ["Use voice chat effectively", "Know your roles", "Trust your team"]
-  }
-];
-
-/* ─── SNOW ─── */
-function SnowLayer({ dark }) {
-  const flakes = useMemo(
-    () =>
-      Array.from({ length: 34 }, (_, i) => ({
-        id: i,
-        left: `${(i * 2.9 + (i % 7) * 11) % 100}%`,
-        size: 4 + (i % 4),
-        duration: 8 + (i % 6) * 1.2,
-        delay: (i % 10) * 0.8,
-        opacity: dark ? 0.9 : 0.7,
-      })),
-    [dark]
-  );
-
+function SectionHeader({ eyebrow, title, text }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        pointerEvents: "none",
-        overflow: "hidden",
-        zIndex: 1,
-      }}
-    >
-      {flakes.map((flake) => (
-        <span
-          key={flake.id}
-          style={{
-            position: "absolute",
-            left: flake.left,
-            top: -20,
-            width: flake.size,
-            height: flake.size,
-            borderRadius: "50%",
-            background: dark ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.9)",
-            filter: `blur(${flake.size > 4 ? 0.6 : 0}px)`,
-            opacity: flake.opacity,
-            animation: `snow-fall ${flake.duration}s linear ${flake.delay}s infinite, snow-sway ${3.6 + (flake.id % 5)}s ease-in-out ${flake.delay}s infinite`,
-          }}
-        />
-      ))}
+    <div className="sectionHeader">
+      <div className="eyebrow">{eyebrow}</div>
+      <h2>{title}</h2>
+      {text && <p>{text}</p>}
     </div>
   );
 }
 
-/* ─── BACKGROUND LIGHTS ─── */
-function Ambient({ dark }) {
+function StatCard({ label, value }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        pointerEvents: "none",
-        zIndex: 0,
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          width: "46vw",
-          height: "46vw",
-          maxWidth: 420,
-          maxHeight: 420,
-          borderRadius: "50%",
-          top: "-8%",
-          left: "-10%",
-          background: dark
-            ? "radial-gradient(circle, rgba(47,107,255,0.14) 0%, transparent 72%)"
-            : "radial-gradient(circle, rgba(0,0,0,0.08) 0%, transparent 72%)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          width: "34vw",
-          height: "34vw",
-          maxWidth: 320,
-          maxHeight: 320,
-          borderRadius: "50%",
-          top: "14%",
-          right: "-6%",
-          background: dark
-            ? "radial-gradient(circle, rgba(139,92,246,0.11) 0%, transparent 72%)"
-            : "radial-gradient(circle, rgba(0,0,0,0.055) 0%, transparent 72%)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          width: "40vw",
-          height: "40vw",
-          maxWidth: 360,
-          maxHeight: 360,
-          borderRadius: "50%",
-          bottom: "-6%",
-          right: "6%",
-          background: dark
-            ? "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 75%)"
-            : "radial-gradient(circle, rgba(0,0,0,0.045) 0%, transparent 75%)",
-        }}
-      />
+    <div className="statCard">
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }
 
-/* ─── FEATURE STRIP ─── */
-function FeaturedStrip({ dark }) {
-  const items = [
-    { label: "Season 16 meta", value: "5v5 comps" },
-    { label: "Role clarity", value: "Less chaos" },
-    { label: "Win plans", value: "Better converts" },
+function Hero({ setTab }) {
+  return (
+    <section className="hero">
+      <div className="heroBadge">
+        <span className="liveDot" />
+        Live Season 16 5v5 Meta
+      </div>
+
+      <h1>
+        Build better teams.
+        <br />
+        Win cleaner fights.
+      </h1>
+
+      <p>
+        A premium BedWars 5v5 meta hub for builds, drafting, roles, counters,
+        timing plans, and practice routines.
+      </p>
+
+      <div className="heroActions">
+        <button onClick={() => setTab("meta")} className="primaryBtn">
+          View 5v5 Meta
+        </button>
+        <button onClick={() => setTab("draft")} className="ghostBtn">
+          Test Your Draft
+        </button>
+      </div>
+
+      <div className="statsGrid">
+        <StatCard label="Format" value="5v5" />
+        <StatCard label="Season" value="S16" />
+        <StatCard label="Focus" value="Teamplay" />
+      </div>
+    </section>
+  );
+}
+
+function BuildCard({ build }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <article className={`buildCard ${open ? "open" : ""}`}>
+      <button className="buildTop" onClick={() => setOpen((v) => !v)}>
+        <div className="buildIcon" style={{ background: build.gradient }}>
+          {build.icon}
+        </div>
+
+        <div className="buildTitle">
+          <span style={{ color: build.accent }}>{build.tag}</span>
+          <h3>{build.name}</h3>
+        </div>
+
+        <div className="expand">{open ? "−" : "+"}</div>
+      </button>
+
+      <p className="buildWhy">{build.why}</p>
+
+      <div className="buildDetails">
+        <InfoBlock label="Early Plan" text={build.early} />
+        <InfoBlock label="Mid Game Plan" text={build.mid} />
+        <InfoBlock label="Win Condition" text={build.win} />
+        <InfoBlock label="Best Into" text={build.bestInto} />
+        <InfoBlock label="Weakness" text={build.weakness} danger />
+      </div>
+    </article>
+  );
+}
+
+function InfoBlock({ label, text, danger }) {
+  return (
+    <div className={danger ? "infoBlock danger" : "infoBlock"}>
+      <span>{label}</span>
+      <p>{text}</p>
+    </div>
+  );
+}
+
+function MetaSection() {
+  return (
+    <section className="section">
+      <SectionHeader
+        eyebrow="Top Builds"
+        title="Season 16 5v5 Meta"
+        text="Clean team builds with a real plan instead of random kit stacking."
+      />
+
+      <div className="buildGrid">
+        {META_BUILDS.map((build) => (
+          <BuildCard key={build.name} build={build} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DraftBuilder() {
+  const [showMore, setShowMore] = useState(false);
+  const [roleFilter, setRoleFilter] = useState("All");
+  const [picks, setPicks] = useState(["Cait", "Lassy", "Star", "Metal", "Noelle"]);
+
+  const kits = showMore ? [...META_KITS, ...EXTRA_KITS] : META_KITS;
+  const filteredKits =
+    roleFilter === "All"
+      ? kits
+      : kits.filter((kit) => kit.roles.includes(roleFilter));
+
+  const result = useMemo(() => evaluateDraft(picks), [picks]);
+
+  const updatePick = (index, value) => {
+    setPicks((old) => old.map((pick, i) => (i === index ? value : pick)));
+  };
+
+  const roleFilters = [
+    "All",
+    "Frontline",
+    "Support",
+    "Economy",
+    "Defender",
+    "Bed Breaker",
+    "Ranged",
   ];
 
   return (
-    <div
-      style={{
-        marginTop: 28,
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-        gap: 10,
-        width: "100%",
-        maxWidth: 760,
-        marginInline: "auto",
-      }}
-    >
-      {items.map((item) => (
-        <div
-          key={item.label}
-          style={{
-            borderRadius: 18,
-            padding: "15px 16px",
-            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.86)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            boxShadow: dark ? "0 10px 24px rgba(0,0,0,0.2)" : "0 10px 22px rgba(0,0,0,0.05)",
-            textAlign: "left",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 10,
-              fontWeight: 800,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              fontFamily: "'JetBrains Mono', monospace",
-              color: dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)",
-              marginBottom: 6,
-            }}
-          >
-            {item.label}
-          </div>
-          <div
-            style={{
-              fontSize: 16,
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              color: dark ? "#ffffff" : "#3b82f6",
-            }}
-          >
-            {item.value}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ─── DRAFT BUILDER SECTION ─── */
-function DraftBuilderSection({ dark }) {
-  const [pick1, setPick1] = useState("Caitlyn");
-  const [pick2, setPick2] = useState("Lassy");
-  const [pick3, setPick3] = useState("Star Collector");
-  const [pick4, setPick4] = useState("Metal Detector");
-  const [pick5, setPick5] = useState("Noelle");
-
-  const picks = [pick1, pick2, pick3, pick4, pick5];
-  const result = useMemo(() => evaluateDraft(picks), [pick1, pick2, pick3, pick4, pick5]);
-
-  const rolePill = (ok) => ({
-    fontSize: 11,
-    fontWeight: 800,
-    padding: "7px 10px",
-    borderRadius: 999,
-    border: `1px solid ${ok ? "rgba(16,185,129,0.26)" : "rgba(239,68,68,0.22)"}`,
-    background: ok ? "rgba(16,185,129,0.10)" : "rgba(239,68,68,0.08)",
-    color: ok ? "#10b981" : "#ef4444",
-    letterSpacing: "0.04em",
-    textTransform: "uppercase",
-    fontFamily: "'JetBrains Mono', monospace",
-  });
-
-  return (
-    <div
-      style={{
-        borderRadius: 24,
-        background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-        border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        overflow: "hidden",
-        boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
-      }}
-    >
-      <div
-        style={{
-          padding: "13px 18px 12px",
-          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-          display: "flex",
-          alignItems: "center",
-          gap: 9,
-        }}
-      >
-        <div
-          style={{
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            background: "#06b6d4",
-            boxShadow: "0 0 10px #06b6d4",
-          }}
-        />
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 800,
-            letterSpacing: "0.1em",
-            color: "#06b6d4",
-            fontFamily: "'JetBrains Mono', monospace",
-          }}
-        >
-          DRAFT BUILDER
-        </span>
-      </div>
-
-      <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 14 }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-            gap: 10,
-          }}
-        >
-          {[pick1, pick2, pick3, pick4, pick5].map((value, i) => (
-            <select
-              key={i}
-              value={value}
-              onChange={(e) => {
-                const v = e.target.value;
-                if (i === 0) setPick1(v);
-                if (i === 1) setPick2(v);
-                if (i === 2) setPick3(v);
-                if (i === 3) setPick4(v);
-                if (i === 4) setPick5(v);
-              }}
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                borderRadius: 12,
-                border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
-                background: dark ? "#111827" : "#ffffff",
-                color: dark ? "#ffffff" : "#111827",
-                fontSize: 14,
-                outline: "none",
-              }}
-            >
-                          {[...DRAFT_KITS]
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((kit) => (
-                <option key={kit.name} value={kit.name}>
-                  {kit.name}
-                </option>
-            ))}
-            </select>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          <span style={rolePill(result.hasEconomy)}>Economy {result.hasEconomy ? "✓" : "✕"}</span>
-          <span style={rolePill(result.hasJuggernaut)}>Juggernaut {result.hasJuggernaut ? "✓" : "✕"}</span>
-          <span style={rolePill(result.hasSupport)}>Support {result.hasSupport ? "✓" : "✕"}</span>
-          <span style={rolePill(result.hasDefender)}>BD {result.hasDefender ? "✓" : "✕"}</span>
-        </div>
-
-        {result.positives.map((item, i) => (
-          <div
-            key={`p-${i}`}
-            style={{
-              borderRadius: 15,
-              padding: "12px 14px",
-              background: "rgba(16,185,129,0.08)",
-              border: "1px solid rgba(16,185,129,0.18)",
-              color: "#10b981",
-              fontSize: 13.3,
-              lineHeight: 1.65,
-            }}
-          >
-            ✔ {item}
-          </div>
-        ))}
-
-        {result.warnings.map((item, i) => (
-          <div
-            key={`w-${i}`}
-            style={{
-              borderRadius: 15,
-              padding: "12px 14px",
-              background: "rgba(239,68,68,0.08)",
-              border: "1px solid rgba(239,68,68,0.18)",
-              color: "#ef4444",
-              fontSize: 13.3,
-              lineHeight: 1.65,
-            }}
-          >
-            ⚠ {item}
-          </div>
-        ))}
-
-        {result.suggestions.length > 0 && (
-          <div
-            style={{
-              borderRadius: 15,
-              padding: "12px 14px",
-              background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
-              color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
-              fontSize: 13.3,
-              lineHeight: 1.65,
-            }}
-          >
-            <strong style={{ color: dark ? "#fff" : "#0f0f10" }}>Suggested fixes:</strong> {result.suggestions.join(" ")}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ─── COMP CARD ─── */
-function CompCard({ comp, dark, isFavorite, onToggleFavorite }) {
-  const [open, setOpen] = useState(false);
-
-  const handleFavoriteClick = (e) => {
-    e.stopPropagation();
-    onToggleFavorite();
-  };
-
-  return (
-    <div
-      className="compCard"
-      onClick={() => setOpen((o) => !o)}
-      style={{
-        borderRadius: 24,
-        background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-        border: `1px solid ${
-          open
-            ? `rgba(${comp.rgb},0.34)`
-            : dark
-            ? "rgba(255,255,255,0.08)"
-            : "rgba(0,0,0,0.08)"
-        }`,
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        boxShadow: open
-          ? dark
-            ? `0 18px 44px rgba(0,0,0,0.34), 0 0 0 1px rgba(${comp.rgb},0.08)`
-            : `0 14px 38px rgba(0,0,0,0.08), 0 0 0 1px rgba(${comp.rgb},0.08)`
-          : dark
-          ? "0 10px 30px rgba(0,0,0,0.24)"
-          : "0 10px 26px rgba(0,0,0,0.05)",
-        cursor: "pointer",
-        overflow: "hidden",
-        transition: "0.28s ease",
-        userSelect: "none",
-        WebkitTapHighlightColor: "transparent",
-      }}
-    >
-      <div
-        style={{
-          height: 3,
-          background: `linear-gradient(90deg, transparent 0%, ${comp.color} 50%, transparent 100%)`,
-          opacity: open ? 1 : 0.52,
-          transition: "opacity 0.3s ease",
-        }}
+    <section className="section">
+      <SectionHeader
+        eyebrow="Draft Builder"
+        title="Check if your 5v5 team makes sense"
+        text="Pick five kits and the site checks your roles, pressure, and weak spots."
       />
-      <div style={{ padding: "22px 20px 20px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 16,
-              flexShrink: 0,
-              background: `linear-gradient(135deg, rgba(${comp.rgb},0.2), rgba(${comp.rgb},0.08))`,
-              border: `1px solid rgba(${comp.rgb},0.22)`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 21,
-              boxShadow: `inset 0 1px 0 rgba(255,255,255,0.12)`,
-            }}
-          >
-            {comp.icon}
-          </div>
 
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div
-              style={{
-                fontSize: 10,
-                fontWeight: 800,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: comp.color,
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: 4,
-              }}
-            >
-              {comp.short}
+      <div className="draftShell">
+        <div className="draftPanel">
+          <div className="draftTop">
+            <div>
+              <span className="miniLabel">Your Team</span>
+              <h3>5 Kit Draft</h3>
             </div>
-            <div
-              style={{
-                fontSize: 15,
-                fontWeight: 800,
-                lineHeight: 1.25,
-                color: dark ? "#f8f8fb" : "#0f0f10",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {comp.name}
-            </div>
-          </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <button
-              onClick={handleFavoriteClick}
-              style={{
-                width: 32,
-                height: 32,
-                flexShrink: 0,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                color: isFavorite ? "#f59e0b" : (dark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"),
-                fontSize: 16,
-                transition: "all 0.2s ease",
-              }}
-            >
-              {isFavorite ? "⭐" : "☆"}
+            <button className="smallBtn" onClick={() => setShowMore((v) => !v)}>
+              {showMore ? "Show Meta Only" : "Show More Kits"}
             </button>
-
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                flexShrink: 0,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
-                color: dark ? "rgba(255,255,255,0.46)" : "rgba(0,0,0,0.4)",
-              }}
-            >
-              <ChevronIcon open={open} />
-            </div>
           </div>
-        </div>
 
-        <p
-          style={{
-            margin: "14px 0 0",
-            fontSize: 13.4,
-            lineHeight: 1.7,
-            color: dark ? "rgba(255,255,255,0.52)" : "rgba(0,0,0,0.56)",
-          }}
-        >
-          {comp.why}
-        </p>
-
-        <div
-          style={{
-            overflow: "hidden",
-            maxHeight: open ? 900 : 0,
-            opacity: open ? 1 : 0,
-            transition:
-              "max-height 0.45s cubic-bezier(0.32,0.72,0,1), opacity 0.25s ease",
-          }}
-        >
-          <div style={{ paddingTop: 14, display: "flex", flexDirection: "column", gap: 9 }}>
-            {[
-              { label: "Use when", text: comp.useWhen, icon: "🎯" },
-              { label: "Early", text: comp.early, icon: "⚡" },
-              { label: "Mid", text: comp.mid, icon: "🔄" },
-              { label: "Win condition", text: comp.win, icon: "🏆" },
-            ].map((p) => (
-              <div
-                key={p.label}
-                style={{
-                  borderRadius: 15,
-                  padding: "12px 14px",
-                  background: dark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.024)",
-                  border: `1px solid ${
-                    dark ? "rgba(255,255,255,0.055)" : "rgba(0,0,0,0.055)"
-                  }`,
-                }}
+          <div className="roleFilters">
+            {roleFilters.map((role) => (
+              <button
+                key={role}
+                onClick={() => setRoleFilter(role)}
+                className={roleFilter === role ? "filter active" : "filter"}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
-                  <span style={{ fontSize: 12 }}>{p.icon}</span>
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      letterSpacing: "0.14em",
-                      textTransform: "uppercase",
-                      color: comp.color,
-                      fontFamily: "'JetBrains Mono', monospace",
-                    }}
-                  >
-                    {p.label}
-                  </span>
-                </div>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: 13,
-                    lineHeight: 1.68,
-                    color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
-                  }}
-                >
-                  {p.text}
-                </p>
-              </div>
+                {role}
+              </button>
+            ))}
+          </div>
+
+          <div className="pickGrid">
+            {picks.map((pick, index) => (
+              <label key={index} className="pickBox">
+                <span>Slot {index + 1}</span>
+                <select value={pick} onChange={(e) => updatePick(index, e.target.value)}>
+                  {filteredKits.map((kit) => (
+                    <option key={kit.name} value={kit.name}>
+                      {kit.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
             ))}
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
 
-/* ─── COUNTERS SECTION ─── */
-function CountersSection({ dark }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      {COUNTERS.map((counter, i) => (
-        <div
-          key={i}
-          style={{
-            borderRadius: 22,
-            padding: "20px",
-            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-            <span style={{ fontSize: 24 }}>{counter.icon}</span>
-            <h3 style={{
-              margin: 0,
-              fontSize: 18,
-              fontWeight: 700,
-              color: dark ? "#ffffff" : "#3b82f6"
-            }}>
-              Countering {counter.target}
-            </h3>
-          </div>
-
-          <div style={{ marginBottom: 16 }}>
-            <h4 style={{
-              margin: "0 0 8px 0",
-              fontSize: 14,
-              fontWeight: 700,
-              color: dark ? "#ffffff" : "#3b82f6"
-            }}>
-              Strategies
-            </h4>
-            <ul style={{
-              margin: 0,
-              paddingLeft: 20,
-              fontSize: 13,
-              lineHeight: 1.6,
-              color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)"
-            }}>
-              {counter.strategies.map((strat, j) => (
-                <li key={j}>{strat}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div style={{ display: "flex", gap: 12 }}>
-            <div style={{ flex: 1 }}>
-              <h4 style={{
-                margin: "0 0 8px 0",
-                fontSize: 12,
-                fontWeight: 700,
-                color: "#10b981",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px"
-              }}>
-                Recommended
-              </h4>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                {counter.recommended.map((rec, j) => (
-                  <span key={j} style={{
-                    fontSize: 11,
-                    padding: "4px 8px",
-                    background: "rgba(16,185,129,0.1)",
-                    border: "1px solid rgba(16,185,129,0.2)",
-                    borderRadius: 8,
-                    color: "#10b981"
-                  }}>
-                    {rec}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ flex: 1 }}>
-              <h4 style={{
-                margin: "0 0 8px 0",
-                fontSize: 12,
-                fontWeight: 700,
-                color: "#ef4444",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px"
-              }}>
-                Avoid
-              </h4>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                {counter.avoid.map((avoid, j) => (
-                  <span key={j} style={{
-                    fontSize: 11,
-                    padding: "4px 8px",
-                    background: "rgba(239,68,68,0.1)",
-                    border: "1px solid rgba(239,68,68,0.2)",
-                    borderRadius: 8,
-                    color: "#ef4444"
-                  }}>
-                    {avoid}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ─── PRACTICE SECTION ─── */
-function PracticeSection({ dark }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      {PRACTICE.map((drill, i) => (
-        <div
-          key={i}
-          style={{
-            borderRadius: 22,
-            padding: "20px",
-            background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow: dark ? "0 10px 28px rgba(0,0,0,0.22)" : "0 10px 24px rgba(0,0,0,0.05)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 24 }}>{drill.icon}</span>
-              <div>
-                <h3 style={{
-                  margin: 0,
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: dark ? "#ffffff" : "#3b82f6",
-                  marginBottom: 4
-                }}>
-                  {drill.name}
-                </h3>
-                <span style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: drill.color,
-                  background: `rgba(${drill.rgb},0.1)`,
-                  padding: "2px 8px",
-                  borderRadius: 12,
-                  border: `1px solid rgba(${drill.rgb},0.2)`
-                }}>
-                  {drill.difficulty}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <p style={{
-            margin: "0 0 16px 0",
-            fontSize: 14,
-            lineHeight: 1.5,
-            color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)"
-          }}>
-            {drill.description}
-          </p>
-
-          <div style={{ marginBottom: 16 }}>
-            <h4 style={{
-              margin: "0 0 8px 0",
-              fontSize: 14,
-              fontWeight: 700,
-              color: dark ? "#ffffff" : "#3b82f6"
-            }}>
-              Practice Drills
-            </h4>
-            <ul style={{
-              margin: 0,
-              paddingLeft: 20,
-              fontSize: 13,
-              lineHeight: 1.6,
-              color: dark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)"
-            }}>
-              {drill.drills.map((d, j) => (
-                <li key={j}>{d}</li>
-              ))}
-            </ul>
+        <div className="draftResult">
+          <div className="scoreCircle">
+            <strong>{result.score}</strong>
+            <span>/100</span>
           </div>
 
           <div>
-            <h4 style={{
-              margin: "0 0 8px 0",
-              fontSize: 12,
-              fontWeight: 700,
-              color: "#3b82f6",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px"
-            }}>
-              Pro Tips
-            </h4>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-              {drill.tips.map((tip, j) => (
-                <span key={j} style={{
-                  fontSize: 11,
-                  padding: "4px 8px",
-                  background: "rgba(59,130,246,0.1)",
-                  border: "1px solid rgba(59,130,246,0.2)",
-                  borderRadius: 8,
-                  color: "#3b82f6"
-                }}>
-                  {tip}
-                </span>
+            <span className="miniLabel">Verdict</span>
+            <h3>{result.verdict}</h3>
+            <p>{result.verdictText}</p>
+          </div>
+
+          <div className="roleCheckGrid">
+            {Object.entries(result.roles).map(([role, ok]) => (
+              <div key={role} className={ok ? "roleCheck ok" : "roleCheck bad"}>
+                <span>{ok ? "✓" : "!"}</span>
+                {role}
+              </div>
+            ))}
+          </div>
+
+          {result.missing.length > 0 && (
+            <div className="warningBox">
+              <strong>Fix this:</strong> Add {result.missing.join(", ")}.
+            </div>
+          )}
+
+          {result.positives.length > 0 && (
+            <div className="positiveList">
+              {result.positives.map((item) => (
+                <p key={item}>✓ {item}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RolesSection() {
+  return (
+    <section className="section">
+      <SectionHeader
+        eyebrow="Role Guide"
+        title="Know what every slot is supposed to do"
+        text="The best 5v5 teams usually cover pressure, scaling, sustain, and bed safety."
+      />
+
+      <div className="roleGrid">
+        {ROLE_GUIDE.map((role) => (
+          <div className="roleCard" key={role.role}>
+            <div className="roleIcon">{role.icon}</div>
+            <h3>{role.role}</h3>
+            <p>{role.job}</p>
+            <div className="kitTags">
+              {role.kits.map((kit) => (
+                <span key={kit}>{kit}</span>
               ))}
             </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
-/* ─── GUIDES SECTION ─── */
-function GuidesSection({ dark }) {
-  const [active, setActive] = useState("Win Checklist");
-  const guide = GUIDES[active];
-
+function CountersSection() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          overflowX: "auto",
-          paddingBottom: 2,
-          scrollbarWidth: "none",
-          WebkitOverflowScrolling: "touch",
-        }}
-      >
-        {Object.keys(GUIDES).map((name) => {
-          const g = GUIDES[name];
-          const isA = name === active;
-          return (
-            <button
-              key={name}
-              onClick={() => setActive(name)}
-              style={{
-                flexShrink: 0,
-                padding: "8px 15px",
-                borderRadius: 999,
-                border: isA
-                  ? `1.5px solid rgba(${g.rgb},0.34)`
-                  : `1px solid ${dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)"}`,
-                background: isA
-                  ? dark
-                    ? `rgba(${g.rgb},0.15)`
-                    : `rgba(${g.rgb},0.08)`
-                  : dark
-                  ? "rgba(255,255,255,0.04)"
-                  : "rgba(255,255,255,0.72)",
-                cursor: "pointer",
-                fontSize: 12,
-                fontWeight: 800,
-                fontFamily: "'Inter', sans-serif",
-                color: isA ? g.color : dark ? "rgba(255,255,255,0.48)" : "rgba(0,0,0,0.55)",
-                transition: "all 0.22s",
-                WebkitTapHighlightColor: "transparent",
-                boxShadow: isA
-                  ? dark
-                    ? "0 6px 20px rgba(0,0,0,0.22)"
-                    : "0 6px 18px rgba(0,0,0,0.05)"
-                  : "none",
-              }}
-            >
-              {g.icon} {name}
-            </button>
-          );
-        })}
-      </div>
+    <section className="section">
+      <SectionHeader
+        eyebrow="Counters"
+        title="How to play into annoying builds"
+        text="Simple answers for the most common 5v5 problems."
+      />
 
-      <div
-        style={{
-          borderRadius: 24,
-          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          overflow: "hidden",
-          boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
-        }}
-      >
-        <div
-          style={{
-            padding: "13px 18px 12px",
-            borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-            display: "flex",
-            alignItems: "center",
-            gap: 9,
-          }}
-        >
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: guide.color,
-              boxShadow: `0 0 10px rgba(${guide.rgb},0.45)`,
-            }}
-          />
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.1em",
-              color: guide.color,
-              fontFamily: "'JetBrains Mono', monospace",
-            }}
-          >
-            {active.toUpperCase()}
-          </span>
-        </div>
+      <div className="counterGrid">
+        {COUNTERS.map((counter) => (
+          <div className="counterCard" key={counter.title}>
+            <div className="counterIcon">{counter.icon}</div>
+            <h3>{counter.title}</h3>
+            <p>{counter.plan}</p>
 
-        <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
-          {guide.items.map((item, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                gap: 12,
-                alignItems: "flex-start",
-                borderRadius: 15,
-                padding: "12px 14px",
-                background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
-              }}
-            >
-              <div
-                style={{
-                  flexShrink: 0,
-                  width: 28,
-                  height: 28,
-                  borderRadius: 9,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 11,
-                  fontWeight: 800,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  background: `rgba(${guide.rgb},0.12)`,
-                  color: guide.color,
-                  border: `1px solid rgba(${guide.rgb},0.22)`,
-                }}
-              >
-                {i + 1}
-              </div>
-              <p
-                style={{
-                  margin: 0,
-                  paddingTop: 2,
-                  fontSize: 13.4,
-                  lineHeight: 1.68,
-                  color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
-                }}
-              >
-                {item}
-              </p>
+            <div className="miniLabel">Good Answers</div>
+            <div className="kitTags">
+              {counter.good.map((kit) => (
+                <span key={kit}>{kit}</span>
+              ))}
             </div>
-          ))}
-        </div>
+
+            <div className="avoidBox">
+              <strong>Avoid:</strong> {counter.avoid}
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
 
-/* ─── TIMING SECTION ─── */
-function TimingSection({ dark }) {
+function TimingSection() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      <div
-        style={{
-          borderRadius: 24,
-          background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-          border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          overflow: "hidden",
-          boxShadow: dark ? "0 12px 34px rgba(0,0,0,0.24)" : "0 12px 32px rgba(0,0,0,0.05)",
-        }}
-      >
-        <div
-          style={{
-            padding: "13px 18px 12px",
-            borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-            display: "flex",
-            alignItems: "center",
-            gap: 9,
-          }}
-        >
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: "#06b6d4",
-              boxShadow: "0 0 10px #06b6d4",
-            }}
-          />
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.1em",
-              color: "#06b6d4",
-              fontFamily: "'JetBrains Mono', monospace",
-            }}
-          >
-            GAME TIMING
-          </span>
-        </div>
+    <section className="section">
+      <SectionHeader
+        eyebrow="Timing Plan"
+        title="What you should be doing during the match"
+        text="Use this as a quick mental checklist so your team does not waste the best windows."
+      />
 
-        <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
-          {TIMING_ITEMS.map((item, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                gap: 12,
-                alignItems: "flex-start",
-                borderRadius: 15,
-                padding: "12px 14px",
-                background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.022)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-              }}
-            >
-              <div
-                style={{
-                  flexShrink: 0,
-                  width: 28,
-                  height: 28,
-                  borderRadius: 9,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 11,
-                  fontWeight: 800,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  background: "rgba(6,182,212,0.12)",
-                  color: "#06b6d4",
-                  border: "1px solid rgba(6,182,212,0.22)",
-                }}
-              >
-                {i + 1}
-              </div>
-              <p
-                style={{
-                  margin: 0,
-                  paddingTop: 2,
-                  fontSize: 13.4,
-                  lineHeight: 1.68,
-                  color: dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.62)",
-                }}
-              >
-                {item}
-              </p>
+      <div className="timeline">
+        {TIMING.map((item) => (
+          <div className="timeCard" key={item.time}>
+            <div className="timeStamp">{item.time}</div>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
 
-/* ─── TAB BAR ─── */
-function TabBar({ tab, setTab, dark }) {
+function PracticeSection() {
+  return (
+    <section className="section">
+      <SectionHeader
+        eyebrow="Practice"
+        title="Drills that actually improve your gamesense"
+        text="Short routines for cleaner movement, better calls, and faster reactions."
+      />
+
+      <div className="practiceGrid">
+        {PRACTICE.map((drill) => (
+          <div className="practiceCard" key={drill.title}>
+            <span>{drill.level}</span>
+            <h3>{drill.title}</h3>
+            <p>{drill.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function BottomNav({ tab, setTab }) {
   const tabs = [
-    { key: "comps",  label: "Comps",  icon: "⚔️" },
-    { key: "draft", label: "Draft", icon: "🧠" },
-    { key: "counters", label: "Counters", icon: "🛡️" },
-    { key: "practice", label: "Practice", icon: "🎯" },
-    { key: "guides", label: "Guides", icon: "📋" },
-    { key: "timing", label: "Game Timing", icon: "⏱️" },
+    { key: "home", label: "Home", icon: "⌂" },
+    { key: "meta", label: "5v5 Meta", icon: "◆" },
+    { key: "draft", label: "Draft", icon: "◎" },
+    { key: "roles", label: "Roles", icon: "⬡" },
+    { key: "more", label: "More", icon: "⋯" },
   ];
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 200,
-        background: dark ? "rgba(10,10,14,0.88)" : "rgba(255,255,255,0.82)",
-        backdropFilter: "blur(30px)",
-        WebkitBackdropFilter: "blur(30px)",
-        borderTop: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-        display: "flex",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
-      }}
-    >
-      {tabs.map((t) => {
-        const isA = t.key === tab;
-        return (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            style={{
-              flex: 1,
-              border: "none",
-              background: "none",
-              cursor: "pointer",
-              padding: "10px 0 12px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 3,
-              WebkitTapHighlightColor: "transparent",
-            }}
-          >
-            <span style={{ fontSize: 21, lineHeight: 1 }}>{t.icon}</span>
-            <span
-              style={{
-                fontSize: 10,
-                fontWeight: isA ? 800 : 600,
-                color: isA ? (dark ? "#ffffff" : "#3b82f6") : dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.4)",
-                letterSpacing: isA ? "0.01em" : 0,
-              }}
-            >
-              {t.label}
-            </span>
-            {isA && (
-              <div
-                style={{
-                  marginTop: 2,
-                  width: 20,
-                  height: 3,
-                  borderRadius: 999,
-                  background: dark ? "#ffffff" : "#3b82f6",
-                }}
-              />
-            )}
-          </button>
-        );
-      })}
-    </div>
+    <nav className="bottomNav">
+      {tabs.map((item) => (
+        <button
+          key={item.key}
+          onClick={() => setTab(item.key)}
+          className={tab === item.key ? "navItem active" : "navItem"}
+        >
+          <span>{item.icon}</span>
+          {item.label}
+        </button>
+      ))}
+    </nav>
   );
 }
 
-/* ─── MAIN ─── */
 export default function App() {
   useFonts();
-const [seconds, setSeconds] = useState(0);
+  const [tab, setTab] = useState("home");
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setSeconds((s) => s + 1);
-  }, 1000);
-  return () => clearInterval(interval);
-}, []);
-
-const formatTime = (s) => {
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return `${m}:${sec.toString().padStart(2, "0")}`;
-};
-  const [dark, setDark] = useState(true);
-  const [tab, setTab] = useState("comps");
-  const [mounted, setMounted] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [favorites, setFavorites] = useState([]);
-
-  useEffect(() => {
-    setMounted(true);
-    const savedFavorites = localStorage.getItem("bw-favorites");
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites));
+  const renderTab = () => {
+    if (tab === "home") {
+      return (
+        <>
+          <Hero setTab={setTab} />
+          <MetaSection />
+          <DraftBuilder />
+          <RolesSection />
+        </>
+      );
     }
-  }, []);
 
-  useEffect(() => {
-    localStorage.setItem("bw-favorites", JSON.stringify(favorites));
-  }, [favorites]);
+    if (tab === "meta") return <MetaSection />;
+    if (tab === "draft") return <DraftBuilder />;
+    if (tab === "roles") return <RolesSection />;
 
-  const toggleFavorite = (compName) => {
-    setFavorites(prev =>
-      prev.includes(compName)
-        ? prev.filter(name => name !== compName)
-        : [...prev, compName]
+    return (
+      <>
+        <CountersSection />
+        <TimingSection />
+        <PracticeSection />
+      </>
     );
   };
 
-  const filteredComps = COMPS.filter(comp =>
-    searchQuery === "" ||
-    comp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    comp.short.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    comp.why.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  if (!mounted) return null;
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: dark
-          ? "linear-gradient(180deg, #07070a 0%, #0b0b10 46%, #0e1016 100%)"
-          : "linear-gradient(180deg, #f7f7f5 0%, #ffffff 46%, #f1f1ee 100%)",
-        color: dark ? "#f5f7fb" : "#3b82f6",
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-        position: "relative",
-        overflowX: "hidden",
-        paddingBottom: 90,
-      }}
-    >
+    <div className="app">
       <style>{`
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        * {
+          box-sizing: border-box;
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
+
         body {
           margin: 0;
+          background: #030712;
+          color: #f8fafc;
+          font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
           -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          background: ${dark ? "#09090d" : "#f7f7f5"};
         }
-        ::-webkit-scrollbar { display: none; }
-        button, select { font-family: inherit; }
+
+        button,
+        select {
+          font-family: inherit;
+        }
+
+        button {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .app {
+          min-height: 100vh;
+          padding-bottom: 92px;
+          background:
+            radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 36%),
+            radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 34%),
+            linear-gradient(180deg, #020617 0%, #030712 48%, #050816 100%);
+          color: #f8fafc;
+          overflow-x: hidden;
+        }
+
+        .app::before {
+          content: "";
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+          background-size: 42px 42px;
+          mask-image: linear-gradient(to bottom, black, transparent 75%);
+          z-index: 0;
+        }
+
+        .app > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero {
+          max-width: 1040px;
+          margin: 0 auto;
+          padding: 76px 18px 44px;
+          text-align: center;
+        }
+
+        .heroBadge {
+          width: fit-content;
+          margin: 0 auto 18px;
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          padding: 9px 14px;
+          border: 1px solid rgba(125, 211, 252, 0.24);
+          border-radius: 999px;
+          background: rgba(15, 23, 42, 0.64);
+          backdrop-filter: blur(22px);
+          color: #7dd3fc;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .liveDot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          background: #22d3ee;
+          box-shadow: 0 0 18px #22d3ee;
+          animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.45;
+            transform: scale(1.45);
+          }
+        }
+
+        .hero h1 {
+          margin: 0;
+          font-size: clamp(48px, 9vw, 94px);
+          line-height: 0.9;
+          letter-spacing: -0.08em;
+          font-weight: 900;
+          background: linear-gradient(180deg, #ffffff, #a5f3fc 56%, #60a5fa);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+
+        .hero p {
+          max-width: 680px;
+          margin: 22px auto 0;
+          color: rgba(226, 232, 240, 0.72);
+          font-size: 17px;
+          line-height: 1.7;
+        }
+
+        .heroActions {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          flex-wrap: wrap;
+          margin-top: 30px;
+        }
+
+        .primaryBtn,
+        .ghostBtn,
+        .smallBtn {
+          border: none;
+          cursor: pointer;
+          border-radius: 999px;
+          font-weight: 800;
+          transition: 0.22s ease;
+        }
+
+        .primaryBtn {
+          padding: 14px 22px;
+          color: #020617;
+          background: linear-gradient(135deg, #ffffff, #7dd3fc);
+          box-shadow: 0 18px 40px rgba(56, 189, 248, 0.22);
+        }
+
+        .ghostBtn {
+          padding: 14px 22px;
+          color: #e0f2fe;
+          background: rgba(15, 23, 42, 0.72);
+          border: 1px solid rgba(255, 255, 255, 0.11);
+        }
+
+        .smallBtn {
+          padding: 9px 13px;
+          color: #e0f2fe;
+          background: rgba(14, 165, 233, 0.12);
+          border: 1px solid rgba(125, 211, 252, 0.18);
+          font-size: 12px;
+        }
+
+        .primaryBtn:hover,
+        .ghostBtn:hover,
+        .smallBtn:hover {
+          transform: translateY(-2px);
+        }
+
+        .statsGrid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 12px;
+          max-width: 760px;
+          margin: 34px auto 0;
+        }
+
+        .statCard,
+        .buildCard,
+        .draftPanel,
+        .draftResult,
+        .roleCard,
+        .counterCard,
+        .timeCard,
+        .practiceCard {
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(15, 23, 42, 0.46));
+          backdrop-filter: blur(26px);
+          box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+        }
+
+        .statCard {
+          border-radius: 24px;
+          padding: 18px;
+          text-align: left;
+        }
+
+        .statCard span,
+        .miniLabel,
+        .eyebrow {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 11px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #67e8f9;
+        }
+
+        .statCard strong {
+          display: block;
+          margin-top: 7px;
+          font-size: 24px;
+          letter-spacing: -0.04em;
+        }
+
+        .section {
+          max-width: 1040px;
+          margin: 0 auto;
+          padding: 38px 18px;
+        }
+
+        .sectionHeader {
+          margin-bottom: 20px;
+        }
+
+        .sectionHeader h2 {
+          margin: 8px 0 0;
+          font-size: clamp(30px, 5vw, 54px);
+          letter-spacing: -0.06em;
+          line-height: 1;
+        }
+
+        .sectionHeader p {
+          max-width: 680px;
+          margin: 12px 0 0;
+          color: rgba(226, 232, 240, 0.66);
+          line-height: 1.65;
+        }
+
+        .buildGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .buildCard {
+          border-radius: 30px;
+          overflow: hidden;
+          transition: 0.25s ease;
+        }
+
+        .buildCard:hover {
+          transform: translateY(-3px);
+          border-color: rgba(125, 211, 252, 0.22);
+        }
+
+        .buildTop {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          text-align: left;
+          background: transparent;
+          border: none;
+          color: inherit;
+          padding: 22px 22px 0;
+          cursor: pointer;
+        }
+
+        .buildIcon {
+          width: 54px;
+          height: 54px;
+          border-radius: 18px;
+          display: grid;
+          place-items: center;
+          color: white;
+          font-size: 24px;
+          font-weight: 900;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.26), 0 14px 30px rgba(14,165,233,0.18);
+          flex: 0 0 auto;
+        }
+
+        .buildTitle {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .buildTitle span {
+          display: block;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 11px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          margin-bottom: 5px;
+        }
+
+        .buildTitle h3 {
+          margin: 0;
+          font-size: 18px;
+          letter-spacing: -0.04em;
+          line-height: 1.2;
+        }
+
+        .expand {
+          width: 34px;
+          height: 34px;
+          display: grid;
+          place-items: center;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #bae6fd;
+          font-size: 22px;
+          font-weight: 600;
+        }
+
+        .buildWhy {
+          margin: 0;
+          padding: 15px 22px 22px;
+          color: rgba(226, 232, 240, 0.68);
+          font-size: 14px;
+          line-height: 1.7;
+        }
+
+        .buildDetails {
+          display: grid;
+          gap: 10px;
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          padding: 0 22px;
+          transition: 0.35s ease;
+        }
+
+        .buildCard.open .buildDetails {
+          max-height: 900px;
+          opacity: 1;
+          padding: 0 22px 22px;
+        }
+
+        .infoBlock {
+          border-radius: 18px;
+          padding: 13px 14px;
+          background: rgba(255,255,255,0.045);
+          border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .infoBlock span {
+          display: block;
+          margin-bottom: 5px;
+          color: #7dd3fc;
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          font-weight: 900;
+          font-family: "JetBrains Mono", monospace;
+        }
+
+        .infoBlock p {
+          margin: 0;
+          color: rgba(226, 232, 240, 0.68);
+          line-height: 1.62;
+          font-size: 13.5px;
+        }
+
+        .infoBlock.danger span {
+          color: #93c5fd;
+        }
+
+        .draftShell {
+          display: grid;
+          grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+          gap: 16px;
+          align-items: start;
+        }
+
+        .draftPanel,
+        .draftResult {
+          border-radius: 30px;
+          padding: 22px;
+        }
+
+        .draftTop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          margin-bottom: 16px;
+        }
+
+        .draftTop h3,
+        .draftResult h3,
+        .roleCard h3,
+        .counterCard h3,
+        .timeCard h3,
+        .practiceCard h3 {
+          margin: 5px 0 0;
+          letter-spacing: -0.04em;
+        }
+
+        .roleFilters {
+          display: flex;
+          gap: 8px;
+          overflow-x: auto;
+          padding-bottom: 8px;
+          margin-bottom: 14px;
+          scrollbar-width: none;
+        }
+
+        .roleFilters::-webkit-scrollbar {
+          display: none;
+        }
+
+        .filter {
+          flex: 0 0 auto;
+          border: 1px solid rgba(255,255,255,0.1);
+          background: rgba(255,255,255,0.05);
+          color: rgba(226,232,240,0.68);
+          padding: 8px 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 800;
+          cursor: pointer;
+        }
+
+        .filter.active {
+          background: rgba(56, 189, 248, 0.16);
+          color: #7dd3fc;
+          border-color: rgba(125, 211, 252, 0.28);
+        }
+
+        .pickGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+
+        .pickBox {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          border-radius: 18px;
+          padding: 13px;
+          background: rgba(255,255,255,0.045);
+          border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .pickBox span {
+          color: rgba(226,232,240,0.5);
+          font-size: 12px;
+          font-weight: 800;
+        }
 
         select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
-select option {
-  background: #111827;
-  color: #ffffff;
-}
-
-select option:hover {
-  background: #1f2937;
-}
-
-select option:checked {
-  background: #2563eb;
-  color: #ffffff;
-}
-  
-
-        @keyframes fade-up {
-          from { opacity: 0; transform: translateY(18px); }
-          to { opacity: 1; transform: translateY(0); }
+          width: 100%;
+          border: none;
+          outline: none;
+          border-radius: 13px;
+          padding: 12px;
+          color: #f8fafc;
+          background: #0f172a;
+          font-size: 14px;
+          font-weight: 750;
         }
 
-        @keyframes pulse-dot {
-          0%,100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.35); opacity: 0.65; }
-        }
-             @keyframes snow-fall {
-        0% {
-          transform: translateY(-10vh);
-          opacity: 0;
-        }
-      
-        12% {
-          opacity: 0.9;
-        }
-      
-        55% {
-          opacity: 0.9;
-        }
-      
-        100% {
-          transform: translateY(100vh);
-          opacity: 0;
-        }
-      }
-
-        @keyframes snow-sway {
-          0%,100% { margin-left: -5px; }
-          50% { margin-left: 7px; }
+        option {
+          background: #0f172a;
+          color: #f8fafc;
         }
 
-        .fade {
-          animation: fade-up 0.56s cubic-bezier(0.22, 0.8, 0.2, 1) both;
-        }
-        .fade1 { animation-delay: 0.06s; }
-        .fade2 { animation-delay: 0.12s; }
-        .fade3 { animation-delay: 0.18s; }
-        .liveDot {
-          animation: pulse-dot 2.4s ease-in-out infinite;
+        .draftResult {
+          position: sticky;
+          top: 18px;
         }
 
-        @media (hover: hover) and (pointer: fine) {
-          .compCard:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 22px 46px rgba(0,0,0,0.20);
+        .scoreCircle {
+          width: 112px;
+          height: 112px;
+          display: grid;
+          place-items: center;
+          margin-bottom: 18px;
+          border-radius: 999px;
+          background:
+            radial-gradient(circle at 50% 50%, rgba(56,189,248,0.14), transparent 58%),
+            linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+          border: 1px solid rgba(125, 211, 252, 0.2);
+        }
+
+        .scoreCircle strong {
+          font-size: 34px;
+          letter-spacing: -0.06em;
+        }
+
+        .scoreCircle span {
+          color: rgba(226,232,240,0.5);
+          font-size: 12px;
+          margin-top: -30px;
+        }
+
+        .draftResult p {
+          color: rgba(226,232,240,0.68);
+          line-height: 1.62;
+        }
+
+        .roleCheckGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 8px;
+          margin-top: 14px;
+        }
+
+        .roleCheck {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          padding: 9px;
+          border-radius: 14px;
+          font-size: 12px;
+          font-weight: 850;
+        }
+
+        .roleCheck span {
+          width: 20px;
+          height: 20px;
+          display: grid;
+          place-items: center;
+          border-radius: 999px;
+        }
+
+        .roleCheck.ok {
+          color: #67e8f9;
+          background: rgba(34,211,238,0.08);
+          border: 1px solid rgba(103,232,249,0.14);
+        }
+
+        .roleCheck.bad {
+          color: #93c5fd;
+          background: rgba(59,130,246,0.08);
+          border: 1px solid rgba(147,197,253,0.14);
+        }
+
+        .warningBox,
+        .avoidBox {
+          margin-top: 14px;
+          border-radius: 16px;
+          padding: 12px 13px;
+          color: #bfdbfe;
+          background: rgba(37, 99, 235, 0.1);
+          border: 1px solid rgba(147, 197, 253, 0.16);
+          line-height: 1.55;
+          font-size: 13px;
+        }
+
+        .positiveList {
+          margin-top: 14px;
+          display: grid;
+          gap: 8px;
+        }
+
+        .positiveList p {
+          margin: 0;
+          padding: 10px 12px;
+          border-radius: 14px;
+          color: #a5f3fc;
+          background: rgba(6, 182, 212, 0.08);
+          border: 1px solid rgba(103, 232, 249, 0.14);
+          font-size: 13px;
+        }
+
+        .roleGrid,
+        .counterGrid,
+        .practiceGrid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .roleCard,
+        .counterCard,
+        .practiceCard {
+          border-radius: 28px;
+          padding: 22px;
+        }
+
+        .roleIcon,
+        .counterIcon {
+          width: 48px;
+          height: 48px;
+          display: grid;
+          place-items: center;
+          border-radius: 16px;
+          background: linear-gradient(135deg, rgba(56,189,248,0.2), rgba(37,99,235,0.12));
+          color: #7dd3fc;
+          font-weight: 900;
+          font-size: 22px;
+          margin-bottom: 14px;
+        }
+
+        .roleCard p,
+        .counterCard p,
+        .practiceCard p,
+        .timeCard p {
+          color: rgba(226,232,240,0.66);
+          line-height: 1.62;
+          font-size: 14px;
+        }
+
+        .kitTags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 7px;
+          margin-top: 14px;
+        }
+
+        .kitTags span {
+          padding: 6px 9px;
+          border-radius: 999px;
+          color: #bae6fd;
+          background: rgba(56,189,248,0.09);
+          border: 1px solid rgba(125,211,252,0.14);
+          font-size: 12px;
+          font-weight: 800;
+        }
+
+        .timeline {
+          display: grid;
+          gap: 12px;
+        }
+
+        .timeCard {
+          display: grid;
+          grid-template-columns: 145px minmax(0, 1fr);
+          gap: 18px;
+          border-radius: 26px;
+          padding: 18px;
+        }
+
+        .timeStamp {
+          width: fit-content;
+          height: fit-content;
+          padding: 8px 11px;
+          border-radius: 999px;
+          background: rgba(56,189,248,0.1);
+          border: 1px solid rgba(125,211,252,0.16);
+          color: #7dd3fc;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 12px;
+          font-weight: 900;
+        }
+
+        .practiceCard span {
+          color: #7dd3fc;
+          font-size: 12px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          font-family: "JetBrains Mono", monospace;
+        }
+
+        .bottomNav {
+          position: fixed;
+          left: 50%;
+          bottom: 16px;
+          transform: translateX(-50%);
+          width: min(640px, calc(100% - 24px));
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 6px;
+          padding: 8px;
+          border-radius: 28px;
+          background: rgba(2, 6, 23, 0.82);
+          border: 1px solid rgba(255,255,255,0.12);
+          backdrop-filter: blur(30px);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.42);
+          z-index: 20;
+        }
+
+        .navItem {
+          border: none;
+          background: transparent;
+          color: rgba(226,232,240,0.48);
+          border-radius: 20px;
+          padding: 10px 6px;
+          font-size: 11px;
+          font-weight: 850;
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .navItem span {
+          font-size: 18px;
+          line-height: 1;
+        }
+
+        .navItem.active {
+          color: #e0f2fe;
+          background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(37,99,235,0.16));
+        }
+
+        @media (max-width: 860px) {
+          .buildGrid,
+          .draftShell,
+          .roleGrid,
+          .counterGrid,
+          .practiceGrid {
+            grid-template-columns: 1fr;
+          }
+
+          .draftResult {
+            position: static;
+          }
+
+          .hero {
+            padding-top: 54px;
+          }
+        }
+
+        @media (max-width: 560px) {
+          .statsGrid {
+            grid-template-columns: 1fr;
+          }
+
+          .pickGrid {
+            grid-template-columns: 1fr;
+          }
+
+          .timeCard {
+            grid-template-columns: 1fr;
+          }
+
+          .hero h1 {
+            font-size: 48px;
+          }
+
+          .hero p {
+            font-size: 15px;
+          }
+
+          .buildTop {
+            align-items: flex-start;
+          }
+
+          .bottomNav {
+            bottom: 10px;
+            border-radius: 24px;
+          }
+
+          .navItem {
+            font-size: 10px;
           }
         }
       `}</style>
 
-      <Ambient dark={dark} />
-      <SnowLayer dark={dark} />
+      {renderTab()}
 
-      {/* NAV */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          background: dark ? "rgba(7,7,10,0.72)" : "rgba(255,255,255,0.72)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 960,
-            margin: "0 auto",
-            padding: "12px 18px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            position: "relative",
-            zIndex: 5,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 12,
-                fontSize: 18,
-                background: dark
-                  ? "linear-gradient(135deg, #111827 0%, #1f2937 45%, #0f172a 100%)"
-                  : "linear-gradient(135deg, #ffffff 0%, #f1f1f1 100%)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: dark
-                  ? "0 10px 26px rgba(0,0,0,0.28)"
-                  : "0 10px 24px rgba(0,0,0,0.08)",
-              }}
-            >
-              🛏
-            </div>
-
-            <div>
-              <div
-                style={{
-                  fontSize: 14.5,
-                  fontWeight: 900,
-                  letterSpacing: "-0.03em",
-                  color: dark ? "#ffffff" : "#3b82f6",
-                  lineHeight: 1.05,
-                }}
-              >
-                BedWars
-              </div>
-              <div
-                style={{
-                  fontSize: 9.5,
-                  fontWeight: 700,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.34)",
-                }}
-              >
-                Squads 5v5 Meta
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setDark((d) => !d)}
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 12,
-              border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-              cursor: "pointer",
-              background: dark ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.92)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: dark ? "rgba(255,255,255,0.76)" : "rgba(0,0,0,0.72)",
-              boxShadow: dark
-                ? "0 10px 24px rgba(0,0,0,0.22)"
-                : "0 8px 20px rgba(0,0,0,0.06)",
-              WebkitTapHighlightColor: "transparent",
-            }}
-          >
-            {dark ? <SunIcon /> : <MoonIcon />}
-          </button>
-        </div>
-      </div>
-
-      {/* HERO */}
-      <div
-        className="fade"
-        style={{
-          maxWidth: 960,
-          margin: "0 auto",
-          padding: "72px 18px 20px",
-          textAlign: "center",
-          position: "relative",
-          zIndex: 5,
-        }}
-      >
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "6px 14px",
-            borderRadius: 999,
-            marginBottom: 20,
-            background: dark ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.88)",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)"}`,
-            boxShadow: dark
-              ? "0 10px 24px rgba(0,0,0,0.18)"
-              : "0 8px 22px rgba(0,0,0,0.05)",
-          }}
-        >
-          <div
-            className="liveDot"
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: "50%",
-              background: dark ? "#ffffff" : "#3b82f6",
-            }}
-          />
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: dark ? "rgba(255,255,255,0.78)" : "rgba(0,0,0,0.75)",
-              fontFamily: "'JetBrains Mono', monospace",
-            }}
-          >
-            Roblox BedWars · Season 16 · 5v5
-          </span>
-        </div>
-
-        <h1
-          style={{
-            margin: "0 0 10px",
-            fontSize: "clamp(3.2rem, 12vw, 6.2rem)",
-            fontWeight: 900,
-            letterSpacing: "-0.07em",
-            lineHeight: 0.92,
-            color: dark ? "#ffffff" : "#3b82f6",
-          }}
-        >
-          Squads
-        </h1>
-            <div
-  style={{
-    marginTop: 18,
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 10,
-    padding: "8px 16px",
-    borderRadius: 999,
-    background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
-    border: `1px solid ${dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
-    fontFamily: "'JetBrains Mono', monospace",
-    fontWeight: 800,
-    letterSpacing: "0.08em",
-  }}
->
-  ⏱ {formatTime(seconds)}
-</div>
-
-        <p
-          style={{
-            margin: "0 0 10px",
-            fontSize: "clamp(1rem, 4vw, 1.6rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            color: dark ? "rgba(255,255,255,0.82)" : "rgba(0,0,0,0.82)",
-          }}
-        >
-          Comps · Drafts · Counters
-        </p>
-
-        <p
-          style={{
-            margin: "14px auto 0",
-            maxWidth: 560,
-            fontSize: 14.4,
-            lineHeight: 1.8,
-            color: dark ? "rgba(255,255,255,0.46)" : "rgba(0,0,0,0.52)",
-          }}
-        >
-          Clean squads reference built for ranked players who want structure, better roles, and cleaner games.
-        </p>
-
-        <div
-          className="fade fade1"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 10,
-            marginTop: 24,
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            { val: "5", label: "Comps" },
-            { val: "1", label: "Draft tool" },
-            { val: "4", label: "Guides" },
-          ].map((s) => (
-            <div
-              key={s.label}
-              style={{
-                minWidth: 96,
-                padding: "13px 19px",
-                borderRadius: 18,
-                background: dark ? "rgba(16,16,20,0.8)" : "rgba(255,255,255,0.88)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                boxShadow: dark
-                  ? "0 12px 28px rgba(0,0,0,0.22)"
-                  : "0 10px 24px rgba(0,0,0,0.05)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 3,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "1.6rem",
-                  fontWeight: 900,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: dark ? "#ffffff" : "#3b82f6",
-                }}
-              >
-                {s.val}
-              </span>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 800,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: dark ? "rgba(255,255,255,0.34)" : "rgba(0,0,0,0.36)",
-                }}
-              >
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <FeaturedStrip dark={dark} />
-      </div>
-
-      {/* CONTENT */}
-      <div
-        className="fade fade2"
-        style={{
-          maxWidth: 960,
-          margin: "0 auto",
-          padding: "12px 18px",
-          position: "relative",
-          zIndex: 5,
-        }}
-      >
-        {tab === "comps" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <div
-              style={{
-                borderRadius: 16,
-                padding: "16px",
-                background: dark ? "rgba(16,16,20,0.78)" : "rgba(255,255,255,0.84)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
-                boxShadow: dark ? "0 8px 24px rgba(0,0,0,0.2)" : "0 8px 22px rgba(0,0,0,0.05)",
-              }}
-            >
-              <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
-                <div style={{ position: "relative", flex: 1 }}>
-                  <input
-                    type="text"
-                    placeholder="Search comps, kits, or strategies..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 16px",
-                      paddingLeft: 40,
-                      borderRadius: 12,
-                      border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
-                      background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
-                      color: dark ? "#ffffff" : "#3b82f6",
-                      fontSize: 14,
-                      outline: "none",
-                    }}
-                  />
-                  <span style={{
-                    position: "absolute",
-                    left: 12,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: dark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
-                    fontSize: 16
-                  }}>
-                    🔍
-                  </span>
-                </div>
-                <button
-                  onClick={() => setTab(tab === "favorites" ? "comps" : "favorites")}
-                  style={{
-                    padding: "10px 16px",
-                    borderRadius: 12,
-                    border: `1px solid ${dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
-                    background: favorites.length > 0 && tab !== "favorites" ? "rgba(245,158,11,0.1)" : "transparent",
-                    color: favorites.length > 0 && tab !== "favorites" ? "#f59e0b" : (dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)"),
-                    fontSize: 14,
-                    fontWeight: 500,
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                  }}
-                >
-                  ⭐ {favorites.length > 0 ? favorites.length : ""}
-                  {tab === "favorites" ? "All Comps" : "Favorites"}
-                </button>
-              </div>
-
-              {searchQuery && (
-                <div style={{
-                  fontSize: 12,
-                  color: dark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
-                  textAlign: "center"
-                }}>
-                  Found {filteredComps.length} comp{filteredComps.length !== 1 ? "s" : ""} matching "{searchQuery}"
-                </div>
-              )}
-            </div>
-
-            {(tab === "favorites" ? COMPS.filter(c => favorites.includes(c.name)) : filteredComps).map((c, i) => (
-              <CompCard
-                key={i}
-                comp={c}
-                dark={dark}
-                isFavorite={favorites.includes(c.name)}
-                onToggleFavorite={() => toggleFavorite(c.name)}
-              />
-            ))}
-
-            {tab === "favorites" && favorites.length === 0 && (
-              <div
-                style={{
-                  textAlign: "center",
-                  padding: "40px 20px",
-                  color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
-                }}
-              >
-                <div style={{ fontSize: 48, marginBottom: 16 }}>⭐</div>
-                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#3b82f6" }}>
-                  No Favorite Comps Yet
-                </h3>
-                <p style={{ margin: 0, fontSize: 14 }}>
-                  Tap the star icon on any comp to add it to your favorites!
-                </p>
-              </div>
-            )}
-
-            {filteredComps.length === 0 && searchQuery && (
-              <div
-                style={{
-                  textAlign: "center",
-                  padding: "40px 20px",
-                  color: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)",
-                }}
-              >
-                <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
-                <h3 style={{ margin: "0 0 8px 0", color: dark ? "#ffffff" : "#3b82f6" }}>
-                  No Comps Found
-                </h3>
-                <p style={{ margin: 0, fontSize: 14 }}>
-                  Try adjusting your search terms or browse all comps.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {tab === "draft" && <DraftBuilderSection dark={dark} />}
-        {tab === "counters" && <CountersSection dark={dark} />}
-        {tab === "practice" && <PracticeSection dark={dark} />}
-        {tab === "guides" && <GuidesSection dark={dark} />}
-        {tab === "timing" && <TimingSection dark={dark} />}
-      </div>
-
-      {/* FOOTER */}
-      <div
-        className="fade fade3"
-        style={{
-          maxWidth: 960,
-          margin: "24px auto 0",
-          padding: "0 18px",
-          position: "relative",
-          zIndex: 5,
-        }}
-      >
-        <div
-          style={{
-            borderRadius: 28,
-            padding: "28px 22px",
-            background: dark
-              ? "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025))"
-              : "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(247,247,244,0.96))",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            textAlign: "center",
-            boxShadow: dark ? "0 16px 38px rgba(0,0,0,0.24)" : "0 14px 34px rgba(0,0,0,0.06)",
-          }}
-        >
-          <h3
-            style={{
-              margin: "0 0 8px",
-              fontSize: "clamp(1.15rem, 4vw, 1.6rem)",
-              fontWeight: 900,
-              letterSpacing: "-0.03em",
-              color: dark ? "#ffffff" : "#3b82f6",
-            }}
-          >
-            Play cleaner. Scale faster.
-          </h3>
-
-          <p
-            style={{
-              margin: "0 auto",
-              maxWidth: 460,
-              fontSize: 13.4,
-              lineHeight: 1.72,
-              color: dark ? "rgba(255,255,255,0.48)" : "rgba(0,0,0,0.52)",
-            }}
-          >
-            A cleaner squads reference for better calls, better role discipline, and less random queue gameplay.
-          </p>
-
-          <div
-            style={{
-              marginTop: 16,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "8px 14px",
-              borderRadius: 999,
-              background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
-            }}
-          >
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: dark ? "#ffffff" : "#3b82f6",
-              }}
-            />
-            <span
-              style={{
-                fontSize: 10.5,
-                fontWeight: 800,
-                fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: dark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
-              }}
-            >
-              made by justcyril
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <TabBar tab={tab} setTab={setTab} dark={dark} />
+      <BottomNav tab={tab} setTab={setTab} />
     </div>
   );
 }
