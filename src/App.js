@@ -295,16 +295,47 @@ function evaluateDraft(picks) {
   const hasBedBreaker = has("Bed Breaker");
   const hasRanged = has("Ranged");
 
-  let score = [hasFrontline, hasSupport, hasEconomy, hasDefender, hasBedBreaker].filter(Boolean).length * 20;
+  const hasLateGamePlan =
+    hasEconomy ||
+    hasKit("Melody") ||
+    hasKit("Fisher") ||
+    hasKit("Metal") ||
+    hasKit("Beekeeper") ||
+    hasKit("Farmer") ||
+    hasKit("Zeno") ||
+    hasKit("Warden") ||
+    hasKit("Noelle");
+
+  let score = 0;
+
+  if (hasFrontline) score += 25;
+  if (hasSupport) score += 25;
+  if (hasEconomy) score += 25;
+  if (hasDefender) score += 15;
+
+  // Bed breaker is useful, but not mandatory.
+  if (hasBedBreaker) score += 10;
+
+  // Ranged is bonus utility.
   if (hasRanged && score < 100) score += 5;
+
+  // Scaling/lategame comps can still close games without a dedicated bed breaker kit.
+  if (!hasBedBreaker && hasLateGamePlan && hasFrontline && hasSupport && hasEconomy) {
+    score += 10;
+  }
+
   score = Math.min(score, 100);
 
   const missing = [];
   if (!hasFrontline) missing.push("main jugg/frontline");
   if (!hasSupport) missing.push("support");
-  if (!hasEconomy) missing.push("economy");
+  if (!hasEconomy && !hasLateGamePlan) missing.push("economy/scaling");
   if (!hasDefender) missing.push("defender");
-  if (!hasBedBreaker) missing.push("bed breaker");
+
+  const notes = [];
+  if (!hasBedBreaker && hasLateGamePlan) {
+    notes.push("No dedicated bed breaker kit, but this can still close through gear lead, TNT rain, grouped pressure, and late-game control.");
+  }
 
   const syns = [];
   if (hasKit("Cait") && hasKit("Lassy")) syns.push("Cait + Lassy — pull one target, then Cait farms contract value");
@@ -319,12 +350,14 @@ function evaluateDraft(picks) {
   let verdict = "Risky";
   let vt = "Missing important 5v5 structure.";
 
-  if (score >= 100) {
+  if (score >= 95) {
     verdict = "Elite";
-    vt = "Balanced build with main jugg, support, economy, bed safety, and a bed break plan.";
+    vt = hasBedBreaker
+      ? "Balanced build with fight power, support, scaling, bed safety, and a direct bed break option."
+      : "Strong scaling build. It can win late and convert with TNT, grouped pressure, and gear lead instead of needing a bed breaker kit.";
   } else if (score >= 80) {
     verdict = "Strong";
-    vt = "Good build. One role could still be cleaner.";
+    vt = "Good build. It has enough structure to win if your team plays disciplined.";
   } else if (score >= 60) {
     verdict = "Playable";
     vt = "Can win with careful play around the missing role.";
@@ -335,6 +368,7 @@ function evaluateDraft(picks) {
     verdict,
     vt,
     missing,
+    notes,
     syns,
     roles: {
       Frontline: hasFrontline,
@@ -791,10 +825,16 @@ function DraftBuilder() {
             </div>
 
             {eval_.missing.length > 0 && (
-              <div className="warnBox">
-                <strong>Fix:</strong> Add {eval_.missing.join(", ")}.
-              </div>
-            )}
+  <div className="warnBox">
+    <strong>Fix:</strong> Add {eval_.missing.join(", ")}.
+  </div>
+)}
+
+{eval_.notes?.length > 0 && (
+  <div className="noteBox">
+    <strong>Note:</strong> {eval_.notes[0]}
+  </div>
+)}
 
             {eval_.syns.length > 0 && (
               <div className="synList">
@@ -1754,6 +1794,16 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 .roleCheck.ok { color: #67e8f9; background: rgba(34,211,238,.08); border: 1px solid rgba(103,232,249,.15); }
 .roleCheck.bad { color: #93c5fd; background: rgba(59,130,246,.08); border: 1px solid rgba(147,197,253,.15); }
 
+.noteBox {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border-radius: 14px;
+  background: rgba(0,229,160,.075);
+  border: 1px solid rgba(0,229,160,.16);
+  color: #a7f3d0;
+  font-size: 13px;
+  line-height: 1.55;
+}
 .warnBox {
   margin-top: 12px;
   padding: 11px 13px;
