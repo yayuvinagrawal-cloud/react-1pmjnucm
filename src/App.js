@@ -56,118 +56,85 @@ const ChevronIcon = ({ open }) => (
 
 /* ─── DATA ─── */
 const COMPS = [
-  
   {
-    name: "Sheila / Star / Noelle / Beekeeper",
-    short: "Core Comp",
-    icon: "⚔️",
+    name: "Cait / Cait / Metal / Noelle / Star",
+    short: "Double Cait",
+    icon: "☠️",
     color: "#2f6bff",
     rgb: "47,107,255",
-    why: "Solid balanced comp that keeps pressure on, survives well, and scales cleanly if your team stays organized.",
+    why: "Two Caits means double contract chains running at all times. If either Cait tags someone, the decay + contract combo is almost guaranteed to close — and the kill counts for both if a teammate or the void finishes it.",
     useWhen:
-      "Run this when your team has chemistry and your Beekeeper knows how to get early value without griefing their own tempo.",
+      "Run this when both Cait players know how to chain contracts and won't waste tags on random 1v1s. Strongest into any team that doesn't have good peel for their economy kits.",
     early:
-      "Split 2 mid and 2 base after t1. Take good fights only and don't waste tempo on ego pushes.",
+      "Both Caits should pick separate contracts ASAP and start applying decay early. Metal builds value quietly. Noelle locks down base. Star keeps both Caits topped off.",
     mid:
-      "Use Sheila and Star to keep map pressure, secure upgrades fast, and try to hit first t3 before around 6 minutes.",
+      "Rotate contracts together so one Cait is always on an active tag. Use Star pulls to set up cleaner decay trades and let the decay do the closing work.",
     win:
-      "Once you get first t3, convert that lead into bed pressure fast with TNT and grouped pushes.",
+      "Once both Caits have multiple contract stacks, the team becomes nearly unkillable in extended fights. Group up, force fights, and use decay pressure to run through any remaining teams.",
   },
   {
-    name: "Farmer / Fisher / Star / Amy",
-    short: "Stable Econ",
-    icon: "💰",
-    color: "#10b981",
-    rgb: "16,185,129",
-    why: "Reliable loot flow with solid defense and safer scaling into the mid game.",
-    useWhen:
-      "Use this if you want a stable economy with two players protecting the game state while the comp scales up.",
-    early:
-      "Do not force bad fights. Keep your economy kits alive and let your fighters take cleaner trades.",
-    mid:
-      "Play for armor timing, enchants, generator control, and safe pressure instead of random scraps.",
-    win:
-      "Use your gear lead to win one clean grouped fight and roll that into bed pressure.",
-  },
-  {
-    name: "Lani/ Umbra / Warden / Fisher",
-    short: "Bypass",
-    icon: "🏃",
+    name: "Cait / Lassy / Star / Metal / Noelle",
+    short: "Lasso Cait",
+    icon: "🪢",
     color: "#ef4444",
     rgb: "239,68,68",
-    why: "Made to dodge standard fights and win faster through movement, side pressure, and bed threat.",
+    why: "Lassy is Cait's best setup tool in 5v5. Lasso pulls a tagged target straight into Cait's decay range or off the map — either way the contract closes and Cait keeps scaling.",
     useWhen:
-      "Pick this into slower teams or when you want to speed the game up and force chaos.",
+      "Use this when your Lassy player is confident with lasso timing and can find good pulls on bridges and off-map edges. Destroys teams that stack in one lane.",
     early:
-      "Split lanes early. Lani players create angles while Fisher builds value and Warden stabilizes fights.",
+      "Lassy and Cait should be linked all game. Cait tags, Lassy watches for a pull window. Metal and Noelle hold base while Star supports fights.",
     mid:
-      "Keep pressure on side lanes and avoid flipping full team fights unless you have a clear edge.",
+      "Look for lasso setups on bridges and gap crossings. One clean pull into the void closes a contract AND eliminates the player. Double value every time.",
     win:
-      "Punish openings instantly, get bed damage, and finish before slower comps fully scale.",
+      "With Cait scaled up from clean contract completions, push as a grouped 5. Lassy peels anyone trying to run. Noelle holds base while the front four close out.",
   },
   {
-    name: "Davey / Umbra / Fisher / Fisher",
-    short: "BB Strat",
+    name: "Cait / Silas / Sheila / Lassy / Metal / Wren / Noelle",
+    short: "S16 Flex Core",
+    icon: "⚔️",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    why: "Your standard S16 5v5 flexible core. Cait brings contract pressure and decay, Silas brings a permanent healing and damage aura that makes every fight feel lopsided, and Lassy controls the pace of any engagement.",
+    useWhen:
+      "Default to this when you don't know what the enemy is running. Wren if you expect early rushes and BB threats, Noelle if you want a stronger base lock.",
+    early:
+      "Silas should stay near the group so his healing aura is active during any early fights. Cait starts contract chains. Metal builds econ. Lassy watches bridges.",
+    mid:
+      "Switch Silas to damage aura before grouped fights. Lasso a priority target, Cait tags them, Silas and Sheila clean up with the damage buff active.",
+    win:
+      "Your team wins most prolonged fights because of Silas's permanent aura advantage. Force extended trades, keep stacking contracts, and close on beds when teams are low.",
+  },
+  {
+    name: "Warden / Melody / Melody / Hannah / Fisher",
+    short: "Double Melody",
+    icon: "🎵",
+    color: "#10b981",
+    rgb: "16,185,129",
+    why: "Double Melody in 5v5 is oppressive. The sustain stacks on every grouped fight and makes your team nearly unkillable in extended scraps. Warden tanks up front, Hannah provides utility, and Fisher scales the economy.",
+    useWhen:
+      "Pick this when you want to out-sustain everything and win slow grind fights. Best into aggressive comps that like to rush grouped because they're walking into a healing nightmare.",
+    early:
+      "Stay grouped as much as possible so both Melody heals are always active. Fisher builds value. Let Warden absorb early pressure and don't waste Melody casts on solo fights.",
+    mid:
+      "Group fights are basically free with double Melody active. Call the timing and send the full 5 into any fight where you have numbers or gear parity.",
+    win:
+      "Scale into late game with Fisher economy, stack Melody heals in grouped fights, and grind down anything left standing. You don't need to rush — time is on your side.",
+  },
+  {
+    name: "Davey / Umbra / Umbra / Fisher / Fisher",
+    short: "BB Bypass",
     icon: "💥",
     color: "#f59e0b",
     rgb: "245,158,11",
-    why: "Aggressive bed break comp with strong pressure windows and good scaling from double Fisher.",
+    why: "Double Umbra controls the map better than almost anything in 5v5 — two sets of ult pressure means you can always find an angle. Double Fisher feeds the economy while Davey waits for a clean bed break window.",
     useWhen:
-      "Use this if your BB is confident, your team plays fast, and you want to break slow teams before they stabilize.",
+      "Use this against coordinated teams that play slow and defensive. The pressure from two Umbras forces them to overextend and opens space for Davey to work.",
     early:
-      "Let Davey look for clean openings while both Fishers build value and Umbra controls pressure space.",
+      "Both Fishers scale quietly. Umbras hold map pressure without overcommitting their ults. Davey scouts bed angles and waits for the right open.",
     mid:
-      "Force hard choices, threaten multiple lanes, and make teams split between map control and base defense.",
+      "Use Umbra ults to split enemy teams or cut rotations before a grouped push. Once defenders are moved, call Davey through immediately.",
     win:
-      "Get one real opening, send Davey through, and turn the pressure into a fast finish.",
-  },
-  {
-    name: "Amy / Umbra / Fisher / Fisher",
-    short: "Fisher Fisher",
-    icon: "🌊",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    why: "Safe scaling comp with strong late-game power and clean fight control if your team stays patient.",
-    useWhen:
-      "Pick this if your team wants steady scaling, trusts the Amy player in fights, and can keep both Fishers safe early.",
-    early:
-      "Avoid random fights, keep both Fishers alive, and only let Amy take strong trades.",
-    mid:
-      "Play around gear spikes, enchants, and Umbra utility while keeping pressure without overcommitting.",
-    win:
-      "Outscale, win one big grouped fight, then use map control to take bed and close.",
-  },
-  {
-  name: "Amy / Freya / Fisher / Fisher",
-  short: "No Scale Jugg",
-  icon: "⚡",
-  color: "#22c55e",
-  rgb: "34,197,94",
-  why: "Double Fisher scaling with strong fight pressure from Amy and Freya. Lets you build value while still taking real fights instead of full passive scaling jugg kits.",
-  useWhen:
-    "Use this when your fighters are confident and can stay alive. Good into slower comps you can pressure early.",
-  early:
-    "Keep both Fishers alive at all costs. No need to take early fights as you DONT need kills with this strat focus t3.",
-  mid:
-    "Play around bb timing and Amy jugg. Take fights when you are up or outnumber.",
-  win:
-    "Outscale with double Fisher, win a clean fight with Amy + Freya, then convert fast into bed pressure.",
-},
-  {
-    name: "Lucia / Umbra / Baker / Whisper",
-    short: "Macro Core",
-    icon: "🧠",
-    color: "#06b6d4",
-    rgb: "6,182,212",
-    why: "Strong macro comp with eco, intel, sustain, and real pressure threat. Good for duo-q or cleaner coordinated games.",
-    useWhen:
-      "Use this when you want a safer comp that still has map pressure and cleaner rotations instead of random all-in fighting.",
-    early:
-      "Let Lucia and Whisper stabilize macro while Baker keeps tempo clean and Umbra looks for smart entries instead of forced ones.",
-    mid:
-      "Use owl info and Umbra pressure to create cleaner fights. Keep your resets tight and don't waste your scaling by overforcing.",
-    win:
-      "Scale into better gear, keep map control, then convert one clean pressure window into bed damage and a grouped finish.",
+      "Get one clean Umbra setup, send Davey through on the bed, and have the second Umbra hold the reset point. Double Fisher economy means you can sustain any late game that follows.",
   },
 ];
 
@@ -175,34 +142,42 @@ const ROLES = [
   {
     key: "CYCLE",
     emoji: "♻️",
-    desc: "Scaling kits like Metal Beekeeper and Farmer. Their job is value first.",
+    desc: "Economy kits. Build value quietly and don't die for no reason.",
     color: "#10b981",
     rgb: "16,185,129",
-    kits: ["Bee Keeper", "Metal", "Farmer", "Star", "Thalya", "Sigrid", "Davey", "Double Fisher", "Lucia"],
+    kits: ["Metal Detector", "Farmer", "Fisher", "Star Collector", "Lucia"],
   },
   {
     key: "BD",
     emoji: "🛡️",
-    desc: "Bed defender. Keeps bed safe, watches gen and pchests, and has counter TNT ready.",
+    desc: "Bed defender. Holds base, watches gen and pchests, has counter TNT ready.",
     color: "#2f6bff",
     rgb: "47,107,255",
-    kits: ["Noelle", "Wren", "Fisher", "Baker", "Zola"],
+    kits: ["Noelle", "Wren", "Fisher", "Baker", "Hannah"],
   },
   {
     key: "MJ",
     emoji: "⚔️",
-    desc: "Main fighter. Handles most PvP and sets the pace in bigger fights.",
+    desc: "Main fighter. Handles most PvP and sets the pace of grouped fights.",
     color: "#ef4444",
     rgb: "239,68,68",
-    kits: ["Sheila Aery", "Silas", "Amy", "Freya", "Cait", "Mech", "Lucia", "Umbra"],
+    kits: ["Caitlyn", "Sheila", "Silas", "Warden", "Freya", "Nyx"],
   },
   {
     key: "SJ",
     emoji: "🤝",
-    desc: "Second fighter. Supports the main and adds utility, peel, and pressure.",
+    desc: "Second fighter or support. Peels, sets up kills, and adds utility.",
     color: "#f59e0b",
     rgb: "245,158,11",
-    kits: ["Star", "Amy", "Mech", "Zeno", "Lassy", "Wren", "Noelle", "Umeko", "Umbra", "Nahla", "Melody", "Whisper", "Baker"],
+    kits: ["Lassy", "Star Collector", "Umbra", "Silas", "Hannah", "Melody"],
+  },
+  {
+    key: "RANGE",
+    emoji: "🏹",
+    desc: "Ranged pressure. Archer only needs 6 ems for crossbow early — incredible value.",
+    color: "#06b6d4",
+    rgb: "6,182,212",
+    kits: ["Archer", "Umeko", "Zeno"],
   },
   {
     key: "BBER",
@@ -210,7 +185,7 @@ const ROLES = [
     desc: "Bed breaker. Tracks openings, finds angles, and ends games.",
     color: "#8b5cf6",
     rgb: "139,92,246",
-    kits: ["Ragnar", "DinoTamer", "Sigrid", "Umbra", "Triton", "Davey", "Amy", "Smoke", "Milo", "Regent", "Mech"],
+    kits: ["Davey", "Umbra", "Sigrid", "Triton", "Ragnar"],
   },
 ];
 
@@ -220,117 +195,119 @@ const GUIDES = {
     color: "#2f6bff",
     rgb: "47,107,255",
     items: [
-      "Don't force early fights unless you know the fight is good.",
-      "Take fights mostly in pairs or grouped swings.",
-      "Protect scaling kits early instead of sending them into random scraps.",
-      "Get blocks and stone sword first so early game has structure.",
-      "Most games are won off one clean grouped fight and a fast conversion.",
-      "Vs cheaters, don't ego fight. Stack gear, keep blocks, and TNT rain when needed.",
+      "In 5v5 there are more bodies in every fight — don't go in solo unless you have a massive gear lead.",
+      "Protect your economy kits (Metal, Fisher) like they are your most valuable player — because they are.",
+      "Grouped fights win games. Split pushing is only good if the enemy splits to chase you.",
+      "Noelle and Wren are both meta BDs — make sure your BD player has counter TNT stocked at all times.",
+      "If Cait is on your team, never finish a tagged contract target yourself — let Cait get the kill to stack contracts.",
+      "Vs cheaters: don't ego fight. Stack gear, play distance, and use TNT rain when needed.",
     ],
   },
-  "Fisher Fisher": {
-    icon: "🎣",
+  "Cait Guide": {
+    icon: "☠️",
+    color: "#ef4444",
+    rgb: "239,68,68",
+    items: [
+      "Cait's kill credit mechanic is the core of her S16 value — if you tag someone and they die to void, TNT, or a teammate, Cait still gets the contract.",
+      "Pick your contract target based on their kit class to unlock the right bonus (support target = silence, economy target = bounty ems, etc.).",
+      "Lassy is Cait's best partner — lasso pulls a tagged target, Cait tags them, and either Lassy voids them or Cait finishes = clean contract every time.",
+      "Double Cait in 5v5 is broken because two separate contract chains are always running — always pressure two different targets.",
+      "Don't blow decay tags on throwaway trades. Tag someone you're going to close out or that Lassy can pull.",
+      "In late game with full contract stacks, Cait's decay essentially melts anyone without diamond armor in extended fights.",
+    ],
+  },
+  "Silas Guide": {
+    icon: "🛡️",
     color: "#8b5cf6",
     rgb: "139,92,246",
     items: [
-      "Double Fisher only works if both stay alive and keep building value.",
-      "Your fighters should hold tempo, not flip every chance they see.",
-      "After t1, jump on fish timing whenever it doesn't cost dim gold or ems.",
-      "Get rod early and build value as fast as possible without inting.",
+      "Silas's aura is always active — stay near your team. A Silas playing solo is wasting 80% of his kit.",
+      "Switch to damage aura right before a group fight starts for the +10% damage buff on all 5 players simultaneously.",
+      "Press the Attack (Q) should be used at the START of fights, not when you're already losing — double the aura efficiency for 8 seconds.",
+      "Build Triumph stacks by getting assists too, not just kills. In 5v5 there are enough players that you should hit 10+ stacks in mid game.",
+      "At max stacks, consuming them with Q gives 20 shield to Silas and doubles healing + damage for all nearby teammates. This wins fight flips.",
+      "Pair Silas with Cait or Sheila — the damage aura makes their already strong kits even harder to fight against.",
     ],
   },
-  "Real Strats": {
-    icon: "🧠",
-    color: "#3b82f6",
-    rgb: "59,130,246",
+  "Archer Guide": {
+    icon: "🏹",
+    color: "#06b6d4",
+    rgb: "6,182,212",
     items: [
-      "Core comps work best when everyone sticks to their role and timing.",
-      "Do not throw scaling kits into pointless fights just for excitement.",
-      "If your comp scales, survive early and arrive to mid game clean.",
-      "Good squads win with structure, pressure windows, and fast conversion.",
-    ],
-  },
-  "BB Strats": {
-    icon: "💥",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    items: [
-      "Your BB should not ego fight. Their job is spacing, angles, and punish windows.",
-      "Pressure first, break second. Good bed breaks come after defenders get moved.",
-      "If the map is locked, threaten side lanes and make the enemy split.",
-      "When an opening appears, the whole team commits fast with no hesitation.",
+      "Archer's biggest S16 advantage is only needing 6 emeralds for the Tactical Crossbow early game — that's insane value per em spent.",
+      "Get the crossbow as your first purchase and start applying ranged pressure immediately — most teams won't have armor yet.",
+      "In 5v5 there are always players crossing bridges or clustering at mid — crossbow shots into groups deal massive early game value.",
+      "Archer is a support-damage role in 5v5, not a solo carry. Stay behind your fighters and apply pressure from range.",
+      "Your job isn't to get kills — it's to chip people below half health so your main jugg can close out fast.",
+      "Late game, bow damage combined with decay from a paired Cait or poison from Lassy is a lethal combination.",
     ],
   },
 };
 
+
 const TIMING_ITEMS = [
-  "Add timing and early game focus - prioritize stone sword and blocks first.",
-  "Split again after t1 to maintain map pressure and control space.",
-  "Try to get iron armour before guards spawn at 3 minutes.",
-  "Aim for 5-6 minute t3 timing to scale efficiently.",
-  "If you get first t3, use it immediately and bedbreak all other teams.",
-  "Try to get enchants around t3 for better scaling potential.",
-  "Forest farm if possible as main jugg to build value safely.",
-  "Second jugg should start coming with you and bbing with that first t3.",
-  "Try not to get reset and feed bounty to maintain momentum.",
-  "By 20 minutes after beds break, get at least 1k blocks, 2-3 teslas, and as many fireballs and TNT as you can.",
-  "In late-game, don't ego fight too much and try to stick together with your team behind blocks.",
-  "Don't be too open - always be aware of your surroundings and stay vigilant.",
+  "In 5v5, games move faster with more bodies — prioritize stone sword and blocks immediately at spawn.",
+  "If you have Archer, buy the Tactical Crossbow FIRST (only 6 ems) — it's your best early investment.",
+  "Split 2 mid and 3 base in early game, or 3 mid 2 base depending on comp — never go 5 mid and leave base open.",
+  "Try to get iron armour before guards spawn at 3 minutes — in 5v5 you can die much faster without it.",
+  "Aim for a 5–6 minute t3 timing — whoever hits it first in 5v5 has a massive window to press beds.",
+  "If you get first t3, immediately send grouped pressure with TNT and grouped pushes — don't sit on it.",
+  "Try to get enchants around t3 timing — even one enchant on the main jugg swings fights heavily.",
+  "If running Cait, make sure every contract target is being tracked — don't let contract windows expire.",
+  "Silas should activate damage aura right before every grouped fight — it takes 1 second and is always worth it.",
+  "By 20 minutes after beds break, have at least 1k blocks, 2–3 teslas, and as many fireballs and TNT as possible.",
+  "In late game, stick together as 5 — solo plays in 5v5 get punished far harder than in 4v4.",
+  "Always be aware of which teams still have beds — in 5v5 bed tracking is harder with more teams on the map.",
 ];
 
 const DRAFT_KITS = [
-  // ECONOMY / CYCLE
-  { name: "Beekeeper", roles: ["economy"] },
-  { name: "Taliyah", roles: ["economy"] },
+  // META S16
+  { name: "Caitlyn", roles: ["juggernaut"] },
+  { name: "Lassy", roles: ["support", "juggernaut"] },
+  { name: "Star Collector", roles: ["support", "economy"] },
+  { name: "Archer", roles: ["support"] },
+  { name: "Silas", roles: ["support", "juggernaut"] },
+  { name: "Noelle", roles: ["defender", "support"] },
+  { name: "Wren", roles: ["defender"] },
 
-  { name: "Farmer", roles: ["economy"] },
+  // ECONOMY / CYCLE
   { name: "Metal Detector", roles: ["economy"] },
-  { name: "Yuzi", roles: ["bedbreaker"] },
+  { name: "Farmer", roles: ["economy"] },
+  { name: "Beekeeper", roles: ["economy"] },
+  { name: "Lucia", roles: ["economy", "juggernaut"] },
   { name: "Davey", roles: ["economy", "bedbreaker"] },
-  { name: "Triton", roles: ["bedbreaker"] },
+  { name: "Fisher", roles: ["defender", "economy"] },
 
   // MAIN JUGG
-  { name: "Lucia", roles: ["juggernaut", "economy"] },
-  { name: "Aery", roles: ["juggernaut"] },
-  { name: "Barbarian", roles: ["juggernaut"] },
-  { name: "Amy", roles: ["juggernaut", "support"] },
   { name: "Sheila", roles: ["juggernaut"] },
+  { name: "Aery", roles: ["juggernaut"] },
+  { name: "Amy", roles: ["juggernaut", "support"] },
   { name: "Freya", roles: ["juggernaut", "support"] },
-  { name: "Grim Reaper", roles: ["juggernaut"] },
   { name: "Warden", roles: ["juggernaut"] },
   { name: "Nyx", roles: ["juggernaut"] },
-
-  // SJ / FLEX
-  { name: "Umbra", roles: ["support"] },
-  { name: "Lani", roles: ["support"] },
-  { name: "Hannah", roles: ["support", "defender"] },
+  { name: "Grim Reaper", roles: ["juggernaut"] },
+  { name: "Barbarian", roles: ["juggernaut"] },
 
   // SUPPORT
-  { name: "Whisper", roles: ["support"] },
-  { name: "Star Collector", roles: ["support"] },
+  { name: "Umbra", roles: ["support", "bedbreaker"] },
   { name: "Melody", roles: ["support"] },
-  { name: "Lassy", roles: ["support"] },
+  { name: "Hannah", roles: ["support", "defender"] },
+  { name: "Whisper", roles: ["support"] },
+  { name: "Baker", roles: ["support", "defender"] },
+  { name: "Lani", roles: ["support"] },
   { name: "Zeno", roles: ["support"] },
   { name: "Smoke", roles: ["support"] },
-  { name: "Milo", roles: ["support"] },
-  { name: "Regent", roles: ["support"] },
 
   // BED BREAKERS
   { name: "Ragnar", roles: ["bedbreaker"] },
   { name: "Dino Tamer", roles: ["bedbreaker"] },
+  { name: "Triton", roles: ["bedbreaker"] },
 
   // DEFENDER
-  { name: "Noelle", roles: ["defender", "support"] },
-  { name: "Builder", roles: ["defender"] },
   { name: "Marina", roles: ["defender"] },
-  { name: "Fisher", roles: ["defender", "economy"] },
-  { name: "Wren", roles: ["defender"] },
   { name: "Zola", roles: ["defender"] },
 
-  // HYBRID
-  { name: "Baker", roles: ["support", "defender"] },
-
-  // LOW META / OPTIONAL
+  // OTHER
   { name: "Eldertree", roles: ["juggernaut"] },
 ];
 
@@ -403,50 +380,51 @@ function evaluateDraft(picks) {
 }
 
 
-/* ─── COUNTER STRATEGIES ─── */
 const COUNTERS = [
   {
-    target: "Double Fisher",
-    icon: "🎣",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
+    target: "Double Cait",
+    icon: "☠️",
+    color: "#2f6bff",
+    rgb: "47,107,255",
     strategies: [
-      "Force early fights before they scale",
-      "Target fishers with fireball + TNT",
-      "Try to hit them with projectiles to interup fishing"
+      "Don't let Cait tag your economy kits — keep Metal and Fisher behind the group",
+      "Apply static effects (lightning enchant, etc.) to reduce decay healing from Dark Insight",
+      "Burst Cait down before she completes contracts — she scales every kill",
+      "Use Lassy to pull Cait out of position before she can finish a tag",
     ],
-    recommended: ["Sheila", "Star", "Umbra", "Amy"],
-    avoid: ["Single target damage", "Letting them group"]
+    recommended: ["Lassy", "Noelle", "Wren", "Umbra"],
+    avoid: ["Letting Cait tag your support kits", "Extended fights where decay stacks up"]
   },
   {
-    target: "BB Comp",
+    target: "Double Melody",
+    icon: "🎵",
+    color: "#10b981",
+    rgb: "16,185,129",
+    strategies: [
+      "Apply static enchant — it prevents Melody's healing from ticking during static effect",
+      "Force split fights so not all 5 players are inside both Melody heal ranges",
+      "Focus the Warden first — removing their frontline collapses the comp",
+      "Burst fast and hard. Double Melody wins prolonged fights — don't give them time.",
+    ],
+    recommended: ["Caitlyn", "Archer", "Silas", "Lassy"],
+    avoid: ["Extended grind fights", "Letting their whole team stack together"]
+  },
+  {
+    target: "Double Umbra BB",
     icon: "💥",
     color: "#f59e0b",
     rgb: "245,158,11",
     strategies: [
-      "Stack beds with obsidian",
-      "HAVE COUNTER TNT!",
-      "Keep distance from base",
-      "Counter with your own BB pressure"
+      "HAVE COUNTER TNT — Davey needs an opening and your base needs to survive it",
+      "Stack beds with obsidian layers and keep Noelle or Wren on base at all times",
+      "Track Umbra ults — both Umbras can't ult at the same time, there's always a window",
+      "Counter-pressure with your own BB to force them to split attention",
     ],
-    recommended: ["Noelle", "Wren", "Baker", "Zola"],
-    avoid: ["Exposing bed location", "Not being aware of their location"]
+    recommended: ["Noelle", "Wren", "Baker", "Hannah"],
+    avoid: ["Leaving base undefended", "Ignoring Davey's position"]
   },
-  {
-    target: "Cheater Comp",
-    icon: "😈",
-    color: "#ef4444",
-    rgb: "239,68,68",
-    strategies: [
-      "Report immediately",
-      "Play defensively, don't ego",
-      "Use map control to your advantage",
-      "Stack gear and wait for staff"
-    ],
-    recommended: ["Any defensive comp", "Generator control", "Map pressure"],
-    avoid: ["Fair fights", "Getting tilted"]
-  }
 ];
+
 
 /* ─── PRACTICE DRILLS ─── */
 const PRACTICE = [
@@ -607,7 +585,7 @@ function Ambient({ dark }) {
 /* ─── FEATURE STRIP ─── */
 function FeaturedStrip({ dark }) {
   const items = [
-    { label: "Structured meta", value: "Clean comps" },
+    { label: "Season 16 meta", value: "5v5 comps" },
     { label: "Role clarity", value: "Less chaos" },
     { label: "Win plans", value: "Better converts" },
   ];
@@ -669,13 +647,14 @@ function FeaturedStrip({ dark }) {
 
 /* ─── DRAFT BUILDER SECTION ─── */
 function DraftBuilderSection({ dark }) {
-  const [pick1, setPick1] = useState("Lucia");
-  const [pick2, setPick2] = useState("Whisper");
-  const [pick3, setPick3] = useState("Umbra");
-  const [pick4, setPick4] = useState("Baker");
+  const [pick1, setPick1] = useState("Caitlyn");
+  const [pick2, setPick2] = useState("Lassy");
+  const [pick3, setPick3] = useState("Star Collector");
+  const [pick4, setPick4] = useState("Metal Detector");
+  const [pick5, setPick5] = useState("Noelle");
 
-  const picks = [pick1, pick2, pick3, pick4];
-  const result = useMemo(() => evaluateDraft(picks), [pick1, pick2, pick3, pick4]);
+  const picks = [pick1, pick2, pick3, pick4, pick5];
+  const result = useMemo(() => evaluateDraft(picks), [pick1, pick2, pick3, pick4, pick5]);
 
   const rolePill = (ok) => ({
     fontSize: 11,
@@ -741,7 +720,7 @@ function DraftBuilderSection({ dark }) {
             gap: 10,
           }}
         >
-          {[pick1, pick2, pick3, pick4].map((value, i) => (
+          {[pick1, pick2, pick3, pick4, pick5].map((value, i) => (
             <select
               key={i}
               value={value}
@@ -751,6 +730,7 @@ function DraftBuilderSection({ dark }) {
                 if (i === 1) setPick2(v);
                 if (i === 2) setPick3(v);
                 if (i === 3) setPick4(v);
+                if (i === 4) setPick5(v);
               }}
               style={{
                 width: "100%",
@@ -1810,7 +1790,7 @@ select option:checked {
                   color: dark ? "rgba(255,255,255,0.32)" : "rgba(0,0,0,0.34)",
                 }}
               >
-                Squads Meta
+                Squads 5v5 Meta
               </div>
             </div>
           </div>
@@ -1885,7 +1865,7 @@ select option:checked {
               fontFamily: "'JetBrains Mono', monospace",
             }}
           >
-            Roblox BedWars · Ranked Squads
+            Roblox BedWars · Season 16 · 5v5
           </span>
         </div>
 
@@ -1954,7 +1934,7 @@ select option:checked {
           }}
         >
           {[
-            { val: "6", label: "Comps" },
+            { val: "5", label: "Comps" },
             { val: "1", label: "Draft tool" },
             { val: "4", label: "Guides" },
           ].map((s) => (
