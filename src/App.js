@@ -488,7 +488,7 @@ function Hero({ setTab }) {
       </div>
 
       <h1 className="heroTitle">
-        Build better<br />
+        <span>Build better</span>
         <em>teams.</em>
       </h1>
 
@@ -1177,25 +1177,35 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 }
 
 .heroTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 18px);
   font-family: var(--font-head);
-  font-size: clamp(60px, 11vw, 120px);
+  font-size: clamp(56px, 10vw, 118px);
   font-weight: 900;
-  letter-spacing: -.05em;
-  line-height: .94;
+  letter-spacing: -.045em;
+  line-height: .82;
   background: linear-gradient(170deg, #ffffff 0%, #c8e8ff 40%, #7dd3fc 65%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+.heroTitle span,
 .heroTitle em {
-  display: inline-block;
-  font-style: italic;
-  margin-top: -8px;
+  display: block;
+  line-height: .82;
 }
+
+.heroTitle em {
+  font-style: italic;
+  transform: translateX(8px);
+}
+
 .heroSub {
   max-width: 610px;
-  margin: 20px auto 0;
+  margin: 28px auto 0;
   color: var(--t2);
   font-size: 17px;
   line-height: 1.7;
@@ -1909,8 +1919,8 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 }
 
 @media (max-width: 560px) {
-  .heroTitle { font-size: 56px; }
-  .heroSub { font-size: 15px; }
+  .heroTitle { font-size: 56px; gap: 14px; }
+  .heroSub { font-size: 15px; margin-top: 24px; }
   .pickGrid { grid-template-columns: 1fr; }
   .kitGrid { grid-template-columns: repeat(2, 1fr); }
   .navLabel { font-size: 9px; }
