@@ -68,7 +68,7 @@ const META_BUILDS = [
   },
   {
     name: "Warden / Melody / Melody / Hannah / Fisher",
-    tag: "Sustain Wall",
+    tag: "Bypass",
     icon: "◌",
     accent: "#67e8f9",
     gradient: "linear-gradient(135deg, #67e8f9, #0ea5e9)",
