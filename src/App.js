@@ -107,13 +107,13 @@ const ROLE_GUIDE = [
     role: "Frontline",
     icon: "⚔",
     job: "Starts fights, takes space, and protects the support players.",
-    kits: ["Cait", "Silas", "Warden", "Sheila", "Freya"],
+    kits: ["Cait", "Silas", "Warden", "Uma", "Whim", "Eldertree", "Sheila", "Freya"],
   },
   {
     role: "Support",
     icon: "✚",
     job: "Keeps fights clean with healing, setup, peel, or utility.",
-    kits: ["Star", "Lassy", "Melody", "Hannah", "Baker"],
+    kits: ["Star", "Lassy", "Melody", "Hannah", "Baker", "Whisper", "Umbra", "Lani"],
   },
   {
     role: "Economy",
@@ -125,19 +125,19 @@ const ROLE_GUIDE = [
     role: "Defender",
     icon: "⬢",
     job: "Protects bed, watches incoming pressure, and prevents free breaks.",
-    kits: ["Noelle", "Wren", "Baker", "Hannah", "Fisher"],
+    kits: ["Noelle", "Wren", "Baker", "Hannah", "Fisher", "Zola", "Marina"],
   },
   {
     role: "Bed Breaker",
     icon: "◆",
     job: "Finds openings and turns pressure into bed breaks.",
-    kits: ["Davey", "Umbra", "Ragnar", "Triton", "Sigrid"],
+    kits: ["Davey", "Pirate Davey", "Umbra", "Ragnar", "Triton", "Sigrid", "Dino Tamer"],
   },
   {
     role: "Ranged",
     icon: "⌁",
     job: "Chips teams before fights and controls bridges from distance.",
-    kits: ["Archer", "Umeko", "Zeno"],
+    kits: ["Archer", "Uma", "Umeko", "Whim", "Zeno"],
   },
 ];
 
@@ -153,8 +153,12 @@ const META_KITS = [
   { name: "Hannah", roles: ["Support", "Defender"] },
   { name: "Fisher", roles: ["Economy", "Defender"] },
   { name: "Davey", roles: ["Bed Breaker", "Pressure"] },
+  { name: "Pirate Davey", roles: ["Bed Breaker", "Pressure"] },
   { name: "Umbra", roles: ["Support", "Bed Breaker", "Pressure"] },
   { name: "Archer", roles: ["Ranged", "Pressure"] },
+  { name: "Uma", roles: ["Frontline", "Ranged", "Pressure"] },
+  { name: "Umeko", roles: ["Ranged", "Pressure"] },
+  { name: "Whim", roles: ["Ranged", "Frontline", "Pressure"] },
   { name: "Wren", roles: ["Defender"] },
 ];
 
@@ -164,12 +168,21 @@ const EXTRA_KITS = [
   { name: "Beekeeper", roles: ["Economy"] },
   { name: "Sheila", roles: ["Frontline"] },
   { name: "Freya", roles: ["Frontline"] },
+  { name: "Eldertree", roles: ["Frontline"] },
   { name: "Baker", roles: ["Support", "Defender"] },
+  { name: "Whisper", roles: ["Support"] },
   { name: "Ragnar", roles: ["Bed Breaker"] },
   { name: "Triton", roles: ["Bed Breaker"] },
   { name: "Sigrid", roles: ["Bed Breaker"] },
-  { name: "Umeko", roles: ["Ranged"] },
+  { name: "Dino Tamer", roles: ["Bed Breaker"] },
   { name: "Zeno", roles: ["Ranged"] },
+  { name: "Zola", roles: ["Defender"] },
+  { name: "Nyx", roles: ["Frontline", "Pressure"] },
+  { name: "Aery", roles: ["Frontline"] },
+  { name: "Amy", roles: ["Frontline", "Support"] },
+  { name: "Lani", roles: ["Support", "Pressure"] },
+  { name: "Smoke", roles: ["Support", "Pressure"] },
+  { name: "Marina", roles: ["Defender"] },
 ];
 
 const COUNTERS = [
@@ -245,8 +258,71 @@ const PRACTICE = [
   },
 ];
 
+function getAllKits(showMore = true) {
+  const pool = showMore ? [...META_KITS, ...EXTRA_KITS] : META_KITS;
+  const map = new Map();
+
+  pool.forEach((kit) => {
+    if (!map.has(kit.name)) {
+      map.set(kit.name, kit);
+    }
+  });
+
+  return [...map.values()];
+}
+
 function getKit(name) {
-  return [...META_KITS, ...EXTRA_KITS].find((kit) => kit.name === name);
+  return getAllKits(true).find((kit) => kit.name === name);
+}
+
+function getKitsByCategory(showMore) {
+  const categories = {
+    Frontline: [],
+    Support: [],
+    Economy: [],
+    Defender: [],
+    "Bed Breaker": [],
+    Ranged: [],
+    Pressure: [],
+  };
+
+  getAllKits(showMore).forEach((kit) => {
+    const mainRole = kit.roles.find((role) => categories[role]) || "Pressure";
+    categories[mainRole].push(kit);
+  });
+
+  Object.keys(categories).forEach((key) => {
+    categories[key].sort((a, b) => a.name.localeCompare(b.name));
+  });
+
+  return categories;
+}
+
+function MouseGlossLayer() {
+  const [pos, setPos] = useState({ x: 50, y: 12 });
+
+  useEffect(() => {
+    const move = (event) => {
+      const x = (event.clientX / window.innerWidth) * 100;
+      const y = (event.clientY / window.innerHeight) * 100;
+      setPos({ x, y });
+      document.documentElement.style.setProperty("--mx", `${x}%`);
+      document.documentElement.style.setProperty("--my", `${y}%`);
+    };
+
+    window.addEventListener("pointermove", move);
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+
+  return (
+    <div
+      className="mouseGloss"
+      style={{
+        "--mx": `${pos.x}%`,
+        "--my": `${pos.y}%`,
+      }}
+    />
+  );
 }
 
 function evaluateDraft(picks) {
@@ -433,37 +509,21 @@ function MetaSection() {
 
 function DraftBuilder() {
   const [showMore, setShowMore] = useState(false);
-  const [roleFilter, setRoleFilter] = useState("All");
   const [picks, setPicks] = useState(["Cait", "Lassy", "Star", "Metal", "Noelle"]);
 
-  const kits = showMore ? [...META_KITS, ...EXTRA_KITS] : META_KITS;
-  const filteredKits =
-    roleFilter === "All"
-      ? kits
-      : kits.filter((kit) => kit.roles.includes(roleFilter));
-
+  const kitCategories = useMemo(() => getKitsByCategory(showMore), [showMore]);
   const result = useMemo(() => evaluateDraft(picks), [picks]);
 
   const updatePick = (index, value) => {
     setPicks((old) => old.map((pick, i) => (i === index ? value : pick)));
   };
 
-  const roleFilters = [
-    "All",
-    "Frontline",
-    "Support",
-    "Economy",
-    "Defender",
-    "Bed Breaker",
-    "Ranged",
-  ];
-
   return (
     <section className="section">
       <SectionHeader
         eyebrow="Draft Builder"
         title="Check if your 5v5 team makes sense"
-        text="Pick five kits and the site checks your roles, pressure, and weak spots."
+        text="Kits are grouped by role inside each dropdown, so your draft never resets when choosing categories."
       />
 
       <div className="draftShell">
@@ -471,7 +531,7 @@ function DraftBuilder() {
           <div className="draftTop">
             <div>
               <span className="miniLabel">Your Team</span>
-              <h3>5 Kit Draft</h3>
+              <h3>{picks.join(" / ")}</h3>
             </div>
 
             <button className="smallBtn" onClick={() => setShowMore((v) => !v)}>
@@ -479,31 +539,32 @@ function DraftBuilder() {
             </button>
           </div>
 
-          <div className="roleFilters">
-            {roleFilters.map((role) => (
-              <button
-                key={role}
-                onClick={() => setRoleFilter(role)}
-                className={roleFilter === role ? "filter active" : "filter"}
-              >
-                {role}
-              </button>
-            ))}
-          </div>
-
           <div className="pickGrid">
             {picks.map((pick, index) => (
               <label key={index} className="pickBox">
                 <span>Slot {index + 1}</span>
                 <select value={pick} onChange={(e) => updatePick(index, e.target.value)}>
-                  {filteredKits.map((kit) => (
-                    <option key={kit.name} value={kit.name}>
-                      {kit.name}
-                    </option>
-                  ))}
+                  {Object.entries(kitCategories).map(([category, kits]) => {
+                    if (kits.length === 0) return null;
+
+                    return (
+                      <optgroup key={category} label={category}>
+                        {kits.map((kit) => (
+                          <option key={`${category}-${kit.name}`} value={kit.name}>
+                            {kit.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    );
+                  })}
                 </select>
               </label>
             ))}
+          </div>
+
+          <div className="draftHint">
+            Meta kits stay clean by default. Use <strong>Show More Kits</strong> for Uma,
+            Eldertree, Whim, Whisper, Zola, Nyx, Aery, Amy, and more.
           </div>
         </div>
 
@@ -709,6 +770,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <MouseGlossLayer />
       <style>{`
         * {
           box-sizing: border-box;
@@ -744,6 +806,7 @@ export default function App() {
             linear-gradient(180deg, #020617 0%, #030712 48%, #050816 100%);
           color: #f8fafc;
           overflow-x: hidden;
+          position: relative;
         }
 
         .app::before {
@@ -1407,6 +1470,175 @@ export default function App() {
         .navItem.active {
           color: #e0f2fe;
           background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(37,99,235,0.16));
+        }
+
+
+
+        .mouseGloss {
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            radial-gradient(
+              620px circle at var(--mx) var(--my),
+              rgba(125, 211, 252, 0.16),
+              rgba(59, 130, 246, 0.07) 28%,
+              transparent 58%
+            );
+          mix-blend-mode: screen;
+          opacity: 0.86;
+          transition: background 0.08s linear;
+        }
+
+        .draftHint {
+          margin-top: 14px;
+          border-radius: 16px;
+          padding: 12px 13px;
+          color: rgba(226, 232, 240, 0.64);
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          font-size: 13px;
+          line-height: 1.55;
+        }
+
+        optgroup {
+          background: #0f172a;
+          color: #7dd3fc;
+          font-weight: 900;
+        }
+
+        .statCard,
+        .buildCard,
+        .draftPanel,
+        .draftResult,
+        .roleCard,
+        .counterCard,
+        .timeCard,
+        .practiceCard {
+          position: relative;
+          overflow: hidden;
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.105), rgba(255,255,255,0.035)),
+            linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.48));
+          border: 1px solid rgba(255,255,255,0.13);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.13),
+            0 24px 70px rgba(0,0,0,0.28);
+        }
+
+        .statCard::before,
+        .buildCard::before,
+        .draftPanel::before,
+        .draftResult::before,
+        .roleCard::before,
+        .counterCard::before,
+        .timeCard::before,
+        .practiceCard::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            linear-gradient(
+              125deg,
+              rgba(255,255,255,0.22) 0%,
+              rgba(255,255,255,0.08) 18%,
+              transparent 42%
+            );
+          opacity: 0.42;
+        }
+
+        .statCard::after,
+        .buildCard::after,
+        .draftPanel::after,
+        .draftResult::after,
+        .roleCard::after,
+        .counterCard::after,
+        .timeCard::after,
+        .practiceCard::after {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          pointer-events: none;
+          background:
+            radial-gradient(
+              420px circle at var(--mx, 50%) var(--my, 0%),
+              rgba(255,255,255,0.16),
+              transparent 48%
+            );
+          opacity: 0;
+          transition: opacity 0.22s ease;
+        }
+
+        .statCard:hover::after,
+        .buildCard:hover::after,
+        .draftPanel:hover::after,
+        .draftResult:hover::after,
+        .roleCard:hover::after,
+        .counterCard:hover::after,
+        .timeCard:hover::after,
+        .practiceCard:hover::after {
+          opacity: 1;
+        }
+
+        .statCard > *,
+        .buildCard > *,
+        .draftPanel > *,
+        .draftResult > *,
+        .roleCard > *,
+        .counterCard > *,
+        .timeCard > *,
+        .practiceCard > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .buildCard:hover,
+        .statCard:hover,
+        .roleCard:hover,
+        .counterCard:hover,
+        .timeCard:hover,
+        .practiceCard:hover {
+          transform: translateY(-5px) scale(1.006);
+          border-color: rgba(186, 230, 253, 0.24);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.18),
+            0 30px 85px rgba(14,165,233,0.14),
+            0 24px 70px rgba(0,0,0,0.32);
+        }
+
+        .primaryBtn {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.95), rgba(186,230,253,0.92));
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.9),
+            0 18px 44px rgba(56,189,248,0.28);
+        }
+
+        .ghostBtn,
+        .smallBtn,
+        .expand {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+          border: 1px solid rgba(255,255,255,0.13);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        select {
+          background:
+            linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.78));
+          border: 1px solid rgba(255,255,255,0.1);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .bottomNav {
+          background:
+            linear-gradient(180deg, rgba(15,23,42,0.86), rgba(2,6,23,0.84));
+          border: 1px solid rgba(255,255,255,0.14);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.11),
+            0 24px 80px rgba(0,0,0,0.48);
         }
 
         @media (max-width: 860px) {
