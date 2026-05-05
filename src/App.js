@@ -1181,14 +1181,18 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   font-size: clamp(60px, 11vw, 120px);
   font-weight: 900;
   letter-spacing: -.05em;
-  line-height: 1.02;
+  line-height: .94;
   background: linear-gradient(170deg, #ffffff 0%, #c8e8ff 40%, #7dd3fc 65%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.heroTitle em { font-style: italic; }
+.heroTitle em {
+  display: inline-block;
+  font-style: italic;
+  margin-top: -8px;
+}
 .heroSub {
   max-width: 610px;
   margin: 20px auto 0;
