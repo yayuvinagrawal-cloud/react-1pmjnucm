@@ -160,6 +160,12 @@ const META_KITS = [
   { name: "Noelle", roles: ["Defender"] },
   { name: "Silas", roles: ["Frontline", "Support"] },
   { name: "Warden", roles: ["Frontline"] },
+  { name: "Sheila", roles: ["Frontline"] },
+  { name: "Nyx", roles: ["Frontline", "Pressure"] },
+  { name: "Freya", roles: ["Frontline"] },
+  { name: "Lucia", roles: ["Economy", "Frontline"] },
+  { name: "Aery", roles: ["Frontline"] },
+  { name: "Amy", roles: ["Frontline", "Support"] },
   { name: "Melody", roles: ["Support"] },
   { name: "Hannah", roles: ["Support", "Defender"] },
   { name: "Fisher", roles: ["Economy", "Defender"] },
@@ -175,10 +181,7 @@ const META_KITS = [
 
 const EXTRA_KITS = [
   { name: "Farmer", roles: ["Economy"] },
-  { name: "Lucia", roles: ["Economy", "Frontline"] },
   { name: "Beekeeper", roles: ["Economy"] },
-  { name: "Sheila", roles: ["Frontline"] },
-  { name: "Freya", roles: ["Frontline"] },
   { name: "Eldertree", roles: ["Frontline"] },
   { name: "Baker", roles: ["Support", "Defender"] },
   { name: "Whisper", roles: ["Support"] },
@@ -188,9 +191,6 @@ const EXTRA_KITS = [
   { name: "Dino Tamer", roles: ["Bed Breaker", "Pressure"] },
   { name: "Zeno", roles: ["Ranged"] },
   { name: "Zola", roles: ["Defender"] },
-  { name: "Nyx", roles: ["Frontline", "Pressure"] },
-  { name: "Aery", roles: ["Frontline"] },
-  { name: "Amy", roles: ["Frontline", "Support"] },
   { name: "Lani", roles: ["Support", "Pressure"] },
   { name: "Smoke", roles: ["Support", "Pressure"] },
   { name: "Marina", roles: ["Defender"] },
@@ -201,7 +201,7 @@ const ROLE_GUIDE = [
     role: "Frontline",
     icon: "⚔",
     job: "Starts fights, takes space, and protects the support players.",
-    kits: ["Cait", "Silas", "Warden", "Uma", "Eldertree", "Whim", "Sheila", "Freya"],
+    kits: ["Cait", "Silas", "Warden", "Sheila", "Nyx", "Freya", "Lucia", "Eldertree"],
   },
   {
     role: "Support",
@@ -308,11 +308,10 @@ const PRACTICE = [
   },
 ];
 
-function getAllKits(showMore = true) {
-  const pool = showMore ? [...META_KITS, ...EXTRA_KITS] : META_KITS;
+function getAllKits() {
   const map = new Map();
 
-  pool.forEach((kit) => {
+  [...META_KITS, ...EXTRA_KITS].forEach((kit) => {
     if (!map.has(kit.name)) {
       map.set(kit.name, kit);
     }
@@ -322,10 +321,10 @@ function getAllKits(showMore = true) {
 }
 
 function getKit(name) {
-  return getAllKits(true).find((kit) => kit.name === name);
+  return getAllKits().find((kit) => kit.name === name);
 }
 
-function getKitsByCategory(showMore) {
+function getKitsByCategory() {
   const categories = {
     Frontline: [],
     Support: [],
@@ -336,7 +335,7 @@ function getKitsByCategory(showMore) {
     Pressure: [],
   };
 
-  getAllKits(showMore).forEach((kit) => {
+  getAllKits().forEach((kit) => {
     const mainRole = kit.roles.find((role) => categories[role]) || "Pressure";
     categories[mainRole].push(kit);
   });
@@ -385,6 +384,9 @@ function evaluateDraft(picks) {
   }
   if (picks.includes("Metal") || picks.includes("Fisher")) {
     positives.push("Your build has scaling, so do not waste early lives.");
+  }
+  if (picks.includes("Amy") || picks.includes("Freya")) {
+    positives.push("Amy/Freya style juggs can get value without relying only on kills.");
   }
 
   let verdict = "Risky";
@@ -540,10 +542,9 @@ function MetaSection() {
 }
 
 function DraftBuilder() {
-  const [showMore, setShowMore] = useState(false);
   const [picks, setPicks] = useState(["Cait", "Lassy", "Star", "Metal", "Noelle"]);
 
-  const kitCategories = useMemo(() => getKitsByCategory(showMore), [showMore]);
+  const kitCategories = useMemo(() => getKitsByCategory(), []);
   const result = useMemo(() => evaluateDraft(picks), [picks]);
 
   const updatePick = (index, value) => {
@@ -555,7 +556,7 @@ function DraftBuilder() {
       <SectionHeader
         eyebrow="Draft Builder"
         title="Check if your 5v5 team makes sense"
-        text="Kits are grouped inside the dropdown by role, so your draft will not reset when browsing."
+        text="All kits are grouped inside the dropdown by role, so your draft will not reset when browsing."
       />
 
       <div className="draftShell">
@@ -565,10 +566,6 @@ function DraftBuilder() {
               <span className="miniLabel">Your Team</span>
               <h3>{picks.join(" / ")}</h3>
             </div>
-
-            <button className="smallBtn" onClick={() => setShowMore((v) => !v)}>
-              {showMore ? "Show Meta Only" : "Show More Kits"}
-            </button>
           </div>
 
           <div className="pickGrid">
@@ -1005,8 +1002,7 @@ export default function App() {
         }
 
         .primaryBtn,
-        .ghostBtn,
-        .smallBtn {
+        .ghostBtn {
           border: none;
           cursor: pointer;
           border-radius: 999px;
@@ -1033,19 +1029,8 @@ export default function App() {
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.09);
         }
 
-        .smallBtn {
-          padding: 9px 13px;
-          color: #e0f2fe;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.095), rgba(255,255,255,0.035));
-          border: 1px solid rgba(125, 211, 252, 0.18);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-          font-size: 12px;
-        }
-
         .primaryBtn:hover,
-        .ghostBtn:hover,
-        .smallBtn:hover {
+        .ghostBtn:hover {
           transform: translateY(-2px);
         }
 
