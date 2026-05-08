@@ -73,21 +73,23 @@ const ALL_KITS = [
   { name: "Silas", roles: ["Frontline", "Support"] },
   { name: "Warden", roles: ["Frontline"] },
   { name: "Sheila", roles: ["Frontline"] },
-  { name: "Nyx", roles: ["Frontline", "Bed Breaker"] },
+  { name: "Nyx", roles: ["Frontline"] },
   { name: "Freya", roles: ["Frontline"] },
   { name: "Lucia", roles: ["Economy", "Frontline"] },
   { name: "Aery", roles: ["Frontline"] },
   { name: "Amy", roles: ["Frontline", "Support"] },
   { name: "Melody", roles: ["Support"] },
   { name: "Hannah", roles: ["Support", "Defender"] },
+  { name: "Infernal Shielder", roles: ["Support"] },
+  { name: "Nyoka", roles: ["Support"] },
   { name: "Fisher", roles: ["Economy", "Defender"] },
-  { name: "Davey", roles: ["Bed Breaker"] },
+  { name: "Davey", roles: ["Bed Breaker", "Economy"] },
   { name: "Pirate Davey", roles: ["Bed Breaker"] },
   { name: "Umbra", roles: ["Support", "Bed Breaker"] },
   { name: "Archer", roles: ["Ranged"] },
   { name: "Umeko", roles: ["Ranged"] },
   { name: "Uma", roles: ["Ranged"] },
-  { name: "Wren", roles: ["Defender"] },
+  { name: "Wren", roles: ["Defender", "Support"] },
   { name: "Whim", roles: ["Ranged"] },
   { name: "Farmer", roles: ["Economy"] },
   { name: "Beekeeper", roles: ["Economy"] },
@@ -194,7 +196,7 @@ const ROLE_GUIDE = [
     role: "Support",
     icon: "✚",
     job: "Keeps fights clean with healing, setup, static/chip pressure, peel, or utility.",
-    kits: ["Star", "Lassy", "Melody", "Hannah", "Baker", "Whisper", "Umbra", "Lani", "Zeno"],
+    kits: ["Star", "Lassy", "Melody", "Hannah", "Infernal Shielder", "Nyoka", "Baker", "Whisper", "Umbra", "Lani", "Zeno"],
   },
   {
     role: "Economy",
@@ -206,7 +208,7 @@ const ROLE_GUIDE = [
     role: "Defender",
     icon: "⬢",
     job: "Protects bed, watches incoming pressure, and stops free breaks.",
-    kits: ["Noelle", "Wren", "Baker", "Hannah", "Fisher", "Zola", "Marina"],
+    kits: ["Noelle", "Wren", "Baker", "Hannah", "Fisher", "Zola", "Marina", "Infernal Shielder"],
   },
   {
     role: "Bed Breaker",
@@ -241,8 +243,15 @@ const COUNTERS = [
     title: "Against Smoke / Davey",
     icon: "◆",
     plan: "Track bed breakers at all times. If Smoke or Davey disappears, stop chasing and check bed.",
-    good: ["Noelle", "Wren", "Hannah", "Baker"],
+    good: ["Noelle", "Wren", "Hannah", "Baker", "Infernal Shielder"],
     avoid: "Leaving base empty after one won fight.",
+  },
+  {
+    title: "Against Bow Spam / Projectile Pressure",
+    icon: "⌁",
+    plan: "Use Infernal Shielder to stall bridge pressure and let your team walk up without getting chipped for free.",
+    good: ["Infernal Shielder", "Nyoka", "Baker", "Whisper"],
+    avoid: "Running one by one through ranged spam with no shield or sustain.",
   },
 ];
 
@@ -304,7 +313,9 @@ function evaluateDraft(picks) {
     hasKit("Farmer") ||
     hasKit("Zeno") ||
     hasKit("Warden") ||
-    hasKit("Noelle");
+    hasKit("Noelle") ||
+    hasKit("Infernal Shielder") ||
+    hasKit("Nyoka");
 
   let score = 0;
 
@@ -312,14 +323,9 @@ function evaluateDraft(picks) {
   if (hasSupport) score += 25;
   if (hasEconomy) score += 25;
   if (hasDefender) score += 15;
-
-  // Bed breaker is useful, but not mandatory.
   if (hasBedBreaker) score += 10;
-
-  // Ranged is bonus utility.
   if (hasRanged && score < 100) score += 5;
 
-  // Scaling/lategame comps can still close games without a dedicated bed breaker kit.
   if (!hasBedBreaker && hasLateGamePlan && hasFrontline && hasSupport && hasEconomy) {
     score += 10;
   }
@@ -345,6 +351,8 @@ function evaluateDraft(picks) {
   if (hasKit("Zeno")) syns.push("Zeno second jugg — ranged/static chip makes enemies barely heal");
   if (hasKit("Lassy")) syns.push("Lassy second jugg — counters bypass and creates pick windows");
   if (hasKit("Smoke")) syns.push("Smoke bed breaker — punishes loose defenders and bypass angles");
+  if (hasKit("Infernal Shielder")) syns.push("Infernal Shielder support — stalls pushes, blocks projectile pressure, and protects grouped fights");
+  if (hasKit("Infernal Shielder") && hasKit("Nyoka")) syns.push("Infernal Shielder + Nyoka — shield stall makes it way harder to stop Nyoka value");
   if (hasKit("Metal") || hasKit("Fisher") || hasKit("Farmer") || hasKit("Beekeeper")) syns.push("Economy present — protect it early instead of ego fighting");
 
   let verdict = "Risky";
@@ -452,6 +460,20 @@ function analyzeDraftLocal(picks) {
     playstyle = "Bypass Break";
     strengths.push("Smoke is a bed breaker, not support. Use it to punish loose defenders and bad rotations.");
     tips.push("Smoke should look for bed angles after your frontline pulls attention, not before the fight starts.");
+  }
+
+  if (hasKit("Infernal Shielder")) {
+    playstyle = "Stall Support";
+    timing = "Mid/Late";
+    strengths.push("Infernal Shielder is strong support because it stalls pushes and helps the team survive projectile pressure.");
+    tips.push("Stand near your team during bridge fights or bed pressure so your shield can protect the grouped push.");
+  }
+
+  if (hasKit("Infernal Shielder") && hasKit("Nyoka")) {
+    playstyle = "Shield Stall Sustain";
+    timing = "Late";
+    strengths.push("Infernal Shielder + Nyoka is strong because shield stall gives Nyoka more time to get value.");
+    tips.push("Use Infernal Shielder to block ranged pressure while Nyoka plays safely behind the main fight.");
   }
 
   if (weaknesses.length === 0) {
@@ -825,16 +847,16 @@ function DraftBuilder() {
             </div>
 
             {eval_.missing.length > 0 && (
-  <div className="warnBox">
-    <strong>Fix:</strong> Add {eval_.missing.join(", ")}.
-  </div>
-)}
+              <div className="warnBox">
+                <strong>Fix:</strong> Add {eval_.missing.join(", ")}.
+              </div>
+            )}
 
-{eval_.notes?.length > 0 && (
-  <div className="noteBox">
-    <strong>Note:</strong> {eval_.notes[0]}
-  </div>
-)}
+            {eval_.notes?.length > 0 && (
+              <div className="noteBox">
+                <strong>Note:</strong> {eval_.notes[0]}
+              </div>
+            )}
 
             {eval_.syns.length > 0 && (
               <div className="synList">
@@ -1262,9 +1284,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   text-shadow: 0 12px 44px rgba(56,189,248,.1);
 }
 
-.heroLine + .heroLine {
-  margin-top: 2px;
-}
+.heroLine + .heroLine { margin-top: 2px; }
 
 .heroLineAccent {
   font-style: italic;
@@ -1302,19 +1322,14 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .btnPrimary {
   border: 1px solid rgba(255,255,255,.18);
   color: #07111f;
-  background:
-    linear-gradient(180deg, #ffffff, #d7f0ff);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    0 14px 36px rgba(91,192,255,.22);
+  background: linear-gradient(180deg, #ffffff, #d7f0ff);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 14px 36px rgba(91,192,255,.22);
 }
 
 .btnGhost {
   color: #edf6ff;
   border: 1px solid rgba(255,255,255,.1);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.03)),
-    rgba(8,14,28,.52);
+  background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.03)), rgba(8,14,28,.52);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 
@@ -1328,11 +1343,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   margin: 36px auto 0;
 }
 
-.heroStat {
-  border-radius: 24px;
-  padding: 18px;
-  text-align: left;
-}
+.heroStat { border-radius: 24px; padding: 18px; text-align: left; }
 
 .heroStat strong {
   display: block;
@@ -1401,12 +1412,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .buildTagRow { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .buildTag { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .tierBadge { padding: 4px 8px; border-radius: 999px; border: 1px solid; font-size: 11px; font-weight: 700; }
-.buildName {
-  font-family: var(--font-head);
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -.035em;
-}
+.buildName { font-family: var(--font-head); font-size: 19px; font-weight: 800; letter-spacing: -.035em; }
 
 .expandBtn {
   width: 32px;
@@ -1419,12 +1425,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   font-size: 20px;
 }
 
-.roleBar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 12px 20px 0;
-}
+.roleBar { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 20px 0; }
 
 .roleBarSeg {
   padding: 4px 9px;
@@ -1435,18 +1436,8 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   font-weight: 700;
 }
 
-.buildWhy {
-  padding: 12px 20px 18px;
-  color: var(--t2);
-  font-size: 14px;
-  line-height: 1.72;
-}
-
-.buildDetails {
-  display: grid;
-  gap: 8px;
-  padding: 0 20px 20px;
-}
+.buildWhy { padding: 12px 20px 18px; color: var(--t2); font-size: 14px; line-height: 1.72; }
+.buildDetails { display: grid; gap: 8px; padding: 0 20px 20px; }
 
 .infoBlock {
   border-radius: 16px;
@@ -1455,12 +1446,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   border: 1px solid var(--border);
 }
 
-.infoBlock p {
-  color: var(--t2);
-  font-size: 13.5px;
-  line-height: 1.68;
-}
-
+.infoBlock p { color: var(--t2); font-size: 13.5px; line-height: 1.68; }
 .infoBlock.danger { border-color: rgba(255,85,102,.15); }
 
 .draftShell {
@@ -1472,11 +1458,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
 .draftLeft { display: grid; gap: 16px; }
 .draftRight { position: sticky; top: 18px; }
-
-.draftPanel, .aiPanel, .draftResult {
-  border-radius: 28px;
-  padding: 22px;
-}
+.draftPanel, .aiPanel, .draftResult { border-radius: 28px; padding: 22px; }
 
 .draftTeamName {
   font-family: var(--font-head);
@@ -1533,11 +1515,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .searchRoles { display: flex; gap: 5px; flex-wrap: wrap; }
 .noResults { padding: 14px; color: var(--t3); }
 
-.pickGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
+.pickGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 
 .pickBox {
   display: flex;
@@ -1549,16 +1527,8 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   border: 1px solid var(--border);
 }
 
-.pickBoxTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.pickBoxTop .mono {
-  font-size: 11px;
-  color: var(--t3);
-}
+.pickBoxTop { display: flex; align-items: center; justify-content: space-between; }
+.pickBoxTop .mono { font-size: 11px; color: var(--t3); }
 
 select {
   width: 100%;
@@ -1585,18 +1555,8 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   line-height: 1.6;
 }
 
-.aiHeader {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.aiHeader h3 {
-  margin: 4px 0 0;
-  font-size: 18px;
-  font-weight: 700;
-}
+.aiHeader { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+.aiHeader h3 { margin: 4px 0 0; font-size: 18px; font-weight: 700; }
 
 .aiGlyph {
   width: 48px;
@@ -1621,14 +1581,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   font-size: 15px;
 }
 
-.aiLoading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 24px 0;
-}
-
+.aiLoading { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 0; }
 .loadDots { display: flex; gap: 6px; }
 
 .loadDots span {
@@ -1662,13 +1615,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 .playstyleBadge { background: rgba(0,198,255,.1); border: 1px solid rgba(0,198,255,.25); color: var(--primary); }
 .timingBadge { background: rgba(255,202,40,.1); border: 1px solid rgba(255,202,40,.22); color: #ffd93d; }
 .aiSummary { color: var(--t2); font-size: 14px; line-height: 1.7; }
-
-.aiCols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
+.aiCols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .goodLabel { color: #00e5a0; }
 .badLabel { color: #ff5566; }
 
@@ -1721,13 +1668,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   font-weight: 700;
 }
 
-.scoreRingWrap {
-  position: relative;
-  width: 130px;
-  height: 130px;
-  margin-bottom: 14px;
-}
-
+.scoreRingWrap { position: relative; width: 130px; height: 130px; margin-bottom: 14px; }
 .scoreRingWrap svg circle:last-child { transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1), stroke .4s; }
 
 .scoreRingInner {
@@ -1739,30 +1680,11 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   justify-content: center;
 }
 
-.scoreRingInner strong {
-  font-family: var(--font-head);
-  font-size: 36px;
-  font-weight: 800;
-}
+.scoreRingInner strong { font-family: var(--font-head); font-size: 36px; font-weight: 800; }
+.scoreRingInner span { font-size: 12px; color: var(--t3); margin-top: -8px; }
 
-.scoreRingInner span {
-  font-size: 12px;
-  color: var(--t3);
-  margin-top: -8px;
-}
-
-.verdictLabel {
-  font-family: var(--font-head);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -.045em;
-}
-
-.verdictText {
-  color: var(--t2);
-  font-size: 14px;
-  margin-top: 4px;
-}
+.verdictLabel { font-family: var(--font-head); font-size: 32px; font-weight: 800; letter-spacing: -.045em; }
+.verdictText { color: var(--t2); font-size: 14px; margin-top: 4px; }
 
 .roleCheckGrid {
   display: grid;
@@ -1804,6 +1726,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   font-size: 13px;
   line-height: 1.55;
 }
+
 .warnBox {
   margin-top: 12px;
   padding: 11px 13px;
@@ -1827,13 +1750,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   margin-top: 6px;
 }
 
-.browserControls {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
+.browserControls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 .filterRow { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .filterBtn {
@@ -1858,10 +1775,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   gap: 10px;
 }
 
-.kitCard {
-  border-radius: 20px;
-  padding: 16px;
-}
+.kitCard { border-radius: 20px; padding: 16px; }
 
 .kitName {
   font-family: var(--font-head);
@@ -1871,11 +1785,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   letter-spacing: -.03em;
 }
 
-.kitRoles, .kitTagList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+.kitRoles, .kitTagList { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .roleTag {
   display: inline-block;
@@ -1893,10 +1803,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   gap: 14px;
 }
 
-.roleCard, .counterCard, .practiceCard {
-  border-radius: 26px;
-  padding: 22px;
-}
+.roleCard, .counterCard, .practiceCard { border-radius: 26px; padding: 22px; }
 
 .roleIconWrap, .counterIconWrap {
   width: 48px;
@@ -1933,12 +1840,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   font-weight: 700;
 }
 
-.counterIconWrap {
-  background: rgba(255,85,102,.1);
-  border-color: rgba(255,85,102,.22);
-  color: #fca5a5;
-}
-
+.counterIconWrap { background: rgba(255,85,102,.1); border-color: rgba(255,85,102,.22); color: #fca5a5; }
 .miniLabel { margin-top: 14px; margin-bottom: 8px; }
 
 .avoidBox {
@@ -1952,11 +1854,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 }
 
 .timeline { display: grid; gap: 4px; }
-
-.timeCard {
-  display: grid;
-  grid-template-columns: 44px 1fr;
-}
+.timeCard { display: grid; grid-template-columns: 44px 1fr; }
 
 .timeLeft {
   display: flex;
@@ -1981,18 +1879,8 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   margin-top: 4px;
 }
 
-.timeBody {
-  margin: 8px 0;
-  padding: 16px 18px;
-  border-radius: 18px;
-}
-
-.timeStamp {
-  color: var(--primary);
-  font-size: 11px;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
+.timeBody { margin: 8px 0; padding: 16px 18px; border-radius: 18px; }
+.timeStamp { color: var(--primary); font-size: 11px; font-weight: 700; margin-bottom: 5px; }
 
 .timeBody h3 {
   font-family: var(--font-head);
@@ -2002,11 +1890,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   letter-spacing: -.03em;
 }
 
-.timeBody p {
-  color: var(--t2);
-  font-size: 14px;
-  line-height: 1.62;
-}
+.timeBody p { color: var(--t2); font-size: 14px; line-height: 1.62; }
 
 .practiceLevel {
   color: #ffd93d;
@@ -2095,15 +1979,8 @@ optgroup, option { background: #0f172a; color: var(--t1); }
     letter-spacing: -.06em;
   }
 
-  .heroLine + .heroLine {
-    margin-top: 4px;
-  }
-
-  .heroSub {
-    font-size: 15px;
-    margin-top: 24px;
-  }
-
+  .heroLine + .heroLine { margin-top: 4px; }
+  .heroSub { font-size: 15px; margin-top: 24px; }
   .pickGrid { grid-template-columns: 1fr; }
   .kitGrid { grid-template-columns: repeat(2, 1fr); }
   .navLabel { font-size: 9px; }
