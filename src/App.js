@@ -108,6 +108,36 @@ const ALL_KITS = [
 ];
 
 const META_BUILDS = [
+   {
+  name: "Infernal Shielder / Zeno / Zeno / Metal / Noelle",
+  tag: "Shield Static Core",
+  tier: "S",
+  icon: "▣",
+  accentA: "#38bdf8",
+  accentB: "#7c3aed",
+  roles: ["Support", "Support", "Ranged", "Economy", "Defender"],
+  why: "This is S tier because Shielder stalls pushes, double Zeno gives nonstop static/chip pressure, Metal scales, and Noelle keeps bed safe.",
+  early: "Play safe and protect Metal. Shielder blocks projectile pressure while Zenos chip from behind.",
+  mid: "Group around Shielder and let double Zeno make enemies unable to heal or reset cleanly.",
+  win: "Outscale with Metal, stall fights with Shielder, then win through static pressure and grouped pushes.",
+  bestInto: "Projectile teams, slow sustain comps, and teams that rely on healing.",
+  weakness: "Needs discipline because there is no hard bed breaker kit.",
+},
+{
+  name: "Infernal Shielder / Nyoka / Silas / Metal / Noelle",
+  tag: "Shield Aura Sustain",
+  tier: "A",
+  icon: "◇",
+  accentA: "#22d3ee",
+  accentB: "#0f766e",
+  roles: ["Support", "Support", "Frontline", "Economy", "Defender"],
+  why: "This is A tier because Shielder stalls and protects, Nyoka gets value safely, Silas buffs grouped fights, Metal scales, and Noelle defends.",
+  early: "Do not split hard. Silas stays with the team while Metal gets value and Noelle watches bed.",
+  mid: "Fight grouped around Silas aura. Shielder blocks ranged pressure so Nyoka can play safely.",
+  win: "Win long grouped fights through aura, stall, and Metal scaling, then convert with TNT and pressure.",
+  bestInto: "Teams that spam projectiles or take long grouped fights.",
+  weakness: "Less direct bed break pressure, so you need TNT and clean fight wins.",
+},
   {
     name: "Cait / Lassy / Star / Metal / Noelle",
     tag: "Most Reliable",
