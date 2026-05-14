@@ -55,6 +55,13 @@ const RC = {
   Ranged: { c: "#ff9ec7", bg: "rgba(255,158,199,.13)", b: "rgba(255,158,199,.25)" },
 };
 
+const TIER_STYLES = {
+  S: { c: "#ffd93d", bg: "rgba(255,217,61,.12)", b: "rgba(255,217,61,.32)" },
+  A: { c: "#93c5fd", bg: "rgba(59,130,246,.12)", b: "rgba(147,197,253,.32)" },
+  B: { c: "#cbd5e1", bg: "rgba(148,163,184,.1)", b: "rgba(203,213,225,.24)" },
+  C: { c: "#fca5a5", bg: "rgba(255,85,102,.1)", b: "rgba(252,165,165,.28)" },
+};
+
 function RoleTag({ role }) {
   const r = RC[role] || { c: "#94a3b8", bg: "rgba(148,163,184,.1)", b: "rgba(148,163,184,.2)" };
   return (
@@ -65,49 +72,82 @@ function RoleTag({ role }) {
 }
 
 const ALL_KITS = [
-  { name: "Cait", roles: ["Frontline"] },
-  { name: "Lassy", roles: ["Support", "Frontline"] },
-  { name: "Star", roles: ["Support"] },
-  { name: "Metal", roles: ["Economy"] },
-  { name: "Noelle", roles: ["Defender"] },
-  { name: "Silas", roles: ["Frontline", "Support"] },
-  { name: "Warden", roles: ["Frontline"] },
-  { name: "Sheila", roles: ["Frontline"] },
-  { name: "Nyx", roles: ["Frontline"] },
-  { name: "Freya", roles: ["Frontline"] },
-  { name: "Lucia", roles: ["Economy", "Frontline"] },
-  { name: "Aery", roles: ["Frontline"] },
-  { name: "Amy", roles: ["Frontline", "Support"] },
-  { name: "Melody", roles: ["Support"] },
-  { name: "Hannah", roles: ["Support", "Defender"] },
-  { name: "Infernal Shielder", roles: ["Support"] },
-  { name: "Nyoka", roles: ["Support"] },
-  { name: "Fisher", roles: ["Economy", "Defender"] },
-  { name: "Davey", roles: ["Bed Breaker", "Economy"] },
-  { name: "Pirate Davey", roles: ["Bed Breaker"] },
-  { name: "Umbra", roles: ["Support", "Bed Breaker"] },
-  { name: "Archer", roles: ["Ranged"] },
-  { name: "Umeko", roles: ["Ranged"] },
-  { name: "Uma", roles: ["Ranged"] },
-  { name: "Wren", roles: ["Defender", "Support"] },
-  { name: "Whim", roles: ["Ranged"] },
-  { name: "Farmer", roles: ["Economy"] },
-  { name: "Beekeeper", roles: ["Economy"] },
-  { name: "Eldertree", roles: ["Frontline"] },
-  { name: "Baker", roles: ["Support", "Defender"] },
-  { name: "Whisper", roles: ["Support"] },
-  { name: "Ragnar", roles: ["Bed Breaker"] },
-  { name: "Triton", roles: ["Bed Breaker"] },
-  { name: "Sigrid", roles: ["Bed Breaker"] },
-  { name: "Dino Tamer", roles: ["Bed Breaker"] },
-  { name: "Zeno", roles: ["Support", "Ranged"] },
-  { name: "Zola", roles: ["Defender"] },
-  { name: "Lani", roles: ["Support", "Bed Breaker"] },
-  { name: "Smoke", roles: ["Bed Breaker"] },
-  { name: "Marina", roles: ["Defender"] },
+  { name: "Cait", roles: ["Frontline"], tier: "S" },
+  { name: "Lassy", roles: ["Support", "Frontline"], tier: "S" },
+  { name: "Star", roles: ["Support"], tier: "A" },
+  { name: "Metal", roles: ["Economy"], tier: "S" },
+  { name: "Noelle", roles: ["Defender"], tier: "A" },
+  { name: "Silas", roles: ["Frontline", "Support"], tier: "A" },
+  { name: "Warden", roles: ["Frontline"], tier: "A" },
+  { name: "Sheila", roles: ["Frontline"], tier: "B" },
+  {
+    name: "Nyx",
+    roles: ["Frontline"],
+    tier: "A",
+    description: "A slippery frontline who can go invisible. Nyx uses Smoke Bombs to disappear and reposition, making her extremely hard to pin down. Top pick for bypass and bed pressure because she can sneak behind defenders unseen.",
+    tips: "Use smoke to disengage bad fights, not just to initiate. Great for sneaking to bed while teammates hold attention.",
+  },
+  { name: "Freya", roles: ["Frontline"], tier: "B" },
+  { name: "Lucia", roles: ["Economy", "Frontline"], tier: "A" },
+  {
+    name: "Aery",
+    roles: ["Frontline"],
+    tier: "S",
+    description: "A frontline fighter with a powerful dodge ability. Aery can use a dash that makes her briefly invulnerable and repositions her in combat. She is a top-tier main jugg known for aggressive fight pressure.",
+    tips: "Use the dash to dodge kills shots or reposition onto a target. Strong in SJ fights because invincibility frames can negate fall damage combos.",
+  },
+  { name: "Amy", roles: ["Frontline", "Support"], tier: "B" },
+  { name: "Melody", roles: ["Support"], tier: "S" },
+  {
+    name: "Hannah",
+    roles: ["Support", "Defender"],
+    tier: "A",
+    description: "A support kit with a Lasso ability that pulls enemies toward her. Hannah can drag away bed breakers, pull bypass players out of position, or yank enemies off bridges. Strong anti-bypass pick and great team support.",
+    tips: "Save Lasso for Styx or Kaida entering your base. Pulling them out of the portal line stops the bypass chain instantly.",
+  },
+  { name: "Infernal Shielder", roles: ["Support"], tier: "A" },
+  { name: "Nyoka", roles: ["Support"], tier: "A" },
+  { name: "Fisher", roles: ["Economy", "Defender"], tier: "A" },
+  { name: "Davey", roles: ["Bed Breaker", "Economy"], tier: "B" },
+  { name: "Pirate Davey", roles: ["Bed Breaker"], tier: "A" },
+  { name: "Umbra", roles: ["Support", "Bed Breaker"], tier: "A" },
+  { name: "Archer", roles: ["Ranged"], tier: "C" },
+  { name: "Umeko", roles: ["Ranged"], tier: "B" },
+  { name: "Uma", roles: ["Ranged"], tier: "B" },
+  { name: "Wren", roles: ["Defender", "Support"], tier: "B" },
+  { name: "Whim", roles: ["Ranged"], tier: "C" },
+  { name: "Farmer", roles: ["Economy"], tier: "B" },
+  { name: "Beekeeper", roles: ["Economy"], tier: "B" },
+  { name: "Eldertree", roles: ["Frontline"], tier: "B" },
+  { name: "Baker", roles: ["Support", "Defender"], tier: "A" },
+  { name: "Whisper", roles: ["Support"], tier: "A" },
+  { name: "Ragnar", roles: ["Bed Breaker"], tier: "B" },
+  { name: "Triton", roles: ["Bed Breaker"], tier: "B" },
+  { name: "Sigrid", roles: ["Bed Breaker"], tier: "B" },
+  { name: "Dino Tamer", roles: ["Bed Breaker"], tier: "C" },
+  { name: "Zeno", roles: ["Support", "Ranged"], tier: "A" },
+  { name: "Zola", roles: ["Defender"], tier: "B" },
+  { name: "Lani", roles: ["Support", "Bed Breaker"], tier: "B" },
+  { name: "Smoke", roles: ["Bed Breaker"], tier: "A" },
+  { name: "Marina", roles: ["Defender"], tier: "B" },
+  {
+    name: "Barbarian",
+    roles: ["Frontline"],
+    tier: "B",
+    description: "A hard-hitting frontline kit that unlocks the Rage Blade. As Barbarian deals damage, his rage meter fills. When full, he upgrades to the Rage Blade which has higher damage and speed. Strong early kit for aggressive plays.",
+    tips: "Fill rage meter fast by trading hits. Rage Blade is strongest mid-game before enemies get full emerald armor. Pair with a support to stay alive while raging.",
+  },
+  {
+    name: "Grim Reaper",
+    roles: ["Frontline", "Bed Breaker"],
+    tier: "B",
+    description: "A high-skill frontline kit that enters a spirit form on death, letting Grim Reaper fight back before fully dying. Spirit form grants brief invincibility and lets him swing one last time. Strong bed pressure kit.",
+    tips: "Bait enemies into thinking you are dead — spirit form can clutch a bed break. Don't waste spirit form swings on armored targets mid-game.",
+  },
   {
     name: "Ares",
     roles: ["Ranged"],
+    tier: "A",
     kitClass: "Ranged",
     kitRoles: ["SJ", "MJ"],
     description: "Ares is a strong SJ and MJ kit that excels at ranged combat. He buys Spears from the shop for 35 Iron. Each spear deals 52 damage with 40% armor penetration and knocks back all enemies within a 4 block radius on impact. Spears also apply the Zapped effect for 5 seconds. He gets a free spear every 40 seconds and can hold a max of 10. Getting the final hit with a spear returns it to your inventory.",
@@ -116,6 +156,7 @@ const ALL_KITS = [
   {
     name: "Styx",
     roles: ["Bed Breaker", "Support"],
+    tier: "S",
     kitClass: "Movement",
     kitRoles: ["Bypass"],
     description: "Styx is the backbone of the Bypass strategy. She starts with a Confluence Portal she can place anywhere. When she kills an enemy, a second linked portal spawns where they died and lasts 30 seconds, letting Styx and all teammates teleport between the two portals. After death she enters a Ghost state, allowing her to stay on the field and connect portals even while dead. She is the key teleport enabler in 5v5 bypass.",
@@ -124,6 +165,7 @@ const ALL_KITS = [
   {
     name: "Kaida",
     roles: ["Frontline", "Bed Breaker"],
+    tier: "S",
     kitClass: "Fighter",
     kitRoles: ["Bypass", "Early Game", "MJ", "SJ"],
     description: "Kaida is a versatile fighter who summons a Void Dragon. Her Summoner Claws replace her sword. They have a 7 block attack range, hit through walls, and deal AOE damage to multiple enemies at once. Her R ability grows a portal beneath her feet while she slows during the channel, then summons the dragon's head to deal massive AOE damage to all nearby enemies. Claws upgrade as you level up the dragon. She is strong early game, strong in the air, and a top pick for bypass rushing.",
@@ -132,6 +174,7 @@ const ALL_KITS = [
   {
     name: "Lian",
     roles: ["Frontline", "Bed Breaker"],
+    tier: "A",
     kitClass: "Fighter",
     kitRoles: ["Bypass", "SJ damage"],
     description: "Lian is a high-damage fighter kit with SJ-style burst damage using Dragon Swords. She spawns with 3 swords floating behind her, and each regenerates in 12 seconds. R ability: throw one sword as a homing projectile that locks onto enemies within 6 blocks, dealing 70% of her strongest melee weapon's damage with a 2 second cooldown. Q ultimate: slam all current swords down in a triangular AOE pattern for 120% sword damage plus fire damage with knockback. Her ability damage scales up as her sword tier improves.",
@@ -140,6 +183,7 @@ const ALL_KITS = [
   {
     name: "Crypt",
     roles: ["Support", "Bed Breaker"],
+    tier: "A",
     kitClass: "Fighter (Necromancer)",
     kitRoles: ["Bypass"],
     description: "Crypt is a necromancer who builds an undead army during bypass. When Crypt or any teammate kills an enemy, a Gravestone spawns where they died. Crypt uses his Necromancer Staff to collect the soul and summon a Skeleton. Each skeleton has 125 HP, inherits the killed player's weapon and strongest helmet, and deals 88% of the original weapon's damage. Skeletons last 120 seconds and Crypt can have up to 5 active at once. Summoning a 6th removes the oldest.",
@@ -260,7 +304,7 @@ const ROLE_GUIDE = [
     role: "Frontline",
     icon: "⚔",
     job: "Main jugg. Starts fights, takes space, protects support, and creates pressure by winning trades.",
-    kits: ["Cait", "Silas", "Warden", "Sheila", "Nyx", "Freya", "Lucia", "Aery", "Eldertree", "Lassy", "Kaida", "Lian"],
+    kits: ["Cait", "Silas", "Warden", "Sheila", "Nyx", "Freya", "Lucia", "Aery", "Eldertree", "Lassy", "Kaida", "Lian", "Barbarian", "Grim Reaper"],
   },
   {
     role: "Support",
@@ -284,7 +328,7 @@ const ROLE_GUIDE = [
     role: "Bed Breaker",
     icon: "◆",
     job: "Finds openings and converts won fights into bed breaks.",
-    kits: ["Davey", "Pirate Davey", "Umbra", "Ragnar", "Triton", "Sigrid", "Dino Tamer", "Smoke", "Lani", "Nyx", "Styx", "Kaida", "Lian", "Crypt"],
+    kits: ["Davey", "Pirate Davey", "Umbra", "Ragnar", "Triton", "Sigrid", "Dino Tamer", "Smoke", "Lani", "Nyx", "Styx", "Kaida", "Lian", "Crypt", "Grim Reaper"],
   },
   {
     role: "Ranged",
@@ -475,8 +519,7 @@ function analyzeDraftLocal(picks) {
 
   let playstyle = "Balanced Core";
   let timing = "Mid";
-  let summary =
-    "This draft is playable if the team fights grouped and converts wins into bed pressure. The main jugg should create space while support, economy, and defender keep the game stable.";
+  let summary = "";
 
   const strengths = [];
   const weaknesses = [];
@@ -559,6 +602,14 @@ function analyzeDraftLocal(picks) {
     strengths.push("Ares adds ranged spear pressure and AOE knockback for SJ and MJ fights.");
     tips.push("Use Ares spears before melee commits so the team starts fights with free damage and knockback pressure.");
   }
+
+  if (playstyle === "Bypass Rush") summary = "This is a fast bypass comp. Rush early, don't scale — the goal is bed destroyed before 3 minutes.";
+  else if (playstyle === "Pick Core") summary = "This is a pick-based comp. Isolate one target, convert kills into contract value, then push.";
+  else if (playstyle === "Sustain Core") summary = "This is a sustain comp that wins long fights. Stay near Melody, never split, and make enemy trades feel useless.";
+  else if (playstyle === "Bed Break") summary = "This comp has real bed break threat. Win a fight first, then immediately send the bed breaker before defenders reset.";
+  else if (playstyle === "Static Control") summary = "Zeno ranged chip makes enemies barely heal between fights. Let the main jugg start, then Zeno follows up.";
+  else if (playstyle === "Stall Support") summary = "Infernal Shielder stalls pushes and blocks bridge spam. Fight grouped so the shield protects everyone.";
+  else summary = "Balanced comp. Fight grouped, call one target at a time, and convert wins into bed pressure.";
 
   if (weaknesses.length === 0) {
     weaknesses.push("Main weakness is discipline. Splitting, chasing, or leaving bed open can throw the comp.");
@@ -865,8 +916,9 @@ function DraftBuilder() {
                       key={kit.name}
                       className="searchResultItem"
                       onClick={() => {
-                        const slot = picks.findIndex((p) => !picks.includes(kit.name) && p !== kit.name);
-                        updatePick(slot >= 0 ? slot : 0, kit.name);
+                        const emptyOrFirst = picks.findIndex((p) => p === "");
+                        const slot = emptyOrFirst >= 0 ? emptyOrFirst : 0;
+                        updatePick(slot, kit.name);
                         setSearch("");
                       }}
                     >
@@ -958,10 +1010,13 @@ function DraftBuilder() {
 function KitBrowser() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
-  const roles = ["All", "Frontline", "Support", "Economy", "Defender", "Bed Breaker", "Ranged"];
+  const roles = ["All", "Frontline", "Support", "Economy", "Defender", "Bed Breaker", "Ranged", "Bypass", "SJ", "MJ"];
+  const tierOrder = { S: 0, A: 1, B: 2, C: 3 };
 
   const filtered = ALL_KITS.filter((k) => {
-    const roleMatch = filter === "All" || k.roles.includes(filter);
+    const roleMatch = filter === "All"
+      || k.roles.includes(filter)
+      || (k.kitRoles && k.kitRoles.some((r) => r.toLowerCase().includes(filter.toLowerCase())));
     const searchText = [
       k.name,
       k.kitClass,
@@ -976,6 +1031,7 @@ function KitBrowser() {
     const searchMatch = searchText.includes(search.toLowerCase());
     return roleMatch && searchMatch;
   });
+  filtered.sort((a, b) => (tierOrder[a.tier] ?? 3) - (tierOrder[b.tier] ?? 3));
 
   return (
     <section className="section">
@@ -1003,9 +1059,16 @@ function KitBrowser() {
       </div>
 
       <div className="kitGrid">
-        {filtered.map((kit) => (
+        {filtered.map((kit) => {
+          const tierStyle = TIER_STYLES[kit.tier] || TIER_STYLES.B;
+          return (
           <div key={kit.name} className={`card kitCard${kit.description ? " detailed" : ""}`}>
-            <div className="kitName">{kit.name}</div>
+            <div className="kitTitle">
+              <div className="kitName">{kit.name}</div>
+              <span className="tierBadge" style={{ color: tierStyle.c, borderColor: tierStyle.b, background: tierStyle.bg }}>
+                {kit.tier}
+              </span>
+            </div>
             <div className="kitRoles">
               {kit.roles.map((r) => <RoleTag key={r} role={r} />)}
             </div>
@@ -1022,27 +1085,56 @@ function KitBrowser() {
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
 }
 
 function BypassStrategy() {
+  const steps = [
+    "Davey rushes with a cannon (teammates feed iron) to deal bed structure damage from range",
+    "Kaida enters first and uses dragon claw AOE to burst defenders through walls",
+    "Styx places a Confluence Portal near the enemy bed, then intentionally dies",
+    "The entire team teleports through the portal instantly into the enemy base",
+    "Crypt uses Necromancer Staff on gravestones to summon skeletons that distract and attack defenders",
+    "Lian combos R+R+Q for burst damage while teammates hold defenders at bay",
+    "Repeat portal cycle — Styx ghost form reconnects portals, team floods in again",
+    "Bed gets destroyed through sheer sustained pressure before defenders can reset",
+  ];
+  const counters = [
+    "Always keep one dedicated defender watching bed — never leave base empty after winning a fight",
+    "Buy blast protection or defense blocks early",
+    "Use Hannah or Noelle to peel Styx before she gets the kill to stop the portal link",
+    "Infernal Shielder blocks Kaida burst damage during the entry rush",
+  ];
+
   return (
     <section className="section">
       <div className="bypassCallout">
         <div className="mono eyebrow">Strategy Callout</div>
-        <h2>Bypass Strategy</h2>
-        <p>
-          Bypass is a fast 5v5 team strategy designed to win in 2-3 minutes. The team rushes the enemy base together using movement and burst kits to destroy the bed before the enemy can react.
+        <h2>Bypass Strategy Guide</h2>
+        <p className="bypassSub">
+          The fastest way to win a 5v5 — destroy the bed in under 3 minutes.
         </p>
-        <p>
-          The typical bypass comp is Styx as the portal teleporter, Kaida as the AOE burst rusher, Lian as the damage dealer, Crypt for the skeleton army, and a flex slot, often Davey with a cannon or another Lian.
-        </p>
-        <div className="bypassPlan">
-          The strategy relies on Styx placing a portal at the enemy base, dying, and allowing the whole team to instantly teleport in.
+
+        <div className="bypassGuideGrid">
+          <div>
+            <div className="mono label">How it works</div>
+            <ol className="bypassSteps">
+              {steps.map((step) => <li key={step}>{step}</li>)}
+            </ol>
+          </div>
+
+          <div>
+            <div className="mono label badLabel">Counter it</div>
+            <ul className="bypassCounters">
+              {counters.map((counter) => <li key={counter}>{counter}</li>)}
+            </ul>
+          </div>
         </div>
+
         <div className="kitTagList">
           {["Styx", "Kaida", "Lian", "Crypt", "Davey"].map((k) => <span key={k} className="kitChip">{k}</span>)}
         </div>
@@ -1844,7 +1936,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 }
 
 .roleCheck.ok { color: #67e8f9; background: rgba(34,211,238,.08); border: 1px solid rgba(103,232,249,.15); }
-.roleCheck.bad { color: #93c5fd; background: rgba(59,130,246,.08); border: 1px solid rgba(147,197,253,.15); }
+.roleCheck.bad { color: #fca5a5; background: rgba(255,85,102,.08); border: 1px solid rgba(255,85,102,.18); }
 
 .noteBox {
   margin-top: 12px;
@@ -1911,11 +2003,19 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   min-width: 0;
 }
 
+.kitTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
 .kitName {
   font-family: var(--font-head);
   font-size: 19px;
   font-weight: 800;
-  margin-bottom: 10px;
+  min-width: 0;
   letter-spacing: -.03em;
 }
 
@@ -1978,16 +2078,35 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   margin-bottom: 10px;
 }
 
-.bypassPlan {
-  max-width: 760px;
-  margin: 14px 0;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(214,167,255,.1);
-  border: 1px solid rgba(214,167,255,.18);
-  color: #e9d5ff;
+.bypassSub { color: #e9d5ff; font-weight: 700; }
+
+.bypassGuideGrid {
+  display: grid;
+  grid-template-columns: 1.35fr .85fr;
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.bypassSteps, .bypassCounters {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding-left: 22px;
+  color: var(--t2);
   font-size: 13.5px;
   line-height: 1.6;
+}
+
+.bypassSteps li, .bypassCounters li {
+  padding-left: 4px;
+}
+
+.bypassCounters {
+  padding: 12px 14px 12px 32px;
+  border-radius: 16px;
+  background: rgba(255,85,102,.07);
+  border: 1px solid rgba(255,85,102,.15);
+  color: #fca5a5;
 }
 
 .roleTag {
@@ -2169,6 +2288,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 
 @media (max-width: 860px) {
   .buildGrid, .draftShell, .roleGrid, .counterGrid, .practiceGrid { grid-template-columns: 1fr; }
+  .bypassGuideGrid { grid-template-columns: 1fr; }
   .kitCard.detailed { grid-column: 1 / -1; }
   .draftRight { position: static; }
   .heroStats { grid-template-columns: repeat(2, 1fr); }
@@ -2188,6 +2308,5 @@ optgroup, option { background: #0f172a; color: var(--t1); }
   .pickGrid { grid-template-columns: 1fr; }
   .kitGrid { grid-template-columns: repeat(2, 1fr); }
   .navLabel { font-size: 9px; }
-  .tierBadge { display: none; }
 }
 `;
