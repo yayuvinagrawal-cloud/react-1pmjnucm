@@ -149,19 +149,19 @@ const ALL_KITS = [
 
 const META_BUILDS = [
   {
-    name: "Styx / Kaida / Lian / Crypt / Davey",
+    name: "Kaida / Kaida / Warden / Styx / Styx",
     tag: "Bypass Rush",
     tier: "S",
     icon: "◆",
     accentA: "#d6a7ff",
     accentB: "#27c8ff",
-    roles: ["Bed Breaker", "Frontline", "Frontline", "Support", "Bed Breaker"],
-    why: "This is S tier for fast bypass because Styx opens the portal, Kaida and Lian burst the defense, Crypt snowballs kills into skeleton pressure, and Davey flexes as the bed breaker.",
-    early: "Styx places the safe portal, then the team rushes together. Kaida and Lian should look for immediate defender damage while Crypt collects early gravestones.",
-    mid: "Once Styx creates the enemy-base portal, everyone teleports in at the same time instead of trickling through one by one.",
-    win: "Break bed in the first 2-3 minutes by flooding the enemy base before they can rotate or stabilize.",
+    roles: ["Frontline", "Frontline", "Frontline", "Bed Breaker", "Bed Breaker"],
+    why: "This is S tier for fast bypass because double Styx gives repeat portal pressure, double Kaida brings massive AOE burst, and Warden anchors the fight so the rush does not crumble on entry.",
+    early: "Both Styx players set portal angles while Warden leads the first fight. The Kaidas should burst defenders through walls and force the enemy bed area open.",
+    mid: "Chain the portals so the team keeps re-entering together. Warden holds space while both Kaidas punish grouped defenders with dragon claw AOE.",
+    win: "Break bed in the first 2-3 minutes by overwhelming the enemy base through two Styx portal lanes and nonstop Kaida burst.",
     bestInto: "Slow scaling comps, weak defenders, and teams that overcommit to mid.",
-    weakness: "If Styx cannot create the portal angle or the team enters one at a time, the rush loses its timing.",
+    weakness: "Needs coordinated portal timing. If both Styx players lose their portal angle or the Kaidas split, the rush loses its pressure.",
   },
    {
   name: "Infernal Shielder / Zeno / Zeno / Metal / Noelle",
