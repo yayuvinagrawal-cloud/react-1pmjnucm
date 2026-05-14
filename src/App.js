@@ -105,9 +105,64 @@ const ALL_KITS = [
   { name: "Lani", roles: ["Support", "Bed Breaker"] },
   { name: "Smoke", roles: ["Bed Breaker"] },
   { name: "Marina", roles: ["Defender"] },
+  {
+    name: "Ares",
+    roles: ["Ranged"],
+    kitClass: "Ranged",
+    kitRoles: ["SJ", "MJ"],
+    description: "Ares is a strong SJ and MJ kit that excels at ranged combat. He buys Spears from the shop for 35 Iron. Each spear deals 52 damage with 40% armor penetration and knocks back all enemies within a 4 block radius on impact. Spears also apply the Zapped effect for 5 seconds. He gets a free spear every 40 seconds and can hold a max of 10. Getting the final hit with a spear returns it to your inventory.",
+    tips: "Great for pressuring enemies mid-air during sky battles. Use spear AOE knockback to void opponents during SJ and MJ fights. Spam spears for free damage before engaging in melee.",
+  },
+  {
+    name: "Styx",
+    roles: ["Bed Breaker", "Support"],
+    kitClass: "Movement",
+    kitRoles: ["Bypass"],
+    description: "Styx is the backbone of the Bypass strategy. She starts with a Confluence Portal she can place anywhere. When she kills an enemy, a second linked portal spawns where they died and lasts 30 seconds, letting Styx and all teammates teleport between the two portals. After death she enters a Ghost state, allowing her to stay on the field and connect portals even while dead. She is the key teleport enabler in 5v5 bypass.",
+    tips: "Place your base portal near your bed early. Rush the enemy base, get a kill, die, and your teammates immediately teleport in. Pair with Kaida, Crypt, Lian, and Davey for the full bypass.",
+  },
+  {
+    name: "Kaida",
+    roles: ["Frontline", "Bed Breaker"],
+    kitClass: "Fighter",
+    kitRoles: ["Bypass", "Early Game", "MJ", "SJ"],
+    description: "Kaida is a versatile fighter who summons a Void Dragon. Her Summoner Claws replace her sword. They have a 7 block attack range, hit through walls, and deal AOE damage to multiple enemies at once. Her R ability grows a portal beneath her feet while she slows during the channel, then summons the dragon's head to deal massive AOE damage to all nearby enemies. Claws upgrade as you level up the dragon. She is strong early game, strong in the air, and a top pick for bypass rushing.",
+    tips: "Upgrade your dragon claw fast by using the summon ability. Claws hit through walls, so use this in bypass to damage defenders without exposing yourself. Very strong for SJ and MJ with the extended range and AOE.",
+  },
+  {
+    name: "Lian",
+    roles: ["Frontline", "Bed Breaker"],
+    kitClass: "Fighter",
+    kitRoles: ["Bypass", "SJ damage"],
+    description: "Lian is a high-damage fighter kit with SJ-style burst damage using Dragon Swords. She spawns with 3 swords floating behind her, and each regenerates in 12 seconds. R ability: throw one sword as a homing projectile that locks onto enemies within 6 blocks, dealing 70% of her strongest melee weapon's damage with a 2 second cooldown. Q ultimate: slam all current swords down in a triangular AOE pattern for 120% sword damage plus fire damage with knockback. Her ability damage scales up as her sword tier improves.",
+    tips: "Combo R+R+Q for maximum burst by firing 2 sword missiles then slamming the ultimate for a devastating chain. Great for bypass because she can deal heavy damage while teammates hold pressure. The fire from the Q ultimate also applies burn damage over time.",
+  },
+  {
+    name: "Crypt",
+    roles: ["Support", "Bed Breaker"],
+    kitClass: "Fighter (Necromancer)",
+    kitRoles: ["Bypass"],
+    description: "Crypt is a necromancer who builds an undead army during bypass. When Crypt or any teammate kills an enemy, a Gravestone spawns where they died. Crypt uses his Necromancer Staff to collect the soul and summon a Skeleton. Each skeleton has 125 HP, inherits the killed player's weapon and strongest helmet, and deals 88% of the original weapon's damage. Skeletons last 120 seconds and Crypt can have up to 5 active at once. Summoning a 6th removes the oldest.",
+    tips: "In bypass, prioritize collecting gravestones from early kills to build your army fast. Skeletons can break beds and attack defenders while your team focuses on fighting. Great in 5v5 because the constant stream of kills keeps your army full.",
+  },
 ];
 
 const META_BUILDS = [
+  {
+    name: "Styx / Kaida / Lian / Crypt / Davey",
+    tag: "Bypass Rush",
+    tier: "S",
+    icon: "◆",
+    accentA: "#d6a7ff",
+    accentB: "#27c8ff",
+    roles: ["Bed Breaker", "Frontline", "Frontline", "Support", "Bed Breaker"],
+    why: "This is S tier for fast bypass because Styx opens the portal, Kaida and Lian burst the defense, Crypt snowballs kills into skeleton pressure, and Davey flexes as the bed breaker.",
+    early: "Styx places the safe portal, then the team rushes together. Kaida and Lian should look for immediate defender damage while Crypt collects early gravestones.",
+    mid: "Once Styx creates the enemy-base portal, everyone teleports in at the same time instead of trickling through one by one.",
+    win: "Break bed in the first 2-3 minutes by flooding the enemy base before they can rotate or stabilize.",
+    bestInto: "Slow scaling comps, weak defenders, and teams that overcommit to mid.",
+    weakness: "If Styx cannot create the portal angle or the team enters one at a time, the rush loses its timing.",
+  },
    {
   name: "Infernal Shielder / Zeno / Zeno / Metal / Noelle",
   tag: "Shield Static Core",
@@ -220,13 +275,13 @@ const ROLE_GUIDE = [
     role: "Frontline",
     icon: "⚔",
     job: "Main jugg. Starts fights, takes space, protects support, and creates pressure by winning trades.",
-    kits: ["Cait", "Silas", "Warden", "Sheila", "Nyx", "Freya", "Lucia", "Aery", "Eldertree", "Lassy"],
+    kits: ["Cait", "Silas", "Warden", "Sheila", "Nyx", "Freya", "Lucia", "Aery", "Eldertree", "Lassy", "Kaida", "Lian"],
   },
   {
     role: "Support",
     icon: "✚",
     job: "Keeps fights clean with healing, setup, static/chip pressure, peel, or utility.",
-    kits: ["Star", "Lassy", "Melody", "Hannah", "Infernal Shielder", "Nyoka", "Baker", "Whisper", "Umbra", "Lani", "Zeno"],
+    kits: ["Star", "Lassy", "Melody", "Hannah", "Infernal Shielder", "Nyoka", "Baker", "Whisper", "Umbra", "Lani", "Zeno", "Styx", "Crypt"],
   },
   {
     role: "Economy",
@@ -244,13 +299,13 @@ const ROLE_GUIDE = [
     role: "Bed Breaker",
     icon: "◆",
     job: "Finds openings and converts won fights into bed breaks.",
-    kits: ["Davey", "Pirate Davey", "Umbra", "Ragnar", "Triton", "Sigrid", "Dino Tamer", "Smoke", "Lani", "Nyx"],
+    kits: ["Davey", "Pirate Davey", "Umbra", "Ragnar", "Triton", "Sigrid", "Dino Tamer", "Smoke", "Lani", "Nyx", "Styx", "Kaida", "Lian", "Crypt"],
   },
   {
     role: "Ranged",
     icon: "⌁",
     job: "Chips teams before fights and controls bridges from distance.",
-    kits: ["Archer", "Uma", "Umeko", "Whim", "Zeno"],
+    kits: ["Archer", "Uma", "Umeko", "Whim", "Zeno", "Ares"],
   },
 ];
 
@@ -374,6 +429,8 @@ function evaluateDraft(picks) {
   }
 
   const syns = [];
+  if (hasKit("Styx") && hasKit("Kaida") && hasKit("Lian") && hasKit("Crypt")) syns.push("Bypass core - Styx opens the portal while Kaida, Lian, and Crypt flood the enemy base");
+  if (hasKit("Ares")) syns.push("Ares ranged control - spear AOE can knock enemies off sky or mid-jump fights");
   if (hasKit("Cait") && hasKit("Lassy")) syns.push("Cait + Lassy — pull one target, then Cait farms contract value");
   if (hasKit("Silas") && hasKit("Cait")) syns.push("Silas aura amplifies Cait fights");
   if (hasKit("Davey") && hasKit("Umbra")) syns.push("Davey + Umbra — strong bed break openings");
@@ -504,6 +561,18 @@ function analyzeDraftLocal(picks) {
     timing = "Late";
     strengths.push("Infernal Shielder + Nyoka is strong because shield stall gives Nyoka more time to get value.");
     tips.push("Use Infernal Shielder to block ranged pressure while Nyoka plays safely behind the main fight.");
+  }
+
+  if (hasKit("Styx") && hasKit("Kaida") && hasKit("Lian") && hasKit("Crypt")) {
+    playstyle = "Bypass Rush";
+    timing = "Early";
+    strengths.push("Styx, Kaida, Lian, and Crypt form a fast bypass core that can end before the enemy stabilizes.");
+    tips.push("Styx should create the portal angle first, then Kaida and Lian burst defenders while Crypt turns kills into skeleton pressure.");
+  }
+
+  if (hasKit("Ares")) {
+    strengths.push("Ares adds ranged spear pressure and AOE knockback for SJ and MJ fights.");
+    tips.push("Use Ares spears before melee commits so the team starts fights with free damage and knockback pressure.");
   }
 
   if (weaknesses.length === 0) {
@@ -908,7 +977,18 @@ function KitBrowser() {
 
   const filtered = ALL_KITS.filter((k) => {
     const roleMatch = filter === "All" || k.roles.includes(filter);
-    const searchMatch = k.name.toLowerCase().includes(search.toLowerCase());
+    const searchText = [
+      k.name,
+      k.kitClass,
+      ...(k.roles || []),
+      ...(k.kitRoles || []),
+      k.description,
+      k.tips,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    const searchMatch = searchText.includes(search.toLowerCase());
     return roleMatch && searchMatch;
   });
 
@@ -939,13 +1019,48 @@ function KitBrowser() {
 
       <div className="kitGrid">
         {filtered.map((kit) => (
-          <div key={kit.name} className="card kitCard">
+          <div key={kit.name} className={`card kitCard${kit.description ? " detailed" : ""}`}>
             <div className="kitName">{kit.name}</div>
             <div className="kitRoles">
               {kit.roles.map((r) => <RoleTag key={r} role={r} />)}
             </div>
+            {kit.kitClass && (
+              <div className="kitMeta">
+                <span>Class: {kit.kitClass}</span>
+                <span>Roles: {kit.kitRoles.join(", ")}</span>
+              </div>
+            )}
+            {kit.description && <p className="kitDesc">{kit.description}</p>}
+            {kit.tips && (
+              <div className="kitTips">
+                <strong>Tips:</strong> {kit.tips}
+              </div>
+            )}
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function BypassStrategy() {
+  return (
+    <section className="section">
+      <div className="bypassCallout">
+        <div className="mono eyebrow">Strategy Callout</div>
+        <h2>Bypass Strategy</h2>
+        <p>
+          Bypass is a fast 5v5 team strategy designed to win in 2-3 minutes. The team rushes the enemy base together using movement and burst kits to destroy the bed before the enemy can react.
+        </p>
+        <p>
+          The typical bypass comp is Styx as the portal teleporter, Kaida as the AOE burst rusher, Lian as the damage dealer, Crypt for the skeleton army, and a flex slot, often Davey with a cannon or another Lian.
+        </p>
+        <div className="bypassPlan">
+          The strategy relies on Styx placing a portal at the enemy base, dying, and allowing the whole team to instantly teleport in.
+        </div>
+        <div className="kitTagList">
+          {["Styx", "Kaida", "Lian", "Crypt", "Davey"].map((k) => <span key={k} className="kitChip">{k}</span>)}
+        </div>
       </div>
     </section>
   );
@@ -1082,8 +1197,8 @@ export default function App() {
     if (tab === "home") return <><Hero setTab={setTab} /><MetaSection /><DraftBuilder /></>;
     if (tab === "meta") return <MetaSection />;
     if (tab === "draft") return <DraftBuilder />;
-    if (tab === "kits") return <><KitBrowser /><RolesSection /></>;
-    return <><CountersSection /><TimingSection /><PracticeSection /></>;
+    if (tab === "kits") return <><KitBrowser /><BypassStrategy /><RolesSection /></>;
+    return <><CountersSection /><BypassStrategy /><TimingSection /><PracticeSection /></>;
   };
 
   return (
@@ -1806,6 +1921,10 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 }
 
 .kitCard { border-radius: 20px; padding: 16px; }
+.kitCard.detailed {
+  grid-column: span 2;
+  min-width: 0;
+}
 
 .kitName {
   font-family: var(--font-head);
@@ -1816,6 +1935,75 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 }
 
 .kitRoles, .kitTagList { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.kitMeta {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--t3);
+  font-family: var(--font-badge);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.kitDesc {
+  margin-top: 12px;
+  color: var(--t2);
+  font-size: 13px;
+  line-height: 1.62;
+}
+
+.kitTips {
+  margin-top: 12px;
+  padding: 10px 11px;
+  border-radius: 14px;
+  background: rgba(0,229,160,.07);
+  border: 1px solid rgba(0,229,160,.14);
+  color: #bbf7d0;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.bypassCallout {
+  padding: 24px;
+  border-radius: 28px;
+  border: 1px solid rgba(214,167,255,.2);
+  background:
+    linear-gradient(135deg, rgba(214,167,255,.12), rgba(39,200,255,.07)),
+    rgba(255,255,255,.035);
+  box-shadow: 0 22px 70px rgba(0,0,0,.22);
+}
+
+.bypassCallout h2 {
+  font-family: var(--font-head);
+  font-size: clamp(1.55rem, 4vw, 2.15rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.bypassCallout p {
+  color: var(--t2);
+  max-width: 840px;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.bypassPlan {
+  max-width: 760px;
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(214,167,255,.1);
+  border: 1px solid rgba(214,167,255,.18);
+  color: #e9d5ff;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
 
 .roleTag {
   display: inline-block;
@@ -1996,6 +2184,7 @@ optgroup, option { background: #0f172a; color: var(--t1); }
 
 @media (max-width: 860px) {
   .buildGrid, .draftShell, .roleGrid, .counterGrid, .practiceGrid { grid-template-columns: 1fr; }
+  .kitCard.detailed { grid-column: 1 / -1; }
   .draftRight { position: static; }
   .heroStats { grid-template-columns: repeat(2, 1fr); }
   .hero { padding-top: 56px; }
